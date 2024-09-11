@@ -1,9 +1,9 @@
 <script setup>
-import TheWelcome from '../components/TheWelcome.vue'
+import enterBar from '../components/enterBar.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <enterBar />
   </main>
 </template>
