@@ -20,7 +20,6 @@
             <h4>{{ option.name }}</h4></RouterLink
           >
         </div>
-        :
       </div>
     </nav>
     <div class="logins">
