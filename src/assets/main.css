@@ -7,14 +7,14 @@ body {
 
 * {
   box-sizing: border-box;
-  font-family: "SUSE", sans-serif;
+  font-family: 'SUSE', sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
 }
 
 .nerko {
-  font-family: "Nerko One";
+  font-family: 'Nerko One';
   font-weight: 400;
   font-style: normal;
 }
