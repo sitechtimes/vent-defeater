@@ -1,11 +1,10 @@
-
 :root {
   --primary: #802392;
   --primary-shade: #90479c;
   --secondary: #2df199;
-  --secondary-shade: #A5F8D3;
-  --faded-blue: #A0B9C6;
-  --gray: #9A98B5;
+  --secondary-shade: #a5f8d3;
+  --faded-blue: #a0b9c6;
+  --gray: #9a98b5;
 
   --bg-color: white;
   --bg-color-contrast-translucent: rgba(0, 0, 0, 0.2);
@@ -18,9 +17,9 @@
   --primary: #6f4575;
   --primary-shade: #76617a;
   --secondary: #2df199;
-  --secondary-shade: #A5F8D3;
-  --faded-blue: #A0B9C6;
-  --gray: #9A98B5;
+  --secondary-shade: #a5f8d3;
+  --faded-blue: #a0b9c6;
+  --gray: #9a98b5;
 
   --bg-color: black;
   --bg-color-contrast-translucent: rgba(255, 255, 255, 0.2);
