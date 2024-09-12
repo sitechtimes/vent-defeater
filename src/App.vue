@@ -5,13 +5,16 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
+import { onBeforeMount } from 'vue';
+import { userStore } from './stores/user';
 
-onMounted(() => {
+onBeforeMount(() => {
   if (localStorage.getItem('theme') == 'dark') {
-    document.body.classList.add('dark')
+    document.body.classList.add('dark');
+    userStore().theme = 'dark';
   }
-})
+  document.body.style.display = 'flex';
+});
 </script>
 
 <style scoped></style>
