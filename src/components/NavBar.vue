@@ -214,7 +214,9 @@ const navButtons: NavButtons[] = [
 
 <style scoped lang="scss">
 header {
-  position: fixed;
+  position: sticky;
+  background-color: white;
+  margin-bottom: 2rem;
   top: 0;
   height: 4em;
   width: 100%;
@@ -281,6 +283,8 @@ nav {
   padding: 1em;
   border-radius: 0.25em;
   transition: all 0.5s;
+  background-color: white;
+  box-shadow: 0 0 2px black;
 
   .dropdownButton {
     text-decoration: none;
