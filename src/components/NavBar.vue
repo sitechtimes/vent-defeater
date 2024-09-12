@@ -7,15 +7,7 @@
       <div class="outerNavButton" v-for="button in navButtons" :key="button.name">
         <RouterLink :to="button.path" class="navButton">
           {{ button.name }}
-          <svg
-            v-if="button.dropdown"
-            width="800px"
-            height="800px"
-            viewBox="0 0 24 24"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-            aria-hidden="true"
-          >
+          <svg v-if="button.dropdown" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -25,40 +17,28 @@
           </svg>
         </RouterLink>
         <div class="hoverDropdown" v-if="button.dropdown">
-          <RouterLink
-            class="dropdownButton"
-            v-for="option in button.dropdown"
-            :to="option.path"
-            :key="option.name"
-          >
+          <RouterLink class="dropdownButton" v-for="option in button.dropdown" :to="option.path" :key="option.name">
             <h4>{{ option.name }}</h4></RouterLink
           >
         </div>
       </div>
     </nav>
     <div class="logins">
-      <button @click="toggleTheme" class="theme">
-        <a href="#">
-          <img v-if="user.theme == 'light'" src="/ui/sun.svg" aria-hidden="true" />
-          <img v-else src="/ui/moon.svg" aria-hidden="true" />
-        </a>
-      </button>
-      <RouterLink class="loginButton" to="/"><h3>Log in</h3></RouterLink>
-      <RouterLink class="loginButton signup" to="/"><h3>Sign up</h3></RouterLink>
+      <ThemeToggle />
+      <RouterLink class="loginButton" to="/login"><h3>Log in</h3></RouterLink>
+      <RouterLink class="loginButton signup" to="/login?signup=1"><h3>Sign up</h3></RouterLink>
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
-import { userStore } from '@/stores/user.js'
-
-const user = userStore()
+import ThemeToggle from './ThemeToggle.vue';
 
 type NavButtons = {
-  name: string
-  path: string
-  dropdown?: { name: string; path: string }[]
-}
+  name: string;
+  path: string;
+  dropdown?: { name: string; path: string }[];
+};
 
 const navButtons: NavButtons[] = [
   {
@@ -229,20 +209,7 @@ const navButtons: NavButtons[] = [
     name: 'Talk to Sales',
     path: '/'
   }
-]
-
-function toggleTheme() {
-  if (user.theme == 'light') {
-    document.body.classList.add('dark')
-    user.theme = 'dark'
-    localStorage.setItem('theme', 'dark')
-    return
-  }
-
-  document.body.classList.remove('dark')
-  user.theme = 'light'
-  localStorage.removeItem('theme')
-}
+];
 </script>
 
 <style scoped lang="scss">
@@ -331,23 +298,6 @@ nav {
   align-items: center;
   justify-content: center;
   gap: 0.75em;
-
-  .theme {
-    background-color: transparent;
-    border: 0;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    a {
-      display: flex;
-    }
-
-    img {
-      height: 2em;
-    }
-  }
 
   .loginButton {
     text-decoration: none;
