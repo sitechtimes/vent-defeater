@@ -109,7 +109,7 @@ async function loginWithFacebook() {
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  width: 100%;
+  width: 100vw;
   min-height: 100vh;
   background-color: var(--faded-bg-color);
 }
@@ -132,7 +132,7 @@ h1 {
   flex-direction: column;
   background-color: var(--bg-color);
   padding: 1em;
-  border-radius: 0.5em;
+  border-radius: 1em;
 }
 
 .loginButtons {
@@ -147,20 +147,20 @@ h1 {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.5em;
+    gap: 0.35em;
     width: 100%;
     background-color: transparent;
     border-radius: 10em;
     transition: all 0.25s;
-    border: 0.1em solid var(--text-color);
+    border: 0.2em solid var(--text-color);
 
     p {
-      margin: 0.75em;
+      margin: 0.75em 0;
       font-weight: bold;
     }
 
     img {
-      width: 2em;
+      width: 1.25em;
     }
   }
 }
