@@ -1,21 +1,35 @@
 <template>
   <header>
     <RouterLink class="logo" to="/">
-      <img src="/vent.svg" alt="Vent Defeater logo" />
-      <h1 class="nerko">Vent Defeater</h1>
+      <img src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
     </RouterLink>
     <nav>
-      <div class="outerNavButton" v-for="button in navButtons" :key="button">
+      <div class="outerNavButton" v-for="button in navButtons" :key="button.name">
         <RouterLink :to="button.path" class="navButton">
           {{ button.name }}
-          <img v-if="button.dropdown" src="/dropdownArrow.svg" aria-hidden="true" />
+          <svg
+            v-if="button.dropdown"
+            width="800px"
+            height="800px"
+            viewBox="0 0 24 24"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+            aria-hidden="true"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M12.7071 14.7071C12.3166 15.0976 11.6834 15.0976 11.2929 14.7071L6.29289 9.70711C5.90237 9.31658 5.90237 8.68342 6.29289 8.29289C6.68342 7.90237 7.31658 7.90237 7.70711 8.29289L12 12.5858L16.2929 8.29289C16.6834 7.90237 17.3166 7.90237 17.7071 8.29289C18.0976 8.68342 18.0976 9.31658 17.7071 9.70711L12.7071 14.7071Z"
+              fill="var(--text-color)"
+            />
+          </svg>
         </RouterLink>
         <div class="hoverDropdown" v-if="button.dropdown">
           <RouterLink
             class="dropdownButton"
             v-for="option in button.dropdown"
             :to="option.path"
-            :key="option"
+            :key="option.name"
           >
             <h4>{{ option.name }}</h4></RouterLink
           >
@@ -23,14 +37,30 @@
       </div>
     </nav>
     <div class="logins">
+      <button @click="toggleTheme" class="theme">
+        <a href="#">
+          <img v-if="user.theme == 'light'" src="/ui/sun.svg" aria-hidden="true" />
+          <img v-else src="/ui/moon.svg" aria-hidden="true" />
+        </a>
+      </button>
       <RouterLink class="loginButton" to="/"><h3>Log in</h3></RouterLink>
       <RouterLink class="loginButton signup" to="/"><h3>Sign up</h3></RouterLink>
     </div>
   </header>
 </template>
 
-<script setup>
-const navButtons = [
+<script setup lang="ts">
+import { userStore } from '@/stores/user.js'
+
+const user = userStore()
+
+type NavButtons = {
+  name: string
+  path: string
+  dropdown?: { name: string; path: string }[]
+}
+
+const navButtons: NavButtons[] = [
   {
     name: 'Work',
     path: '/',
@@ -200,6 +230,19 @@ const navButtons = [
     path: '/'
   }
 ]
+
+function toggleTheme() {
+  if (user.theme == 'light') {
+    document.body.classList.add('dark')
+    user.theme = 'dark'
+    localStorage.setItem('theme', 'dark')
+    return
+  }
+
+  document.body.classList.remove('dark')
+  user.theme = 'light'
+  localStorage.removeItem('theme')
+}
 </script>
 
 <style scoped lang="scss">
@@ -211,7 +254,7 @@ header {
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  border: 0.125em solid rgb(230, 230, 230);
+  border: 0.125em solid var(--faded-bg-color);
   border-top: 0;
   border-left: 0;
   border-right: 0;
@@ -244,15 +287,16 @@ nav {
 .navButton {
   position: relative;
   text-decoration: none;
-  color: black;
+  color: var(--text-color);
   font-weight: bold;
   display: flex;
   align-items: center;
   justify-content: center;
 
-  img {
+  svg {
     transition: all 0.5s;
     height: 1em;
+    width: 1em;
   }
 }
 
@@ -265,15 +309,15 @@ nav {
   align-items: flex-start;
   justify-content: center;
   gap: 0.25em;
-  background-color: white;
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
+  background-color: var(--bg-color);
+  box-shadow: 0 0 1em var(--bg-color-contrast-translucent);
   padding: 1em;
   border-radius: 0.25em;
   transition: all 0.5s;
 
   .dropdownButton {
     text-decoration: none;
-    color: black;
+    color: var(--text-color);
 
     h4 {
       font-weight: 500;
@@ -288,9 +332,26 @@ nav {
   justify-content: center;
   gap: 0.75em;
 
+  .theme {
+    background-color: transparent;
+    border: 0;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    a {
+      display: flex;
+    }
+
+    img {
+      height: 2em;
+    }
+  }
+
   .loginButton {
     text-decoration: none;
-    color: black;
+
     h3 {
       font-weight: bold;
       margin: 0;
@@ -298,19 +359,22 @@ nav {
   }
 
   .signup {
-    color: white;
-    background-color: rgb(25, 108, 255);
+    background-color: var(--primary);
     padding: 0.5em 1.25em;
     border-radius: 5em;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 0.3s;
+
+    h3 {
+      color: var(--text-color-contrast);
+    }
   }
 }
 
 @media (hover: hover) and (pointer: fine) {
   .outerNavButton:hover {
     .navButton {
-      img {
+      svg {
         transform: rotate(-180deg);
       }
     }
@@ -323,7 +387,7 @@ nav {
 
   .logins {
     .signup:hover {
-      background-color: rgb(22, 93, 219);
+      background-color: var(--primary-shade);
     }
   }
 }
