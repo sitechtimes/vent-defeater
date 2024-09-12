@@ -12,6 +12,15 @@ const router = createRouter({
       path: '/login',
       name: 'login',
       component: () => import('../views/LoginView.vue')
+    }, {
+      path: "/app/",
+      name: "app",
+      redirect: "/app/dashboard",
+      children: [{
+        path: "dashboard",
+        name: "dashboard",
+        component: () => import('../views/app/DashboardView.vue')
+      }]
     }
   ]
 });
