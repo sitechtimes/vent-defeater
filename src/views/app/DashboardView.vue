@@ -39,7 +39,7 @@ const navButtons = [{
 
 .menu {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     justify-content: flex-start;
     flex-direction: column;
     width: 17.5em;
@@ -61,7 +61,8 @@ const navButtons = [{
     a {
         display: flex;
         align-items: center;
-        justify-content: center;
+        justify-content: flex-start;
+        gap: 0.15em;
         text-decoration: none;
         color: var(--text-color);
         width: 100%;
@@ -77,6 +78,10 @@ const navButtons = [{
         .logo:hover {
             background-color: var(--faded-bg-color);
         }
+    }
+
+    .navButtons {
+
     }
 }
 
