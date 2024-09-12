@@ -8,21 +8,21 @@
 </template>
 
 <script setup lang="ts">
-import { userStore } from '@/stores/user'
+import { userStore } from '@/stores/user';
 
-const user = userStore()
+const user = userStore();
 
 function toggleTheme() {
   if (user.theme == 'light') {
-    document.body.classList.add('dark')
-    user.theme = 'dark'
-    localStorage.setItem('theme', 'dark')
-    return
+    document.body.classList.add('dark');
+    user.theme = 'dark';
+    localStorage.setItem('theme', 'dark');
+    return;
   }
 
-  document.body.classList.remove('dark')
-  user.theme = 'light'
-  localStorage.removeItem('theme')
+  document.body.classList.remove('dark');
+  user.theme = 'light';
+  localStorage.removeItem('theme');
 }
 </script>
 

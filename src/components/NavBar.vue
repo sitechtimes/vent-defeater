@@ -32,13 +32,13 @@
 </template>
 
 <script setup lang="ts">
-import ThemeToggle from './ThemeToggle.vue'
+import ThemeToggle from './ThemeToggle.vue';
 
 type NavButtons = {
-  name: string
-  path: string
-  dropdown?: { name: string; path: string }[]
-}
+  name: string;
+  path: string;
+  dropdown?: { name: string; path: string }[];
+};
 
 const navButtons: NavButtons[] = [
   {
@@ -209,7 +209,7 @@ const navButtons: NavButtons[] = [
     name: 'Talk to Sales',
     path: '/'
   }
-]
+];
 </script>
 
 <style scoped lang="scss">

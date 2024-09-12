@@ -44,29 +44,29 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { onMounted, ref, watch } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 
-const route = useRoute()
-const router = useRouter()
+const route = useRoute();
+const router = useRouter();
 
-const showLogin = ref(true)
+const showLogin = ref(true);
 
-const email = ref('')
-const password = ref('')
+const email = ref('');
+const password = ref('');
 
 watch(
   () => route.query.signup,
   (value) => {
-    if (value) showLogin.value = false
-    else showLogin.value = true
+    if (value) showLogin.value = false;
+    else showLogin.value = true;
   }
-)
+);
 
 onMounted(() => {
-  if (route.query.signup) showLogin.value = false
-  else showLogin.value = true
-})
+  if (route.query.signup) showLogin.value = false;
+  else showLogin.value = true;
+});
 
 const loginButtons = [
   {
@@ -84,22 +84,22 @@ const loginButtons = [
     img: '/logo/facebook.svg',
     function: loginWithFacebook
   }
-]
+];
 
 async function loginWithEmail() {
-  console.log('email')
+  console.log('email');
 }
 
 async function loginWithGoogle() {
-  console.log('google')
+  console.log('google');
 }
 
 async function loginWithMicrosoft() {
-  console.log('microsoft')
+  console.log('microsoft');
 }
 
 async function loginWithFacebook() {
-  console.log('facebook')
+  console.log('facebook');
 }
 </script>
 
