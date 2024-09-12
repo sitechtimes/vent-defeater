@@ -1,25 +1,32 @@
-<script setup>
+<script setup lang="ts">
+import { defineProps } from 'vue';
 
+const checkDigit = (event: KeyboardEvent) => {
+  if (event.key.length === 1 && isNaN(Number(event.key))) {
+    event.preventDefault();
+  }
+};
 </script>
 
 <template>
-<div class="biggerSearchBox">
+<div class="searchBox-container">
   <div class="searchBox">
     Enter access code to join a Menti presentation
-    <input type="number" class="searchInput" placeholder="1234 5678">
+    <input type="text" class="searchInput"  @keydown="checkDigit" maxlength="8" placeholder="1234 5678">
     <button class="searchButton" disabled>Join</button>
   </div>
 </div>
 </template>
 
 <style scoped>
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-    /* display: none; <- Crashes Chrome on hover */
-    -webkit-appearance: none;
-    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+.searchBox-container{
+  outline: solid;
+  size: 10 rem;
+  background-color: #FFFFFF;
 }
-input[type=number] {
-    -moz-appearance:textfield; /* Firefox */
+
+.searchBox-container{
+  padding: 2%;
+  
 }
 </style>
