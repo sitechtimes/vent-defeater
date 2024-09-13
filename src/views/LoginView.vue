@@ -50,9 +50,7 @@
     <h3 v-show="showLogin">New to Vent Defeater?</h3>
     <h3 v-show="!showLogin">Already have an account?</h3>
     <button class="bg-transparent border-0" @click="showLogin ? router.push('?signup=1') : router.push('')">
-      <a href="#" class="no-underline"
-        ><h3 class="m-0 font-medium">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3></a
-      >
+      <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3>
     </button>
   </div>
 </template>
