@@ -6,12 +6,13 @@
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import { userStore } from './stores/user';
+import { useUserStore } from './stores/user';
+const userStore = useUserStore();
 
 onBeforeMount(() => {
   if (localStorage.getItem('theme') == 'dark') {
     document.body.classList.add('dark');
-    userStore().theme = 'dark';
+    userStore.theme = 'dark';
   }
   document.body.style.display = 'flex';
 });
