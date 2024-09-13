@@ -1,7 +1,11 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
 
-export const useUserStore = defineStore('user', () => {
-  const theme = ref('light');
-  return { theme };
-});
+export const userStore = defineStore('userStore', () => {
+  const theme = ref<'light' | 'dark'>('light');
+
+export const userStore = defineStore('user', {
+  state: () => ({
+    theme: 'light'
+  })
+})();
