@@ -1,13 +1,13 @@
 <template>
-  <header>
-    <RouterLink class="logo" to="/">
-      <img src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
+  <header class="transition duration-700 sticky bg-[color:var(--bg-color)] mb-8 top-0 h-16 w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] z-10">
+    <RouterLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
+      <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
     </RouterLink>
-    <nav>
+    <nav class="flex items-center justify-center gap-3">
       <div class="outerNavButton" v-for="button in navButtons" :key="button.name">
-        <RouterLink :to="button.path" class="navButton">
+        <RouterLink :to="button.path" class="navButton relative no-underline text-[color:var(--text-color)] font-bold flex items-center justify-center">
           {{ button.name }}
-          <svg v-if="button.dropdown" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg class="transition duration-300 h-4 w-4" v-if="button.dropdown" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -16,17 +16,22 @@
             />
           </svg>
         </RouterLink>
-        <div class="hoverDropdown" v-if="button.dropdown">
-          <RouterLink class="dropdownButton" v-for="option in button.dropdown" :to="option.path" :key="option.name">
-            <h4>{{ option.name }}</h4></RouterLink
+        <div
+          class="hoverDropdown absolute flex pointer-events-none opacity-0 flex-col items-start justify-center gap-1 bg-[color:var(--bg-color)] shadow-2xl shadow-[color:var(--bg-color-contrast-translucent)] p-4 rounded-sm transition"
+          v-if="button.dropdown"
+        >
+          <RouterLink class="no-underline text-[color:var(--text-color)]" v-for="option in button.dropdown" :to="option.path" :key="option.name">
+            <h4 class="font-medium m-1">{{ option.name }}</h4></RouterLink
           >
         </div>
       </div>
     </nav>
-    <div class="logins">
+    <div class="logins flex items-center justify-center gap-3">
       <ThemeToggle />
-      <RouterLink class="loginButton" to="/login"><h3>Log in</h3></RouterLink>
-      <RouterLink class="loginButton signup" to="/login?signup=1"><h3>Sign up</h3></RouterLink>
+      <RouterLink class="no-underline" to="/login"><h3 class="font-bold m-0">Log in</h3></RouterLink>
+      <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/login?signup=1"
+        ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)]">Sign up</h3></RouterLink
+      >
     </div>
   </header>
 </template>
@@ -213,8 +218,10 @@ const navButtons: NavButtons[] = [
 </script>
 
 <style scoped lang="scss">
-header {
-  position: fixed;
+/*header {
+  position: sticky;
+  background-color: white;
+  margin-bottom: 2rem;
   top: 0;
   height: 4em;
   width: 100%;
@@ -281,6 +288,8 @@ nav {
   padding: 1em;
   border-radius: 0.25em;
   transition: all 0.5s;
+  background-color: white;
+  box-shadow: 0 0 2px black;
 
   .dropdownButton {
     text-decoration: none;
@@ -319,7 +328,7 @@ nav {
       color: var(--text-color-contrast);
     }
   }
-}
+}*/
 
 @media (hover: hover) and (pointer: fine) {
   .outerNavButton:hover {
