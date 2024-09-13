@@ -1,8 +1,8 @@
 <template>
   <button @click="toggleTheme" class="bg-transparent border-0 p-0 flex items-center justify-center">
     <a href="#" class="flex">
-      <img class="h-8" v-show="userStore.theme == 'light'" src="/ui/sun.svg" aria-hidden="true" />
-      <img class="h-8" v-show="userStore.theme == 'dark'" src="/ui/moon.svg" aria-hidden="true" />
+      <img class="h-8" v-show="user.theme == 'light'" src="/ui/sun.svg" aria-hidden="true" />
+      <img class="h-8" v-show="user.theme == 'dark'" src="/ui/moon.svg" aria-hidden="true" />
     </a>
   </button>
 </template>
@@ -10,16 +10,18 @@
 <script setup lang="ts">
 import { userStore } from '@/stores/user';
 
+const user = userStore();
+
 function toggleTheme() {
-  if (userStore.theme == 'light') {
+  if (user.theme == 'light') {
     document.body.classList.add('dark');
-    userStore.theme = 'dark';
+    user.theme = 'dark';
     localStorage.setItem('theme', 'dark');
     return;
   }
 
   document.body.classList.remove('dark');
-  userStore.theme = 'light';
+  user.theme = 'light';
   localStorage.removeItem('theme');
 }
 </script>

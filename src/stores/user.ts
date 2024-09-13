@@ -5,4 +5,4 @@ export const userStore = defineStore('userStore', () => {
   const theme = ref<'light' | 'dark'>('light');
 
   return { theme };
-})();
+});
