@@ -41,7 +41,6 @@ body {
   width: 100vw;
   min-height: 100vh;
   background-color: var(--bg-color);
-  transition: background-color 0.75s;
   display: none;
 }
 
@@ -53,4 +52,15 @@ body {
   font-style: normal;
   color: var(--text-color);
   transition: color 0.75s;
+}
+
+::-webkit-scrollbar {
+  width: 0.75em;
+}
+::-webkit-scrollbar-track {
+  background-color: var(--faded-bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 1em;
 }
