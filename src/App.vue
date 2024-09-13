@@ -9,12 +9,10 @@ import { onBeforeMount } from 'vue';
 import { useUserStore } from './stores/user';
 const userStore = useUserStore();
 
-const user = userStore();
-
 onBeforeMount(() => {
   if (localStorage.getItem('theme') == 'dark') {
     document.body.classList.add('dark');
-    user.theme = 'dark';
+    userStore.theme = 'dark';
   }
   document.body.style.display = 'flex';
 });
