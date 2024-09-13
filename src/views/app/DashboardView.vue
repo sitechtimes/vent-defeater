@@ -1,10 +1,10 @@
 <template>
   <div class="flex items-center justify-center">
     <div class="menu flex items-start justify-start flex-col w-72 min-h-screen p-8">
-      <img class="logo w-full transition duration-300 rounded-md" src="/logo/logoWithWords.svg" aria-hidden="true" @click="router.push('/app/dashboard')" />
+      <img class="logo w-full transition duration-500 rounded-md" src="/logo/logoWithWords.svg" aria-hidden="true" @click="router.push('/app/dashboard')" />
       <div class="flex items-center justify-center flex-col w-full">
         <RouterLink
-          class="transition duration-300 navButton flex items-center justify-start gap-1 no-underline text-[color:var(--text-color)] w-full rounded-md"
+          class="transition duration-500 navButton flex items-center justify-start gap-1 no-underline text-[color:var(--text-color)] w-full rounded-md"
           v-for="button in navButtons"
           :key="button.name"
           :to="button.route"

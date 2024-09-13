@@ -1,5 +1,5 @@
 <template>
-  <header class="transition duration-700 sticky bg-[color:var(--bg-color)] mb-8 top-0 h-16 w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] z-10">
+  <header class="transition duration-500 sticky bg-[color:var(--bg-color)] mb-8 top-0 h-16 w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] z-10">
     <RouterLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
       <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
     </RouterLink>
@@ -7,7 +7,7 @@
       <div class="outerNavButton" v-for="button in navButtons" :key="button.name">
         <RouterLink :to="button.path" class="navButton relative no-underline text-[color:var(--text-color)] font-bold flex items-center justify-center">
           {{ button.name }}
-          <svg class="transition duration-300 h-4 w-4" v-if="button.dropdown" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+          <svg class="transition duration-500 h-4 w-4" v-if="button.dropdown" width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
             <path
               fill-rule="evenodd"
               clip-rule="evenodd"
@@ -30,7 +30,7 @@
       <ThemeToggle />
       <RouterLink class="no-underline" to="/login"><h3 class="font-bold m-0">Log in</h3></RouterLink>
       <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/login?signup=1"
-        ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)]">Sign up</h3></RouterLink
+        ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3></RouterLink
       >
     </div>
   </header>
