@@ -42,7 +42,6 @@ body {
   min-height: 100vh;
   overflow-x: hidden;
   background-color: var(--bg-color);
-  transition: background-color 0.5s;
   display: none;
 }
 
@@ -55,4 +54,15 @@ body {
   color: var(--text-color);
   transition-property: color, background-color;
   transition-duration: 0.5s;
+}
+
+::-webkit-scrollbar {
+  width: 0.75em;
+}
+::-webkit-scrollbar-track {
+  background-color: var(--faded-bg-color);
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary);
+  border-radius: 1em;
 }
