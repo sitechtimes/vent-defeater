@@ -18,21 +18,4 @@ function toggleTheme() {
 }
 </script>
 
-<style lang="scss" scoped>
-/*.theme {
-  background-color: transparent;
-  border: 0;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  a {
-    display: flex;
-  }
-
-  img {
-    height: 2em;
-  }
-}*/
-</style>
+<style scoped></style>
