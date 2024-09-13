@@ -6,7 +6,7 @@
         <h1 class="text-6xl">What will you ask your audience?</h1>
         <p class="text-2xl">Turn presentations into conversations with interactive polls that engage meetings and classrooms.</p>
         <button
-          class="bg-black text-white capsule"
+          class="bg-black text-white dark:bg-white dark:text-black capsule"
           @click="
             () => {
               console.log('no');
@@ -15,15 +15,13 @@
         >
           Get started, it's free
         </button>
-        <p class="text-sm text-gray-600">No credit card needed</p>
+        <p class="text-sm text-gray-600 dark:text-gray-300">No credit card needed</p>
       </section>
-      <div class="video-container-container">
-        <div class="video-container">
-          <video loop autoplay muted src="https://static.mentimeter.com/static/motion/Square.mp4" width="100%" height="100%"></video>
-        </div>
+      <div class="video-container">
+        <video loop autoplay muted src="https://static.mentimeter.com/static/motion/Square.mp4"></video>
       </div>
       <section class="flex flex-col gap-3 items-center">
-        <p class="rounded bg-gray-200">Audience experience</p>
+        <p class="rounded bg-gray-200 dark:bg-gray-800">Audience experience</p>
         <h2 class="text-5xl">From presentations to conversations</h2>
         <p class="text-xl">Vent Defeater ensures all voices are heard, even those who might not usually speak up. Anonymous questions means your audience won't be afraid to ask and engage.</p>
         <div class="flex gap-6">
@@ -42,6 +40,7 @@ import NavBar from '@/components/NavBar.vue';
 <style scoped>
 section {
   max-width: 800px;
+  overflow-x: hidden;
 }
 
 .capsule {
@@ -53,12 +52,12 @@ section {
 }
 
 .switcher {
-  @apply bg-gray-200;
+  @apply bg-gray-200 dark:bg-gray-700;
 }
 
 .switcher.active {
-  @apply bg-white;
-  border: 2px solid black;
+  @apply bg-white dark:bg-black border-black dark:border-white;
+  border: 2px solid;
 }
 
 .rounded {
@@ -68,24 +67,19 @@ section {
   font-weight: 600;
 }
 
-.video-container-container {
-  overflow-x: hidden;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-}
-
 .video-container {
+  display: flex;
   background-image: url(https://static.mentimeter.com/static/images/BKGIMAGENU.svg);
   background-position: center;
   background-size: cover;
+  justify-content: center;
+  overflow-x: hidden;
   width: 100%;
   height: 100%;
 }
 
 video {
   max-width: 1030px;
-  margin: 0 auto;
   border-radius: 10px;
   border: 4px solid lightgray;
 }
