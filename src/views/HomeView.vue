@@ -29,6 +29,7 @@
           <button class="capsule switcher">two</button>
         </div>
       </section>
+      <div id="container" style="width: 500px; height: 400px"></div>
     </main>
   </div>
 </template>
