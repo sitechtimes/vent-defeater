@@ -35,22 +35,7 @@
 </template>
 
 <script setup lang="ts">
-/// <reference types="anychart" />
-
 import NavBar from '@/components/NavBar.vue';
-import 'anychart';
-import { onMounted } from 'vue';
-
-const pie = anychart.pie();
-pie.data([
-  ['Dogs', 50],
-  ['Cats', 50]
-]);
-onMounted(() => {
-  pie.container('container');
-  pie.title("Immigrants' favorite foods");
-  pie.draw();
-});
 </script>
 
 <style scoped>
