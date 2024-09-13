@@ -4,4 +4,4 @@ export const userStore = defineStore('user', {
   state: () => ({
     theme: 'light'
   })
-});
+})();
