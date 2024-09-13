@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)]">
-    <a href="/"><img class="h-32 transition duration-300" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
+    <a href="/"><img class="h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? ' back' : '' }}!</h1>
 
     <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4">
@@ -9,7 +9,7 @@
 
       <div class="loginButtons flex items-center justify-center flex-col gap-2 w-96">
         <button
-          class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-300 border-solid border-2 border-[color:var(--text-color)]"
+          class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-500 border-solid border-2 border-[color:var(--text-color)]"
           v-for="button in loginButtons"
           :key="button.name"
           @click="button.function"
@@ -24,13 +24,13 @@
       <form class="login flex items-center justify-center flex-col gap-6 w-full" @submit="loginWithEmail">
         <div class="flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="email">Your email address</label>
-          <input class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-300" id="email" type="email" required v-model="email" />
+          <input class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500" id="email" type="email" required v-model="email" />
         </div>
 
         <div class="flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="password">{{ showLogin ? 'Your' : 'Choose a' }} password</label>
           <input
-            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-300"
+            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500"
             id="password"
             type="password"
             required
@@ -39,7 +39,7 @@
           />
         </div>
 
-        <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] mt-4 transition duration-300" type="submit">
+        <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] mt-4 transition duration-500" type="submit">
           {{ showLogin ? 'Log in' : 'Sign up' }}
         </button>
         <RouterLink to="/reset-password" class="no-underline font-medium" v-if="showLogin">Forgot password?</RouterLink>

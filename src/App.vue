@@ -10,7 +10,7 @@ import { useUserStore } from './stores/user';
 const userStore = useUserStore();
 
 onBeforeMount(() => {
-  if (localStorage.getItem('theme') == 'dark') {
+  if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark');
     userStore.theme = 'dark';
   }

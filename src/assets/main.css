@@ -52,7 +52,8 @@ body {
   font-weight: 400;
   font-style: normal;
   color: var(--text-color);
-  transition: color 0.75s;
+  transition-property: color, background-color;
+  transition-duration: 0.5s;
 }
 
 ::-webkit-scrollbar {
