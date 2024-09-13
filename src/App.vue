@@ -11,7 +11,7 @@ import { userStore } from './stores/user';
 onBeforeMount(() => {
   if (localStorage.getItem('theme') == 'dark') {
     document.body.classList.add('dark');
-    userStore().theme = 'dark';
+    userStore.theme = 'dark';
   }
   document.body.style.display = 'flex';
 });
