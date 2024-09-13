@@ -1,43 +1,57 @@
 <template>
-  <div class="page">
-    <a href="/"><img class="logo" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
-    <h1>Welcome{{ showLogin ? ' back' : '' }}!</h1>
+  <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)]">
+    <a href="/"><img class="h-32 transition duration-300" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
+    <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? ' back' : '' }}!</h1>
 
-    <div class="card">
-      <h3 v-if="showLogin">Log in to your Vent Defeater account</h3>
-      <h3 v-else>Create a free account</h3>
+    <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4">
+      <h3 class="mb-4" v-show="showLogin">Log in to your Vent Defeater account</h3>
+      <h3 class="mb-4" v-show="!showLogin">Create a free account</h3>
 
-      <div class="loginButtons">
-        <button v-for="button in loginButtons" :key="button.name" @click="button.function">
-          <img :src="button.img" aria-hidden="true" />
-          <p>{{ showLogin ? 'Log in' : 'Sign up' }} with {{ button.name }}</p>
+      <div class="loginButtons flex items-center justify-center flex-col gap-2 w-96">
+        <button
+          class="flex items-center justify-center gap-2 w-full bg-transparent rounded-full transition duration-300 border-solid border-2 border-[color:var(--text-color)]"
+          v-for="button in loginButtons"
+          :key="button.name"
+          @click="button.function"
+        >
+          <img class="w-4" :src="button.img" aria-hidden="true" />
+          <p class="my-2 font-bold">{{ showLogin ? 'Log in' : 'Sign up' }} with {{ button.name }}</p>
         </button>
       </div>
 
-      <span class="or">or using email</span>
+      <span class="m-4">or using email</span>
 
-      <form class="login" @submit="loginWithEmail">
-        <div>
-          <label for="email">Your email address</label>
-          <input id="email" type="email" required v-model="email" />
+      <form class="login flex items-center justify-center flex-col gap-6 w-full" @submit="loginWithEmail">
+        <div class="flex items-start justify-center flex-col gap-1">
+          <label class="font-medium" for="email">Your email address</label>
+          <input class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-300" id="email" type="email" required v-model="email" />
         </div>
 
-        <div>
-          <label for="password">{{ showLogin ? 'Your' : 'Choose a' }} password</label>
-          <input id="password" type="password" required v-model="password" autocomplete="current-password" />
+        <div class="flex items-start justify-center flex-col gap-1">
+          <label class="font-medium" for="password">{{ showLogin ? 'Your' : 'Choose a' }} password</label>
+          <input
+            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-300"
+            id="password"
+            type="password"
+            required
+            v-model="password"
+            autocomplete="current-password"
+          />
         </div>
 
-        <button type="submit">{{ showLogin ? 'Log in' : 'Sign up' }}</button>
-        <RouterLink to="/reset-password" class="reset" v-if="showLogin">Forgot password?</RouterLink>
+        <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] mt-4 transition duration-300" type="submit">
+          {{ showLogin ? 'Log in' : 'Sign up' }}
+        </button>
+        <RouterLink to="/reset-password" class="no-underline font-medium" v-if="showLogin">Forgot password?</RouterLink>
       </form>
     </div>
-    <span v-if="!showLogin">By signing up, you accept our <a href="/">terms of use</a> and <a href="/">privacy policy</a>.</span>
+    <span class="mb-4" v-show="!showLogin">By signing up, you accept our <a href="/">terms of use</a> and <a href="/">privacy policy</a>.</span>
 
-    <h3 v-if="showLogin">New to Vent Defeater?</h3>
-    <h3 v-else>Already have an account?</h3>
-    <button class="signup" @click="showLogin ? router.push('?signup=1') : router.push('')">
-      <a href="#"
-        ><h3>{{ showLogin ? 'Sign up now' : 'Log in' }}</h3></a
+    <h3 v-show="showLogin">New to Vent Defeater?</h3>
+    <h3 v-show="!showLogin">Already have an account?</h3>
+    <button class="bg-transparent border-0" @click="showLogin ? router.push('?signup=1') : router.push('')">
+      <a href="#" class="no-underline"
+        ><h3 class="m-0 font-medium">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3></a
       >
     </button>
   </div>
@@ -104,7 +118,7 @@ async function loginWithFacebook() {
 </script>
 
 <style lang="scss" scoped>
-.page {
+/*.page {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -167,62 +181,17 @@ h1 {
 
 .or {
   margin: 1em;
-}
+}*/
 
 .login {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  gap: 1.5em;
-  width: 100%;
-
-  div {
-    display: flex;
-    align-items: flex-start;
-    justify-content: center;
-    flex-direction: column;
-    gap: 0.25em;
-  }
-
-  label {
-    font-weight: 500;
-  }
-
-  input {
-    width: 30em;
-    height: 3em;
-    border-radius: 0.5em;
-    border: 0;
-    background-color: var(--faded-bg-color);
-    padding: 0 1em;
-    transition: box-shadow 0.25s;
-  }
-
   input:focus {
     outline: 0.15em solid var(--primary);
     box-shadow: var(--primary-shade-translucent) 0 0 0 0.5em;
     background-color: var(--bg-color);
   }
-
-  button {
-    width: 30em;
-    height: 3em;
-    border-radius: 10em;
-    border: 0;
-    background-color: var(--bg-color-contrast);
-    color: var(--text-color-contrast);
-    margin-top: 1em;
-    transition: all 0.25s;
-  }
-
-  .reset {
-    text-decoration: none;
-    font-weight: 500;
-  }
 }
 
-.signup {
+/*.signup {
   background-color: transparent;
   border: 0;
 
@@ -234,7 +203,7 @@ h1 {
       font-weight: 500;
     }
   }
-}
+}*/
 
 @media (hover: hover) and (pointer: fine) {
   .logo:hover {

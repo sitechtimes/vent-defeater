@@ -1,8 +1,8 @@
 <template>
-  <button @click="toggleTheme" class="theme">
-    <a href="#">
-      <img v-if="user.theme == 'light'" src="/ui/sun.svg" aria-hidden="true" />
-      <img v-else src="/ui/moon.svg" aria-hidden="true" />
+  <button @click="toggleTheme" class="bg-transparent border-0 p-0 flex items-center justify-center">
+    <a href="#" class="flex">
+      <img class="h-8" v-show="user.theme == 'light'" src="/ui/sun.svg" aria-hidden="true" />
+      <img class="h-8" v-show="user.theme == 'dark'" src="/ui/moon.svg" aria-hidden="true" />
     </a>
   </button>
 </template>
@@ -27,7 +27,7 @@ function toggleTheme() {
 </script>
 
 <style lang="scss" scoped>
-.theme {
+/*.theme {
   background-color: transparent;
   border: 0;
   padding: 0;
@@ -42,5 +42,5 @@ function toggleTheme() {
   img {
     height: 2em;
   }
-}
+}*/
 </style>
