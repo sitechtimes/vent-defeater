@@ -6,7 +6,8 @@
 
 <script setup lang="ts">
 import { onBeforeMount } from 'vue';
-import { userStore } from './stores/user';
+import { useUserStore } from './stores/user';
+const userStore = useUserStore();
 
 const user = userStore();
 

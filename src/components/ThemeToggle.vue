@@ -8,7 +8,9 @@
 </template>
 
 <script setup lang="ts">
-import { userStore } from '@/stores/user';
+import { useUserStore } from '@/stores/user';
+
+const userStore = useUserStore();
 
 const user = userStore();
 
@@ -26,4 +28,21 @@ function toggleTheme() {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+/*.theme {
+  background-color: transparent;
+  border: 0;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  a {
+    display: flex;
+  }
+
+  img {
+    height: 2em;
+  }
+}*/
+</style>
