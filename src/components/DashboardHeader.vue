@@ -25,7 +25,7 @@
     </div>
 
     <div class="flex items-center justify-center gap-2">
-      <ThemeToggle />
+      <ThemeToggle :big="true" />
 
       <button class="upgrade transition duration-300 flex items-center justify-center gap-1 bg-[color:var(--bg-color)] rounded-full py-2 px-7 border-2 border-[color:var(--text-color)]">
         <img class="transition duration-300 w-4 h-4 dark:invert" src="/ui/star.svg" aria-hidden="true" />

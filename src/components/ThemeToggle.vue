@@ -1,12 +1,23 @@
 <template>
-  <button @click="toggleTheme" class="bg-[color:var(--faded-bg-color)] w-14 h-8 border-solid border-2 border-[color:var(--text-color)] rounded-full relative">
-    <img class="absolute top-0.5 left-0.5 h-6 transition duration-500" :class="{ 'translate-x-6': dark }" :src="dark ? '/ui/moon.svg' : '/ui/sun.svg'" aria-hidden="true" />
+  <button @click="toggleTheme" class="bg-[color:var(--faded-bg-color)] w-14 h-8 px-8 border-solid border-2 border-[color:var(--text-color)] rounded-full relative" :id="big ? 'big' : ''">
+    <img
+      class="absolute top-0.5 left-1 h-6 transition duration-500"
+      :class="{ 'translate-x-8': dark, 'translate-x-10': dark && big }"
+      :src="dark ? '/ui/moon.svg' : '/ui/sun.svg'"
+      aria-hidden="true"
+    />
   </button>
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
 import { ref } from 'vue';
+
+type Props = {
+  big?: boolean;
+};
+
+defineProps<Props>();
 
 const userStore = useUserStore();
 const dark = ref(userStore.theme == 'dark');
@@ -20,4 +31,16 @@ function toggleTheme() {
 }
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped>
+#big {
+  height: 2.75rem;
+  padding-left: 2.5rem;
+  padding-right: 2.5rem;
+
+  img {
+    top: 0.3125rem;
+    height: 1.875rem;
+    left: 0.375rem;
+  }
+}
+</style>

@@ -16,9 +16,10 @@
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref, type Ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import Matter from 'matter-js';
-var Engine = Matter.Engine,
+
+const Engine = Matter.Engine,
   Render = Matter.Render,
   Runner = Matter.Runner,
   Bodies = Matter.Bodies,
@@ -28,13 +29,19 @@ const Events = Matter.Events;
 const joe = ref<HTMLDivElement | undefined>();
 const skibidi = ref<HTMLDivElement | undefined>();
 
-type Word = { count: number; width: number; height: number; shape: Matter.Body | undefined };
+type Word = {
+  count: number;
+  width: number;
+  height: number;
+  shape: Matter.Body | undefined;
+};
 
-const words: Ref<{ [key: string]: Word }> = ref({
-  trump: { count: 5, width: 0, height: 0, shape: undefined },
-  biden: { count: 3, width: 0, height: 0, shape: undefined },
-  skibidi: { count: 1, width: 0, height: 0, shape: undefined }
-});
+type Props = {
+  words: Record<string, number>;
+};
+
+const props = defineProps<Props>();
+const words = ref<Record<string, Word>>(Object.fromEntries(Object.entries(props.words).map(([word, count]) => [word, { count, width: 0, height: 0, shape: undefined }])));
 
 const engine = Engine.create();
 
@@ -51,7 +58,7 @@ function init() {
   console.log(words.value);
 }
 
-let runner;
+let runner: Matter.Runner;
 
 onMounted(() => {
   init();
@@ -145,7 +152,7 @@ Events.on(engine.world, 'afterRemove', () => {
 
 function add(word: string) {
   const wordData = words.value[word];
-  const shape = Bodies.rectangle(window.innerWidth / 2, 200, wordData.width, wordData.height);
+  const shape = Bodies.rectangle(Math.random() * window.innerWidth, 200, wordData.width, wordData.height);
   shape.label = word;
   wordData.shape = shape;
   Composite.add(engine.world, wordData.shape);
