@@ -214,7 +214,7 @@ const navButtons: NavButtons[] = [
 @media (hover: hover) and (pointer: fine) {
   .outerNavButton:hover {
     .navButton {
-      svg {
+      img {
         transform: rotate(-180deg);
       }
     }
