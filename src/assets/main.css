@@ -14,7 +14,9 @@
   --bg-color-contrast: rgb(40, 40, 40);
   --bg-color-contrast-translucent: rgba(0, 0, 0, 0.2);
   --faded-bg-color: rgb(230, 230, 230);
+  --faded-bg-color-light: rgb(241, 245, 245);
   --text-color: black;
+  --faded-text-color: rgb(139, 139, 139);
   --text-color-contrast: white;
 }
 
@@ -31,7 +33,9 @@
   --bg-color-contrast: rgb(230, 230, 230);
   --bg-color-contrast-translucent: rgba(255, 255, 255, 0.2);
   --faded-bg-color: rgb(40, 40, 40);
+  --faded-bg-color-light: rgb(50, 50, 50);
   --text-color: white;
+  --faded-text-color: rgb(230, 230, 230);
   --text-color-contrast: black;
 }
 
