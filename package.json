@@ -13,6 +13,7 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "matter-js": "^0.20.0",
     "pinia": "^2.1.7",
     "sass": "^1.78.0",
     "vue": "^3.4.29",
@@ -21,6 +22,7 @@
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
     "@tsconfig/node20": "^20.1.4",
+    "@types/matter-js": "^0.19.7",
     "@types/node": "^20.14.5",
     "@vitejs/plugin-vue": "^5.0.5",
     "@vue/eslint-config-prettier": "^9.0.0",

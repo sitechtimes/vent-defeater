@@ -11,7 +11,8 @@ import { useUserStore } from './stores/user';
 const userStore = useUserStore();
 
 onBeforeMount(() => {
-  // load sample data into pinia
+  // sample shit
+
   userStore.presentations = [
     {
       id: 'fqeghuiaeghiasiug',
