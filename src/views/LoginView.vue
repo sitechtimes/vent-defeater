@@ -24,13 +24,19 @@
       <form class="login flex items-center justify-center flex-col gap-6 w-full" @submit="loginWithEmail">
         <div class="flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="email">Your email address</label>
-          <input class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500" id="email" type="email" required v-model="email" />
+          <input
+            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
+            id="email"
+            type="email"
+            required
+            v-model="email"
+          />
         </div>
 
         <div class="flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="password">{{ showLogin ? 'Your' : 'Choose a' }} password</label>
           <input
-            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500"
+            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
             id="password"
             type="password"
             required
@@ -116,6 +122,12 @@ async function loginWithFacebook() {
 </script>
 
 <style lang="scss" scoped>
+.login {
+  input:focus {
+    box-shadow: 0 0 0 0.375rem var(--primary-shade-translucent);
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .logo:hover {
     filter: contrast(200%);
@@ -129,7 +141,7 @@ async function loginWithFacebook() {
 
   .login {
     input:hover {
-      outline: 0.15em solid var(--primary);
+      outline: 0.125rem solid var(--primary);
     }
     button:hover {
       background-color: var(--text-color);
