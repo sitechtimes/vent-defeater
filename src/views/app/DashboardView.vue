@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center w-screen h-full">
+  <div class="flex items-center justify-center w-screen h-full overflow-hidden">
     <Transition name="loading">
       <div class="absolute top-0 left-0 w-full h-screen flex items-center justify-center flex-col" v-if="!loaded">
         <img src="/logo/logoWithWords.svg" aria-hidden="true" />
