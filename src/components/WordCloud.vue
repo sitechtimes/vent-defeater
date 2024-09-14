@@ -1,10 +1,10 @@
 <template>
   <div>
-    <div ref="joe" class=""></div>
-    <div ref="skibidi">
+    <div ref="joe" class="hidden"></div>
+    <div ref="skibidi" id="container">
       <span
         v-for="(data, word) in words"
-        class="absolute select-none cursor-pointer origin-center border-2 border-black"
+        class="absolute select-none cursor-pointer origin-center border-black border-2 bg-red-200"
         :key="word"
         :id="String(word)"
         @click="big(word as string)"
@@ -62,7 +62,7 @@ onMounted(() => {
   });
 
   // add all of the bodies to the world
-  Composite.add(engine.world, Bodies.rectangle(0, 600, 10000, 60, { isStatic: true }));
+  Composite.add(engine.world, Bodies.rectangle(0, 1030, 10000, 60, { isStatic: true }));
 
   // run the renderer
   Render.run(render);
@@ -79,7 +79,7 @@ onMounted(() => {
       const wordData = words.value[word];
       if (!wordData.shape) return;
       el.style.left = wordData.shape.position.x - wordData.width / 2 + 'px';
-      el.style.top = wordData.shape.position.y - wordData.height / 2 + 'px';
+      el.style.top = wordData.shape.position.y - wordData.height / 2 + (window.innerHeight - 1000) + 'px';
       el.style.transform = `rotate(${wordData.shape.angle}rad)`;
     });
   });
@@ -152,4 +152,13 @@ function add(word: string) {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+#container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+}
+</style>

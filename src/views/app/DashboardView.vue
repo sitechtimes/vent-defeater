@@ -11,7 +11,7 @@
       </header>
     </div>
   </div>
-  <WordCloud class="border-black"></WordCloud>
+  <WordCloud></WordCloud>
 </template>
 
 <script setup lang="ts">
