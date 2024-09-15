@@ -47,6 +47,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/word',
+      name: 'word',
+      component: () => import('../views/WordView.vue'),
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
       path: '/:pathMatch(.*)*',
       name: 'error',
       component: () => import('../views/ErrorView.vue'),
