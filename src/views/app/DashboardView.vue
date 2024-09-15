@@ -35,10 +35,6 @@
             </div>
           </div>
 
-          <div style="margin-bottom: 100vh">
-            <h1>d</h1>
-          </div>
-
           <div class="flex items-center justify-center gap-4">
             <div class="newProjectButton relative flex items-center justify-center border-solid border border-[color:var(--text-color)] rounded-full bg-[color:var(--text-color)]">
               <RouterLink class="flex items-center justify-center no-underline rounded-l-full bg-[color:var(--text-color)] px-5 border-r border-[color:var(--bg-color)]" to="/app/new">
