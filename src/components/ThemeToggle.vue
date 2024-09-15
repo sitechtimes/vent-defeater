@@ -1,5 +1,9 @@
 <template>
-  <button @click="toggleTheme" class="bg-[color:var(--faded-bg-color)] w-14 h-8 px-8 border-solid border-2 border-[color:var(--text-color)] rounded-full relative" :id="big ? 'big' : ''">
+  <button
+    @click="toggleTheme"
+    class="bg-[color:var(--bg-color)] w-14 h-8 px-8 border-solid border-2 border-[color:var(--text-color)] rounded-full relative transition duration-300"
+    :id="big ? 'big' : ''"
+  >
     <img
       class="absolute top-0.5 left-1 h-6 transition duration-500"
       :class="{ 'translate-x-8': dark, 'translate-x-10': dark && big }"
@@ -41,6 +45,12 @@ function toggleTheme() {
     top: 0.3125rem;
     height: 1.875rem;
     left: 0.375rem;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  button:hover {
+    background-color: var(--faded-bg-color);
   }
 }
 </style>
