@@ -115,7 +115,7 @@ const popularFeatures = [
 
 onMounted(async () => {
   const previousRoute = getPreviousRoute();
-  if (previousRoute && !['/', '/login', '/:pathMatch(.*)*'].includes(previousRoute.path)) {
+  if (previousRoute && !['/', '/login'].includes(previousRoute.path)) {
     loaded.value = true;
     return;
   }

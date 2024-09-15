@@ -31,9 +31,29 @@ const navButtons = [
     route: '/app/dashboard'
   },
   {
-    name: 'My presentations',
+    name: 'My vents',
     img: '/ui/user.svg',
-    route: '/app/presentations'
+    route: '/app/my-vents'
+  },
+  {
+    name: 'Shared with me',
+    img: '/ui/share.svg',
+    route: '/app/shared-with-me'
+  },
+  {
+    name: 'Recent',
+    img: '/ui/clock.svg',
+    route: '/app/recent'
+  },
+  {
+    name: 'Starred',
+    img: '/ui/star.svg',
+    route: '/app/starred'
+  },
+  {
+    name: 'Templates',
+    img: '/ui/document.svg',
+    route: '/app/templates'
   }
 ];
 </script>

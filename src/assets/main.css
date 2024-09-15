@@ -21,11 +21,11 @@
 }
 
 .dark {
-  --primary: #6f4575;
-  --primary-shade: #76617a;
-  --primary-shade-translucent: #76617a33;
-  --secondary: #2df199;
-  --secondary-shade: #a5f8d3;
+  --primary: #682172;
+  --primary-shade: #74417e;
+  --primary-shade-translucent: #703c7a33;
+  --secondary: #17975e;
+  --secondary-shade: #2a7c57;
   --faded-blue: #a0b9c6;
   --gray: #9a98b5;
 
