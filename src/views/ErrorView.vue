@@ -1,7 +1,7 @@
 <template>
   <NavBar />
   <div class="w-full flex items-center justify-center flex-col gap-4 overflow-hidden">
-    <Transition :name="direction" v-if="showImg" appear>
+    <Transition :name=" ['up', 'down', 'left', 'right'][getRandomInt(0, 3)]" v-if="showImg" appear>
       <RouterLink to="/"><img class="logo w-96 h-96" src="/logo/logoWithQuestionMarks.svg" aria-hidden="true" /></RouterLink>
     </Transition>
     <h1 class="font-bold text-5xl text-center">You’ve found our {{ errorCode }} Vent</h1>
@@ -23,8 +23,7 @@ import { getRandomInt } from '@/utils/functions';
 import { onMounted, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 
-const back = ref<string>('');
-const direction = ref<string>('');
+const back = ref<string>('/');
 const showImg = ref(false);
 
 const route = useRoute();
@@ -34,7 +33,6 @@ const errorMessage = ref("Unfortunately, we couldn't find the vent you're lookin
 
 onMounted(() => {
   back.value = String(router.options.history.state.back ?? '/');
-  direction.value = ['up', 'down', 'left', 'right'][getRandomInt(0, 3)];
   showImg.value = true;
 
   if (route.query.code && typeof route.query.code == 'string') {
