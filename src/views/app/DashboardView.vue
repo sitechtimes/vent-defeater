@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center w-screen h-full">
+  <div class="flex items-start justify-center w-screen h-full overflow-hidden">
     <Transition name="loading">
       <div class="absolute top-0 left-0 w-full h-screen flex items-center justify-center flex-col" v-if="!loaded">
         <img src="/logo/logoWithWords.svg" aria-hidden="true" />
@@ -12,9 +12,13 @@
         </div>
       </div>
     </Transition>
+
     <Transition name="sideMenu">
-      <SideMenu v-show="loaded" />
+      <SideMenu v-show="loaded" class="fixed top-0 left-0" />
     </Transition>
+
+    <div class="w-72"></div>
+
     <Transition name="page">
       <div class="w-full min-h-screen flex items-start justify-start flex-col" v-show="loaded">
         <DashboardHeader />
