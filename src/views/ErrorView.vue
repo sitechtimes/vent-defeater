@@ -33,7 +33,6 @@ const errorCode = ref(404);
 const errorMessage = ref("Unfortunately, we couldn't find the vent you're looking for. Our crewmates will keep venting to find it!");
 
 onMounted(() => {
-  console.log(String(router.options.history.state.back));
   back.value = String(router.options.history.state.back ?? '/');
   direction.value = ['up', 'down', 'left', 'right'][getRandomInt(0, 3)];
   showImg.value = true;
