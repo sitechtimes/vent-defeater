@@ -1,5 +1,6 @@
 <template>
-  <textarea
+  <div
+    contenteditable="true"
     class="cursor-text w-full bg-transparent outline-none h-full"
     :style="{
       color: element.text.color,
@@ -12,9 +13,7 @@
       textWrap: element.text.styles.wrap ? 'wrap' : 'nowrap'
     }"
     style="resize: none"
-    :value="element.content"
-    placeholder="Click to add text"
-  ></textarea>
+  >Click to add text</div>
 </template>
 
 <script setup lang="ts">

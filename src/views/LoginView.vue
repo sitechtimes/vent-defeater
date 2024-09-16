@@ -120,6 +120,7 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
+  localStorage.setItem("authToken", "urmom");
   userStore.isAuthenticated = true;
   router.push('/app/dashboard');
 }
