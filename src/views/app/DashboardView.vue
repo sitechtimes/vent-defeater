@@ -1,17 +1,6 @@
 <template>
   <div class="flex items-start justify-center w-screen h-full overflow-hidden">
-    <Transition name="loading">
-      <div class="absolute top-0 left-0 w-full h-screen flex items-center justify-center flex-col" v-if="!loaded">
-        <img src="/logo/logoWithWords.svg" aria-hidden="true" />
-        <div class="flex items-center justify-center gap-1 mt-12">
-          <img class="cog w-12 h-12 dark:invert" src="/ui/cog.svg" aria-hidden="true" />
-          <h1 class="text-3xl">{{ loadingMessage }}</h1>
-        </div>
-        <div class="w-96 h-8 bg-[color:var(--faded-bg-color)] rounded-full">
-          <div class="h-full bg-[color:var(--primary)] transition-all duration-500 rounded-full" :style="{ width: barPercent + '%' }"></div>
-        </div>
-      </div>
-    </Transition>
+    <LoadingTransition v-show="!loaded" @done="loaded = true" />
 
     <Transition name="sideMenu">
       <SideMenu v-show="loaded" class="fixed top-0 left-0" />
@@ -37,9 +26,9 @@
 
           <div class="flex items-center justify-center gap-4">
             <div class="newProjectButton relative flex items-center justify-center border-solid border border-[color:var(--text-color)] rounded-full bg-[color:var(--text-color)]">
-              <RouterLink class="flex items-center justify-center no-underline rounded-l-full bg-[color:var(--text-color)] px-5 border-r border-[color:var(--bg-color)]" to="/app/new">
+              <button class="flex items-center justify-center no-underline rounded-l-full bg-[color:var(--text-color)] px-5 border-r border-[color:var(--bg-color)]" @click="createPresentation()">
                 <p class="font-semibold text-[color:var(--bg-color)]">New Vent</p>
-              </RouterLink>
+              </button>
               <button class="flex items-center justify-center rounded-r-full bg-[color:var(--text-color)] px-3 h-9">
                 <img class="w-6 h-6 invert dark:invert-0" src="/ui/dropdownArrow.svg" alt="Click for more options" />
               </button>
@@ -68,23 +57,18 @@
 
 <script setup lang="ts">
 import DashboardHeader from '@/components/DashboardHeader.vue';
+import LoadingTransition from '@/components/LoadingTransition.vue';
 import SideMenu from '@/components/SideMenu.vue';
 import { getPreviousRoute } from '@/router';
-import { delay } from '@/utils/functions';
-import { onMounted, ref, watch } from 'vue';
+import { useUserStore } from '@/stores/user';
+import type { Template } from '@/utils/types';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
+
+const userStore = useUserStore();
+const router = useRouter();
 
 const loaded = ref(false);
-const barPercent = ref(15);
-const loadingMessage = ref('Searching vents...');
-watch(
-  () => barPercent.value,
-  (value) => {
-    if (value >= 100) loadingMessage.value = 'Done!';
-    else if (value >= 80) loadingMessage.value = 'Calling emergency meeting...';
-    else if (value >= 50) loadingMessage.value = 'Finding impostors...';
-    else if (value >= 30) loadingMessage.value = 'Doing tasks...';
-  }
-);
 
 const popularFeatures = [
   {
@@ -121,15 +105,89 @@ onMounted(async () => {
   }
 
   loaded.value = false;
-  barPercent.value = 10;
-  while (barPercent.value < 100) {
-    await delay(150);
-    barPercent.value += 10;
-  }
-
-  await delay(400);
-  loaded.value = true;
 });
+
+async function createPresentation(preset?: Template) {
+  // load sample presentation into pinia
+  userStore.currentPresentation = {
+    id: 'sdbhugu89wdgh89weghwn9g',
+    name: 'Awesome Presentation',
+    type: 'Presentation',
+    lastOpened: new Date().getTime() / 1000,
+    slides: [
+      {
+        id: 'nweui9gh9wqehg80',
+        type: 'Slide',
+        elements: [
+          {
+            type: 'Text Field',
+            id: 'ahgauioghioag',
+            position: {
+              x: 250,
+              y: 107.5
+            },
+            dimensions: {
+              width: 400,
+              height: 100
+            },
+            background: {
+              color: '#ffff00',
+              image: null
+            },
+            text: {
+              font: 'Arial',
+              color: '#000000',
+              size: 37.5,
+              styles: {
+                bold: false,
+                italics: false,
+                underline: false,
+                strikethrough: false,
+                align: 'center',
+                wrap: true
+              }
+            },
+            content: "it's joever bidone",
+            flex: {
+              items: 'center',
+              justify: 'center',
+              align: 'center',
+              wrap: false
+            },
+            zIndex: 0
+          }
+        ],
+        speakerNotes: null,
+        dimensions: {
+          width: 640,
+          height: 360
+        },
+        background: {
+          color: '#ffffff',
+          image: null
+        },
+        text: {
+          font: 'Arial',
+          color: '#000000',
+          size: 75,
+          styles: {
+            bold: false,
+            italics: false,
+            underline: false,
+            strikethrough: false,
+            align: 'center',
+            wrap: true
+          }
+        },
+        settings: {
+          showCode: true,
+          template: null
+        }
+      }
+    ]
+  };
+  router.push('/app/presentation?prs=sdbhugu89wdgh89weghwn9g&sld=nweui9gh9wqehg80?view=1');
+}
 </script>
 
 <style lang="scss" scoped>
@@ -164,30 +222,6 @@ onMounted(async () => {
 .page-leave-to {
   opacity: 0;
   transform: translateY(50vh);
-}
-
-.loading-enter-active,
-.loading-leave-active {
-  transition: all 0.25s ease;
-}
-
-.loading-enter-from,
-.loading-leave-to {
-  opacity: 0;
-}
-
-@keyframes turn {
-  0% {
-    transform: rotate(0deg);
-  }
-
-  100% {
-    transform: rotate(360deg);
-  }
-}
-
-.cog {
-  animation: turn 1.5s infinite;
 }
 
 @media (hover: hover) and (pointer: fine) {

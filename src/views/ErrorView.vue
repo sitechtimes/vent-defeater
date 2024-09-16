@@ -1,15 +1,15 @@
 <template>
   <NavBar />
   <div class="w-full flex items-center justify-center flex-col gap-4 overflow-hidden">
-    <Transition :name="direction" v-if="showImg" appear>
-      <RouterLink to="/"><img class="logo w-96 h-96" src="/logo/logoWithQuestionMarks.svg" aria-hidden="true" /></RouterLink>
+    <Transition :name="direction">
+      <RouterLink v-if="showImg" to="/"><img class="logo w-96 h-96" src="/logo/logoWithQuestionMarks.svg" aria-hidden="true" /></RouterLink>
     </Transition>
-    <h1 class="font-bold text-5xl text-center">You’ve found our {{ errorCode }} Vent</h1>
+    <h1 class="font-bold text-5xl text-center">You've found our {{ errorCode }} Vent</h1>
     <p class="font-medium text-2xl text-center">{{ errorMessage }}</p>
     <div class="flex items-center justify-center gap-4 mt-7">
-      <a class="transition report py-2 px-6 bg-transparent rounded-full cursor-pointer border-black border-2" @click="goBack"
-        ><p class="text-[color:var(--text-color)] font-semibold text-lg">Go back</p></a
-      >
+      <a class="transition report py-2 px-6 bg-transparent rounded-full cursor-pointer" @click="goBack">
+        <p class="text-[color:var(--text-color)] font-semibold text-lg">Go back</p>
+      </a>
       <RouterLink class="py-2 px-6 no-underline bg-[color:var(--text-color)] rounded-full" to="/"><p class="text-[color:var(--bg-color)] font-semibold text-lg">Home</p></RouterLink>
     </div>
   </div>

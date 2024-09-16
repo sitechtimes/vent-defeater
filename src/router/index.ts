@@ -35,6 +35,14 @@ const router = createRouter({
           meta: {
             requiresAuth: true
           }
+        },
+        {
+          path: 'presentation',
+          name: 'presentation',
+          component: () => import('../views/app/presentation/EditView.vue'),
+          meta: {
+            requiresAuth: true
+          }
         }
       ]
     },
@@ -66,7 +74,7 @@ router.beforeEach((to, from) => {
     router
       .getRoutes()
       .filter((route) => route.meta.requiresAuth == true)
-      .map((route) => route.path)
+      .flatMap((route) => route.path)
       .includes(to.path)
   )
     return { name: 'login' };
