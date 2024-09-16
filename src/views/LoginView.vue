@@ -120,7 +120,8 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  userStore.isAuthenticated = true;
+  userStore.isAuth = true;
+  userStore.logIn(email.value, password.value);
   router.push('/app/dashboard');
 }
 
