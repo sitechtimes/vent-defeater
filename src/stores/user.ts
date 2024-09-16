@@ -10,7 +10,7 @@ export const useUserStore = defineStore('userStore', () => {
   const currentPres = ref<Presentation>();
 
   async function logIn(email: string, password: string) {
-    await fetch(import.meta.env.VITE_BACKEND_URL + '/auth/login', {
+    await fetch(import.meta.env.VITE_BACKEND_URL + '/auth/login/', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
