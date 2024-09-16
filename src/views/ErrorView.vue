@@ -1,10 +1,10 @@
 <template>
   <NavBar />
   <div class="w-full flex items-center justify-center flex-col gap-4 overflow-hidden">
-    <Transition :name=" ['up', 'down', 'left', 'right'][getRandomInt(0, 3)]" v-if="showImg" appear>
+    <Transition :name="['up', 'down', 'left', 'right'][getRandomInt(0, 3)]" v-if="showImg" appear>
       <RouterLink to="/"><img class="logo w-96 h-96" src="/logo/logoWithQuestionMarks.svg" aria-hidden="true" /></RouterLink>
     </Transition>
-    <h1 class="font-bold text-5xl text-center">You’ve found our {{ errorCode }} Vent</h1>
+    <h1 class="font-bold text-5xl text-center">You've found our {{ errorCode }} Vent</h1>
     <p class="font-medium text-2xl text-center">{{ errorMessage }}</p>
     <div class="flex items-center justify-center gap-4 mt-7 font-semibold text-lg">
       <RouterLink class="transition report py-2 px-6 bg-transparent rounded-full border-black border-2" :to="back">

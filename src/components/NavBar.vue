@@ -1,5 +1,7 @@
 <template>
-  <header class="transition duration-500 sticky bg-[color:var(--bg-color)] mb-8 top-0 h-16 w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] z-10">
+  <header
+    class="transition duration-500 sticky bg-[color:var(--bg-color)] mb-12 top-0 h-16 w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] z-10 py-9"
+  >
     <RouterLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
       <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
     </RouterLink>
