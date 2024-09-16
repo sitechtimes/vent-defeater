@@ -31,7 +31,7 @@ const skibidi = ref<HTMLDivElement | undefined>();
 type Word = { count: number; width: number; height: number; shape: Matter.Body | undefined };
 
 const words: Ref<{ [key: string]: Word }> = ref({
-  trump: { count: 5, width: 0, height: 0, shape: undefined },
+  trump: { count: 6, width: 0, height: 0, shape: undefined },
   biden: { count: 3, width: 0, height: 0, shape: undefined },
   skibidi: { count: 1, width: 0, height: 0, shape: undefined }
 });
