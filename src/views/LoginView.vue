@@ -88,6 +88,10 @@ const email = ref('');
 const name = ref('');
 const password = ref('');
 
+const emailErr = ref(false);
+const nameErr = ref(false);
+const passwordErr = ref(false);
+
 watch(
   () => route.query.signup,
   (value) => {
@@ -120,9 +124,18 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  userStore.isAuth = true;
-  userStore.logIn(email.value, password.value);
-  router.push('/app/dashboard');
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+  if (!emailRegex.test(email.value)) emailErr.value = true;
+  if (password.value.length < 8) passwordErr.value = true;
+  if (name.value.length < 3 && !showLogin.value) emailErr.value = true;
+  if (emailErr.value || passwordErr.value || nameErr.value) return;
+  
+  if (showLogin.value) {
+    await userStore.logIn(email.value, password.value);
+  } else {
+    await userStore.signUp(email.value, password.value, name.value);
+  }
+  if (userStore.isAuth)router.push('/app/dashboard');
 }
 
 async function loginWithGoogle() {
