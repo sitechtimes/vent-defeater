@@ -100,6 +100,31 @@ watch(
   }
 );
 
+watch(
+  () => email.value,
+  (value) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(email.value)) emailErr.value = true;
+    else emailErr.value = false;
+  }
+)
+
+watch(
+  () => password.value,
+  (value) => {
+    if (password.value.length < 8 || password.value.length > 50) passwordErr.value = true;
+    else passwordErr.value = false;
+  }
+)
+
+watch(
+  () => name.value,
+  (value) => {
+    if (name.value.length < 4 || name.value.length > 20) nameErr.value = true;
+    else nameErr.value = false;
+  }
+)
+
 onMounted(() => {
   if (route.query.signup) showLogin.value = false;
   else showLogin.value = true;
@@ -124,12 +149,8 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-  if (!emailRegex.test(email.value)) emailErr.value = true;
-  if (password.value.length < 8) passwordErr.value = true;
-  if (name.value.length < 3 && !showLogin.value) emailErr.value = true;
   if (emailErr.value || passwordErr.value || nameErr.value) return;
-  
+
   if (showLogin.value) {
     await userStore.logIn(email.value, password.value);
   } else {
