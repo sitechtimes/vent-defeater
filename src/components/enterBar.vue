@@ -9,7 +9,7 @@ const checkDigit = (event: KeyboardEvent) => {
 </script>
 
 <template>
-<div class="size-40	p-8	focus:outline-none focus:ring-0 box-content		h-40 w-40" >
+<div class="size-40	p-8	focus:outline-none focus:ring-0		h-40 w-40" >
     <input type="text" class="bg-gray-200"  @keydown="checkDigit" maxlength="8" placeholder="12345678">
 </div>
 </template>
