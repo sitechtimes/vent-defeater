@@ -1,35 +1,58 @@
-@import './base.css';
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+:root {
+  --primary: #802392;
+  --primary-shade: #90479c;
+  --primary-shade-translucent: #90479c33;
+  --secondary: #2df199;
+  --secondary-shade: #a5f8d3;
+  --faded-blue: #a0b9c6;
+  --gray: #9a98b5;
 
-#app {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  font-weight: normal;
+  --bg-color: white;
+  --bg-color-contrast: rgb(40, 40, 40);
+  --bg-color-contrast-translucent: rgba(0, 0, 0, 0.2);
+  --faded-bg-color: rgb(230, 230, 230);
+  --text-color: black;
+  --text-color-contrast: white;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+.dark {
+  --primary: #6f4575;
+  --primary-shade: #76617a;
+  --primary-shade-translucent: #76617a33;
+  --secondary: #2df199;
+  --secondary-shade: #a5f8d3;
+  --faded-blue: #a0b9c6;
+  --gray: #9a98b5;
+
+  --bg-color: black;
+  --bg-color-contrast: rgb(230, 230, 230);
+  --bg-color-contrast-translucent: rgba(255, 255, 255, 0.2);
+  --faded-bg-color: rgb(40, 40, 40);
+  --text-color: white;
+  --text-color-contrast: black;
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+body {
+  margin: 0;
+  padding: 0;
+  width: 100vw;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-color: var(--bg-color);
+  transition: background-color 0.5s;
+  display: none;
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
-
-  #app {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    padding: 0 2rem;
-  }
+* {
+  box-sizing: border-box;
+  font-family: 'SUSE', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: var(--text-color);
+  transition-property: color, background-color;
+  transition-duration: 0.5s;
 }
