@@ -11,7 +11,8 @@ import { useUserStore } from './stores/user';
 const userStore = useUserStore();
 
 onBeforeMount(() => {
-  // load sample data into pinia
+  // sample shit
+
   userStore.presentations = [
     {
       id: 'fqeghuiaeghiasiug',
@@ -50,6 +51,11 @@ onBeforeMount(() => {
       lastOpened: 1607614649
     }
   ];
+
+  if (localStorage.getItem("authToken")) {
+    // do auth shit
+    userStore.isAuthenticated = true;
+  }
 
   if (localStorage.getItem('theme') === 'dark') {
     document.body.classList.add('dark');

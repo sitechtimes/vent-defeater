@@ -17,7 +17,7 @@
         <p class="m-0 px-3" v-show="searchInput.length != 0 && presentations.length == 0">
           No search results for <strong>{{ searchInput }}</strong>
         </p>
-        <div class="presentation flex items-center justify-between w-full transition duration-300 px-3 py-1 rounded-md" v-for="presentation in presentations" :key="presentation.id">
+        <div class="presentation flex items-center justify-between w-full transition duration-300 px-3 py-1 rounded-md cursor-pointer" v-for="presentation in presentations" :key="presentation.id">
           <p class="m-0">{{ presentation.name }}</p>
           <p class="m-0 text-[color:var(--faded-text-color)]">{{ presentation.type }}</p>
         </div>
@@ -25,10 +25,10 @@
     </div>
 
     <div class="flex items-center justify-center gap-2">
-      <ThemeToggle />
+      <ThemeToggle :big="true" />
 
       <button class="upgrade transition duration-300 flex items-center justify-center gap-1 bg-[color:var(--bg-color)] rounded-full py-2 px-7 border-2 border-[color:var(--text-color)]">
-        <img class="transition duration-300 w-4 h-4 dark:invert" src="/ui/star.svg" aria-hidden="true" />
+        <img class="transition duration-300 w-4 h-4 dark:invert" src="/ui/starFilled.svg" aria-hidden="true" />
         <p class="m-0 text-[color:var(--text-color)] font-semibold">Upgrade</p>
       </button>
 

@@ -1,5 +1,7 @@
 <template>
-  <header class="transition duration-500 sticky bg-[color:var(--bg-color)] mb-8 top-0 h-16 w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] z-10">
+  <header
+    class="transition duration-500 sticky bg-[color:var(--bg-color)] mb-12 top-0 h-16 w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] z-10 py-9"
+  >
     <RouterLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
       <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
     </RouterLink>
@@ -21,15 +23,19 @@
     </nav>
     <div class="logins flex items-center justify-center gap-3">
       <ThemeToggle />
-      <RouterLink class="no-underline" to="/login"><h3 class="font-bold m-0">Log in</h3></RouterLink>
-      <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/login?signup=1"
+      <RouterLink class="no-underline" to="/login" v-if="!userStore.isAuthenticated"><h3 class="font-bold m-0">Log in</h3></RouterLink>
+      <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/login?signup=1" v-if="!userStore.isAuthenticated"
         ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3></RouterLink
+      >
+      <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/app" v-if="userStore.isAuthenticated"
+        ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Go to dashboard</h3></RouterLink
       >
     </div>
   </header>
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/user';
 import ThemeToggle from './ThemeToggle.vue';
 
 type NavButtons = {
@@ -37,6 +43,8 @@ type NavButtons = {
   path: string;
   dropdown?: { name: string; path: string }[];
 };
+
+const userStore = useUserStore();
 
 const navButtons: NavButtons[] = [
   {

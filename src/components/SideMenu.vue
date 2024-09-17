@@ -1,5 +1,5 @@
 <template>
-  <div class="menu flex items-start justify-start flex-col w-72 min-h-screen p-8 gap-8">
+  <div class="menu flex items-start justify-start flex-col w-72 min-h-screen p-8 gap-8 transition duration-500">
     <img class="logo w-full transition duration-300 rounded-lg cursor-pointer p-2" src="/logo/logoWithWords.svg" aria-hidden="true" @click="router.push('/app/dashboard')" />
     <div class="flex items-center justify-center flex-col w-full gap-px">
       <RouterLink
@@ -31,9 +31,29 @@ const navButtons = [
     route: '/app/dashboard'
   },
   {
-    name: 'My presentations',
+    name: 'My vents',
     img: '/ui/user.svg',
-    route: '/app/presentations'
+    route: '/app/my-vents'
+  },
+  {
+    name: 'Shared with me',
+    img: '/ui/share.svg',
+    route: '/app/shared-with-me'
+  },
+  {
+    name: 'Recent',
+    img: '/ui/clock.svg',
+    route: '/app/recent'
+  },
+  {
+    name: 'Starred',
+    img: '/ui/star.svg',
+    route: '/app/starred'
+  },
+  {
+    name: 'Templates',
+    img: '/ui/document.svg',
+    route: '/app/templates'
   }
 ];
 </script>
