@@ -9,21 +9,13 @@ const checkDigit = (event: KeyboardEvent) => {
 </script>
 
 <template>
-<div class="searchBox-container">
-  <div class="searchBox">
-    Enter access code to join a Menti presentation
-    <input type="text" class="searchInput"  @keydown="checkDigit" maxlength="8" placeholder="1234 5678">
-    <button class="searchButton" disabled>Join</button>
-  </div>
+<div class="size-40	p-8	focus:outline-none focus:ring-0 box-content		h-40 w-40" >
+    <input type="text" class="bg-gray-200"  @keydown="checkDigit" maxlength="8" placeholder="12345678">
 </div>
 </template>
 
 <style scoped>
-.searchBox-container{
-  outline: solid;
-  size: 10 rem;
-  background-color: #FFFFFF;
-  padding: 2%;
-}
-
+  *:focus {
+  outline: none;
+  }
 </style>

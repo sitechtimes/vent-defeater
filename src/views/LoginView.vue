@@ -1,5 +1,5 @@
 <template>
-  <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)]">
+<!--   <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)]">
     <a href="/"><img class="h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? ' back' : '' }}!</h1>
 
@@ -54,12 +54,16 @@
         ><h3 class="m-0 font-medium">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3></a
       >
     </button>
-  </div>
+  </div> -->
+  <enterBar />
+
+  
 </template>
 
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
+import enterBar from '../components/enterBar.vue'
 
 const route = useRoute();
 const router = useRouter();
