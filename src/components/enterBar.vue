@@ -23,10 +23,7 @@ const checkDigit = (event: KeyboardEvent) => {
   outline: solid;
   size: 10 rem;
   background-color: #FFFFFF;
+  padding: 2%;
 }
 
-.searchBox-container{
-  padding: 2%;
-  
-}
 </style>
