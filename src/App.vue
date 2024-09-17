@@ -54,7 +54,7 @@ onBeforeMount(() => {
 
   if (localStorage.getItem("authToken")) {
     // do auth shit
-    userStore.isAuthenticated = true;
+    userStore.isAuth = true;
   }
 
   if (localStorage.getItem('theme') === 'dark') {

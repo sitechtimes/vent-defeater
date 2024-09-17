@@ -21,8 +21,8 @@
 
       <span class="m-4">or using email</span>
 
-      <form class="login flex items-center justify-center flex-col gap-6 w-full" @submit="loginWithEmail" @submit.prevent>
-        <div class="flex items-start justify-center flex-col gap-1">
+      <form class="login flex items-center justify-center flex-col gap-7 w-full" @submit="loginWithEmail" @submit.prevent>
+        <div class="relative flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="email">Your email address <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
             class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
@@ -31,9 +31,10 @@
             required
             v-model="email"
           />
+          <p class="absolute error font-medium text-red-500" v-show="emailErr.length > 0">{{ emailErr }}</p>
         </div>
 
-        <div class="flex items-start justify-center flex-col gap-1" v-if="!showLogin">
+        <div class="relative flex items-start justify-center flex-col gap-1" v-if="!showLogin">
           <label class="font-medium" for="name">Your name <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
             class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
@@ -41,10 +42,12 @@
             type="text"
             required
             v-model="name"
+            autocomplete="name"
           />
+          <p class="absolute error font-medium text-red-500" v-show="nameErr.length > 0">{{ nameErr }}</p>
         </div>
 
-        <div class="flex items-start justify-center flex-col gap-1">
+        <div class="relative flex items-start justify-center flex-col gap-1">
           <label class="font-medium" for="password">{{ showLogin ? 'Your' : 'Choose a' }} password <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
             class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
@@ -52,8 +55,22 @@
             type="password"
             required
             v-model="password"
-            autocomplete="current-password"
+            :autocomplete="showLogin ? 'current-password' : 'new-password'"
           />
+          <p class="absolute error font-medium text-red-500" v-show="passwordErr.length > 0">{{ passwordErr }}</p>
+        </div>
+
+        <div class="relative flex items-start justify-center flex-col gap-1" v-if="!showLogin">
+          <label class="font-medium" for="password">Confirm password <span title="Required" class="text-red-500 font-2xl">*</span></label>
+          <input
+            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
+            id="password"
+            type="password"
+            required
+            v-model="confirmPassword"
+            autocomplete="new-password"
+          />
+          <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
         </div>
 
         <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] mt-4 transition duration-500" type="submit">
@@ -87,10 +104,12 @@ const showLogin = ref(true);
 const email = ref('');
 const name = ref('');
 const password = ref('');
+const confirmPassword = ref("");
 
-const emailErr = ref(false);
-const nameErr = ref(false);
-const passwordErr = ref(false);
+const emailErr = ref("");
+const nameErr = ref("");
+const passwordErr = ref("");
+const confirmPasswordErr = ref("");
 
 watch(
   () => route.query.signup,
@@ -104,26 +123,35 @@ watch(
   () => email.value,
   (value) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailRegex.test(email.value)) emailErr.value = true;
-    else emailErr.value = false;
+    if (value.length != 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
+    else emailErr.value = "";
   }
 )
 
 watch(
   () => password.value,
   (value) => {
-    if (password.value.length < 8 || password.value.length > 50) passwordErr.value = true;
-    else passwordErr.value = false;
+    if (value != confirmPassword.value) confirmPasswordErr.value = "Passwords do not match.";
+    
+    if (value.length < 8) passwordErr.value = "Password must be at least 8 characters.";
+    else if (value.length > 50) passwordErr.value = "Password must be less than 50 characters.";
+    else passwordErr.value = "";
   }
 )
 
 watch(
   () => name.value,
   (value) => {
-    if (name.value.length < 4 || name.value.length > 20) nameErr.value = true;
-    else nameErr.value = false;
+    if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
+    else if (value.length > 40) nameErr.value = "name must be less than 40 characters.";
+    else nameErr.value = "";
   }
 )
+
+watch(() => confirmPassword.value, (value) => {
+  if (value != password.value) confirmPasswordErr.value = "Passwords do not match.";
+  else confirmPasswordErr.value = "";
+})
 
 onMounted(() => {
   if (route.query.signup) showLogin.value = false;
@@ -153,10 +181,15 @@ async function loginWithEmail() {
 
   if (showLogin.value) {
     await userStore.logIn(email.value, password.value);
+    return;
   } else {
+    if (password.value != confirmPassword.value) {
+      passwordErr.value = "Passwords do not match.";
+      return;
+    }
     await userStore.signUp(email.value, password.value, name.value);
   }
-  if (userStore.isAuth)router.push('/app/dashboard');
+  if (userStore.isAuth) router.push('/app/dashboard');
 }
 
 async function loginWithGoogle() {
@@ -177,6 +210,10 @@ async function loginWithFacebook() {
   input:focus {
     box-shadow: 0 0 0 0.375rem var(--primary-shade-translucent);
   }
+}
+
+.error {
+  bottom: -1.5rem;
 }
 
 @media (hover: hover) and (pointer: fine) {
