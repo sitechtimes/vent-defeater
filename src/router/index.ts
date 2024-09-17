@@ -70,7 +70,7 @@ let previousRoute: RouteLocationNormalizedGeneric;
 router.beforeEach((to, from) => {
   const userStore = useUserStore();
   if (
-    !userStore.isAuthenticated &&
+    !userStore.isAuth &&
     router
       .getRoutes()
       .filter((route) => route.meta.requiresAuth == true)

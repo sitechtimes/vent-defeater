@@ -88,6 +88,10 @@ const email = ref('');
 const name = ref('');
 const password = ref('');
 
+const emailErr = ref(false);
+const nameErr = ref(false);
+const passwordErr = ref(false);
+
 watch(
   () => route.query.signup,
   (value) => {
@@ -95,6 +99,31 @@ watch(
     else showLogin.value = true;
   }
 );
+
+watch(
+  () => email.value,
+  (value) => {
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(email.value)) emailErr.value = true;
+    else emailErr.value = false;
+  }
+)
+
+watch(
+  () => password.value,
+  (value) => {
+    if (password.value.length < 8 || password.value.length > 50) passwordErr.value = true;
+    else passwordErr.value = false;
+  }
+)
+
+watch(
+  () => name.value,
+  (value) => {
+    if (name.value.length < 4 || name.value.length > 20) nameErr.value = true;
+    else nameErr.value = false;
+  }
+)
 
 onMounted(() => {
   if (route.query.signup) showLogin.value = false;
@@ -120,9 +149,14 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  localStorage.setItem("authToken", "urmom");
-  userStore.isAuthenticated = true;
-  router.push('/app/dashboard');
+  if (emailErr.value || passwordErr.value || nameErr.value) return;
+
+  if (showLogin.value) {
+    await userStore.logIn(email.value, password.value);
+  } else {
+    await userStore.signUp(email.value, password.value, name.value);
+  }
+  if (userStore.isAuth)router.push('/app/dashboard');
 }
 
 async function loginWithGoogle() {

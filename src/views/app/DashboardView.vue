@@ -109,7 +109,7 @@ onMounted(async () => {
 
 async function createPresentation(preset?: Template) {
   // load sample presentation into pinia
-  userStore.currentPresentation = {
+  userStore.currentPres = {
     id: 'sdbhugu89wdgh89weghwn9g',
     name: 'Awesome Presentation',
     type: 'Presentation',

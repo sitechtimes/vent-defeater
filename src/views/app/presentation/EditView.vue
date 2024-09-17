@@ -49,7 +49,7 @@ const loaded = ref(false);
 
 const userStore = useUserStore();
 const currentSlideIndex = ref(0);
-const currentSlide = ref(userStore.currentPresentation?.slides[currentSlideIndex.value]);
+const currentSlide = ref(userStore.currentPres?.slides[currentSlideIndex.value]);
 const scaleFactor = ref(1);
 const reverseScaleFactor = ref(1);
 
@@ -63,10 +63,10 @@ const elementHeight = ref(0);
 onMounted(() => {
   loaded.value = false;
 
-  if (!userStore.currentPresentation) return;
+  if (!userStore.currentPres) return;
 
-  console.log(userStore.currentPresentation);
-  const slide = userStore.currentPresentation.slides[currentSlideIndex.value];
+  console.log(userStore.currentPres);
+  const slide = userStore.currentPres.slides[currentSlideIndex.value];
   slide.selected = false;
   for (let element of slide.elements) {
     element.selected = false;
