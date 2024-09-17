@@ -16,8 +16,8 @@
       'flex-wrap': element.flex.wrap
     }"
     :style="{
-      top: element.position.x * scaleFactor + 'px',
-      left: element.position.y * scaleFactor + 'px',
+      top: element.position.y * scaleFactor + 'px',
+      left: element.position.x * scaleFactor + 'px',
       width: element.dimensions.width * scaleFactor + 'px',
       height: element.dimensions.height * scaleFactor + 'px',
       backgroundColor: element.background.color,
@@ -25,7 +25,19 @@
       backgroundSize: 'cover'
     }"
   >
-    <TextField v-if="element.type == 'Text Field'" :element="element" :scale-factor="scaleFactor" />
+    <div
+      class="absolute hidden bg-[color:var(--primary)] w-2 h-2 cursor-nw-resize"
+      :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
+      style="top: -0.3rem; left: -0.3rem"
+      @mousedown="emit('scale', $event, true, true)"
+    ></div>
+    <div
+      class="absolute hidden bg-[color:var(--primary)] w-2 h-2 cursor-nw-resize"
+      :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
+      style="bottom: -0.3rem; right: -0.3rem"
+      @mousedown="emit('scale', $event, true, true)"
+    ></div>
+    <TextField v-if="element.type == 'Text Field'" :element="element" :scale-factor="scaleFactor" @select="(event) => emit('select', event)" />
   </div>
 </template>
 
@@ -38,7 +50,12 @@ type Props = {
   element: Element;
   scaleFactor: number;
 };
+type Emits = {
+  select: [event: MouseEvent];
+  scale: [event: MouseEvent, width: boolean, height: boolean];
+};
 const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
 </script>
 
 <style lang="scss" scoped>

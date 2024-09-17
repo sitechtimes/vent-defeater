@@ -123,8 +123,8 @@ async function createPresentation(preset?: Template) {
             type: 'Text Field',
             id: 'ahgauioghioag',
             position: {
-              x: 250,
-              y: 107.5
+              x: 100,
+              y: 100
             },
             dimensions: {
               width: 400,

@@ -22,7 +22,9 @@
           :scale-factor="scaleFactor"
           :selected-element="selectedElement"
           @mousedown="handleMouseDown(element, $event)"
-        ></ElementSwitch>
+          @select="(event) => selectElement(element, event)"
+          @scale="(event, top, left) => handleMouseDown(element, event, top, left)"
+        />
       </div>
     </div>
 
@@ -77,7 +79,7 @@ onMounted(() => {
 });
 
 onUnmounted(() => {
-  document.removeEventListener('mousemove', handleMouseMove);
+  document.removeEventListener('mousemove', moveElement);
   document.removeEventListener('mouseup', handleMouseUp);
 });
 
@@ -98,7 +100,8 @@ function getScaleFactors() {
   }
 }
 
-function handleMouseDown(element: Element, event: MouseEvent) {
+let scaleElementHandler: typeof scaleElement;
+function handleMouseDown(element: Element, event: MouseEvent, width?: boolean, height?: boolean) {
   if (!slideRef.value) return;
 
   selectElement(element, event);
@@ -115,14 +118,42 @@ function handleMouseDown(element: Element, event: MouseEvent) {
   const mouseY = event.clientY - slideRect.top; // left
 
   // offset between mouse and element's top/left
-  offsetX.value = mouseX - element.position.y * scaleFactor.value;
-  offsetY.value = mouseY - element.position.x * scaleFactor.value;
+  offsetX.value = mouseX - element.position.x * scaleFactor.value;
+  offsetY.value = mouseY - element.position.y * scaleFactor.value;
 
-  document.addEventListener('mousemove', handleMouseMove);
+  scaleElementHandler = () => scaleElement(event, width, height);
+  document.addEventListener('mousemove', width || height ? scaleElementHandler : moveElement);
   document.addEventListener('mouseup', handleMouseUp);
 }
 
-function handleMouseMove(event: MouseEvent) {
+function scaleElement(event: MouseEvent, width?: boolean, height?: boolean) {
+  if (!elementMoving.value || !selectedElement.value || !slideRef.value || selectedElement.value.type == 'Slide') return;
+
+  // mouse position relative to slide
+  const slideRect = slideRef.value.getBoundingClientRect();
+  const mouseX = event.clientX - slideRect.left; // top
+  const mouseY = event.clientY - slideRect.top; // left
+  console.log(event.clientX, event.clientY);
+
+  // get distance of mouse from original offsetx/y
+  const rawX = mouseX * reverseScaleFactor.value - offsetX.value * reverseScaleFactor.value;
+  const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value;
+  console.log(rawX, rawY);
+
+  offsetX.value = mouseX - selectedElement.value.position.x * scaleFactor.value;
+  offsetY.value = mouseY - selectedElement.value.position.y * scaleFactor.value;
+
+  let newWidth = selectedElement.value.dimensions.width;
+  let newHeight = selectedElement.value.dimensions.height;
+  if (width) newWidth += rawX;
+  if (height) newHeight += rawY;
+  console.log(newWidth, newHeight);
+
+  // selectedElement.value.dimensions.width = Math.max(0, Math.min(newWidth));
+  // selectedElement.value.dimensions.height = Math.max(0, Math.min(newHeight));
+}
+
+function moveElement(event: MouseEvent) {
   if (!elementMoving.value || !selectedElement.value || !slideRef.value || selectedElement.value.type == 'Slide') return;
 
   // mouse position relative to slide
@@ -135,13 +166,14 @@ function handleMouseMove(event: MouseEvent) {
   const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value;
 
   // check bounds of outer slide
-  selectedElement.value.position.x = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - selectedElement.value.dimensions.height));
-  selectedElement.value.position.y = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - selectedElement.value.dimensions.width));
+  selectedElement.value.position.x = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - selectedElement.value.dimensions.width));
+  selectedElement.value.position.y = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - selectedElement.value.dimensions.height));
 }
 
 function handleMouseUp() {
   elementMoving.value = false;
-  document.removeEventListener('mousemove', handleMouseMove);
+  if (scaleElementHandler) document.removeEventListener('mousemove', scaleElementHandler);
+  document.removeEventListener('mousemove', moveElement);
   document.removeEventListener('mouseup', handleMouseUp);
 }
 

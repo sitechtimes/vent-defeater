@@ -1,7 +1,7 @@
 <template>
   <div
     contenteditable="true"
-    class="cursor-text w-full bg-transparent outline-none h-full"
+    class="cursor-text bg-transparent outline-none"
     :style="{
       color: element.text.color,
       fontSize: element.text.size * scaleFactor + 'px',
@@ -13,7 +13,10 @@
       textWrap: element.text.styles.wrap ? 'wrap' : 'nowrap'
     }"
     style="resize: none"
-  >Click to add text</div>
+    @mousedown="emit('select', $event)"
+  >
+    Click to add text
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -23,7 +26,20 @@ type Props = {
   element: TextField;
   scaleFactor: number;
 };
-defineProps<Props>();
+type Emits = {
+  select: [event: MouseEvent];
+};
+const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
+
+function stop(event: MouseEvent) {
+  event.stopPropagation();
+}
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+div {
+  width: calc(100% - 1.5rem);
+  height: calc(100% - 1.5rem);
+}
+</style>
