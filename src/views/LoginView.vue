@@ -177,21 +177,47 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  router.push('/app/dashboard');
-  return
+  // router.push('/app/dashboard');
+  // return
   if (emailErr.value || passwordErr.value || nameErr.value) return;
 
-  if (showLogin.value) {
-    await userStore.logIn(email.value, password.value);
+  if (!showLogin.value) {
+    signupWithEmail();
     return;
-  } else {
-    if (password.value != confirmPassword.value) {
-      passwordErr.value = "Passwords do not match.";
-      return;
-    }
-    await userStore.signUp(email.value, password.value, name.value);
   }
+
+  try {
+    throw new Error("urmom")
+    await userStore.logIn(email.value, password.value);
+  } catch (error) {
+    if (error instanceof Error){
+      passwordErr.value = error.message;
+      if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
+    }
+    return;
+  }
+
   if (userStore.isAuth) router.push('/app/dashboard');
+  else passwordErr.value = "Something went wrong. Please try again.";
+}
+
+async function signupWithEmail () {
+  if (emailErr.value || passwordErr.value || nameErr.value) return;
+
+  if (password.value != confirmPassword.value) {
+    passwordErr.value = "Passwords do not match.";
+    return;
+  }
+
+  try {
+    await userStore.signUp(email.value, password.value, name.value);
+  } catch (error) {
+    if (error instanceof Error) passwordErr.value = error.message;
+    return;
+  }
+
+  if (userStore.isAuth) router.push('/app/dashboard');
+  else passwordErr.value = "Something went wrong. Please try again.";
 }
 
 async function loginWithGoogle() {
