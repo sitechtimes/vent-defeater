@@ -139,7 +139,7 @@ function scaleElement(event: MouseEvent, width?: boolean, height?: boolean) {
   // move same distance as mouse from original offsetx/y
   const rawX = mouseX * reverseScaleFactor.value - offsetX.value * reverseScaleFactor.value; // position of element's top relative to slide
   const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value; // position of element's left relative to slide
-  console.log(rawX, rawY);
+  console.log(rawX, rawY);  
 
   // check bounds of outer slide
   console.log(selectedElement.value)

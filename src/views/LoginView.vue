@@ -177,8 +177,8 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  // router.push('/app/dashboard');
-  // return
+  router.push('/app/dashboard');
+  return
   if (emailErr.value || passwordErr.value || nameErr.value) return;
 
   if (!showLogin.value) {
@@ -187,7 +187,6 @@ async function loginWithEmail() {
   }
 
   try {
-    throw new Error("urmom")
     await userStore.logIn(email.value, password.value);
   } catch (error) {
     if (error instanceof Error){

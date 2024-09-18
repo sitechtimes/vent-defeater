@@ -29,7 +29,7 @@
       class="absolute hidden bg-[color:var(--primary)] w-2 h-2 cursor-nw-resize"
       :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
       style="top: -0.3rem; left: -0.3rem"
-      @mousedown="emit('scale', $event, true, true)"
+      @mousedown="handleMouseDown($event, true, true)"
     ></div>
     <div
       class="absolute hidden bg-[color:var(--primary)] w-2 h-2 cursor-nw-resize"
@@ -56,6 +56,23 @@ type Emits = {
 };
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
+
+let emitHandler: typeof emitMove;
+function handleMouseDown(event: MouseEvent, width: boolean, height: boolean) {
+  emit("scale", event, width, height);
+  emitHandler = () => emitMove(event, width, height);
+  document.addEventListener('mousemove', emitHandler);
+  document.addEventListener('mouseup', handleMouseUp);
+}
+
+function emitMove(event: MouseEvent, width?: boolean, height?: boolean) {
+  emit("scale", event, width ?? false, height ?? false);
+}
+
+function handleMouseUp() {
+  if (emitHandler) document.removeEventListener('mousemove', emitHandler);
+  document.removeEventListener('mouseup', handleMouseUp);
+}
 </script>
 
 <style lang="scss" scoped>
