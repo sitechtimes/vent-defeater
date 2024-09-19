@@ -29,13 +29,13 @@
       class="absolute hidden bg-[color:var(--primary)] w-2 h-2 cursor-nw-resize"
       :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
       style="top: -0.3rem; left: -0.3rem"
-      @mousedown="handleMouseDown($event, true, true)"
+      @mousedown="emit('scale', $event, 'left', 'top')"
     ></div>
     <div
       class="absolute hidden bg-[color:var(--primary)] w-2 h-2 cursor-nw-resize"
       :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
       style="bottom: -0.3rem; right: -0.3rem"
-      @mousedown="emit('scale', $event, true, true)"
+      @mousedown="emit('scale', $event, 'right', 'bottom')"
     ></div>
     <TextField v-if="element.type == 'Text Field'" :element="element" :scale-factor="scaleFactor" @select="(event) => emit('select', event)" />
   </div>
@@ -52,27 +52,10 @@ type Props = {
 };
 type Emits = {
   select: [event: MouseEvent];
-  scale: [event: MouseEvent, width: boolean, height: boolean];
+  scale: [event: MouseEvent, width: 'left' | 'center' | 'right', height: 'top' | 'center' | 'bottom'];
 };
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-
-let emitHandler: typeof emitMove;
-function handleMouseDown(event: MouseEvent, width: boolean, height: boolean) {
-  emit("scale", event, width, height);
-  emitHandler = () => emitMove(event, width, height);
-  document.addEventListener('mousemove', emitHandler);
-  document.addEventListener('mouseup', handleMouseUp);
-}
-
-function emitMove(event: MouseEvent, width?: boolean, height?: boolean) {
-  emit("scale", event, width ?? false, height ?? false);
-}
-
-function handleMouseUp() {
-  if (emitHandler) document.removeEventListener('mousemove', emitHandler);
-  document.removeEventListener('mouseup', handleMouseUp);
-}
 </script>
 
 <style lang="scss" scoped>
