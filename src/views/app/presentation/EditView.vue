@@ -164,6 +164,7 @@ function scaleElement(event: MouseEvent) {
   const widthDirection = rawX < previousX ? previousWidth + Math.abs(selectedElement.value.position.x - previousX) : previousWidth - Math.abs(selectedElement.value.position.x - previousX);
   const heightDirection = rawY < previousY ? previousHeight + Math.abs(selectedElement.value.position.y - previousY) : previousHeight - Math.abs(selectedElement.value.position.y - previousY);
 
+  // idk man
   if (width == 'left' && height == 'top') {
     selectedElement.value.position.x = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - selectedElement.value.dimensions.width));
     selectedElement.value.position.y = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - selectedElement.value.dimensions.height));
