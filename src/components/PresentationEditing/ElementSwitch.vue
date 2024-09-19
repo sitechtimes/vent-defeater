@@ -16,10 +16,10 @@
       'flex-wrap': element.flex.wrap
     }"
     :style="{
-      top: element.position.y * scaleFactor + 'px',
-      left: element.position.x * scaleFactor + 'px',
-      width: element.dimensions.width * scaleFactor + 'px',
-      height: element.dimensions.height * scaleFactor + 'px',
+      top: element.position.top * scaleFactor + 'px',
+      left: element.position.left * scaleFactor + 'px',
+      bottom: element.position.bottom * scaleFactor + 'px',
+      right: element.position.right * scaleFactor + 'px',
       backgroundColor: element.background.color,
       backgroundImage: element.background.image ? `url('${element.background.image}')` : 'none',
       backgroundSize: 'cover'

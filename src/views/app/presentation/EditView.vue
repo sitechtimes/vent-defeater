@@ -105,27 +105,14 @@ function getScaleFactors() {
   }
 }
 
-let previousX: number;
-let previousY: number;
-let previousWidth: number;
-let previousHeight: number;
 function handleMouseDown(element: Element, event: MouseEvent, width?: 'left' | 'center' | 'right', height?: 'top' | 'center' | 'bottom') {
   if (!slideRef.value) return;
 
   selectElement(element, event);
   elementMoving.value = true;
-
-  if (width) {
-    scalePositionWidth.value = width;
-    previousWidth = element.dimensions.width;
-  }
-  if (height) {
-    scalePositionHeight.value = height;
-    previousHeight = element.dimensions.height;
-  }
-
-  previousX = element.position.x;
-  previousY = element.position.y;
+  
+  scalePositionWidth.value = width;
+  scalePositionHeight.value = height;
 
   // element width and height
   const el = event.target as HTMLDivElement;
@@ -138,8 +125,8 @@ function handleMouseDown(element: Element, event: MouseEvent, width?: 'left' | '
   const mouseY = event.clientY - slideRect.top; // left
 
   // offset between mouse and element's top/left
-  offsetX.value = mouseX - element.position.x * scaleFactor.value;
-  offsetY.value = mouseY - element.position.y * scaleFactor.value;
+  offsetX.value = mouseX - element.position.left * scaleFactor.value;
+  offsetY.value = mouseY - element.position.top * scaleFactor.value;
 
   document.addEventListener('mousemove', width || height ? scaleElement : moveElement);
   document.addEventListener('mouseup', handleMouseUp);
@@ -160,19 +147,13 @@ function scaleElement(event: MouseEvent) {
   const rawX = mouseX * reverseScaleFactor.value - offsetX.value * reverseScaleFactor.value; // position of element's top relative to slide
   const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value; // position of element's left relative to slide
   console.log(rawX, rawY);
-
-  const widthDirection = rawX < previousX ? previousWidth + Math.abs(selectedElement.value.position.x - previousX) : previousWidth - Math.abs(selectedElement.value.position.x - previousX);
-  const heightDirection = rawY < previousY ? previousHeight + Math.abs(selectedElement.value.position.y - previousY) : previousHeight - Math.abs(selectedElement.value.position.y - previousY);
-
   // idk man
   if (width == 'left' && height == 'top') {
-    selectedElement.value.position.x = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - selectedElement.value.dimensions.width));
-    selectedElement.value.position.y = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - selectedElement.value.dimensions.height));
-    selectedElement.value.dimensions.width = Math.max(0, Math.min(widthDirection, slideRect.width * reverseScaleFactor.value));
-    selectedElement.value.dimensions.height = Math.max(0, Math.min(heightDirection, slideRect.height * reverseScaleFactor.value));
+    selectedElement.value.position.left = rawX;
+    selectedElement.value.position.top = rawY;
   } else if (width == 'right' && height == 'bottom') {
-    selectedElement.value.dimensions.width = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - selectedElement.value.dimensions.width));
-    selectedElement.value.dimensions.height = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - selectedElement.value.dimensions.height));
+    selectedElement.value.position.right = rawX;
+    selectedElement.value.position.bottom = rawY;
   }
 
   // check bounds of outer slide
@@ -194,8 +175,10 @@ function moveElement(event: MouseEvent) {
   const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value; // position of element's left relative to slide
 
   // check bounds of outer slide
-  selectedElement.value.position.x = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - selectedElement.value.dimensions.width));
-  selectedElement.value.position.y = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - selectedElement.value.dimensions.height));
+  selectedElement.value.position.right = Math.max(0, Math.min((selectedElement.value.position.right + selectedElement.value.position.left - rawX), slideRect.width * reverseScaleFactor.value - Math.abs(selectedElement.value.position.right - selectedElement.value.position.left)));
+  selectedElement.value.position.bottom = Math.max(0, Math.min((selectedElement.value.position.bottom + selectedElement.value.position.top - rawY), slideRect.height * reverseScaleFactor.value - Math.abs(selectedElement.value.position.bottom - selectedElement.value.position.top)));
+  selectedElement.value.position.left = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - Math.abs(selectedElement.value.position.right - selectedElement.value.position.left)));
+  selectedElement.value.position.top = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - Math.abs(selectedElement.value.position.bottom - selectedElement.value.position.top)));
 }
 
 function handleMouseUp() {

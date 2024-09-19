@@ -2,20 +2,23 @@ export type Template = 'Multiple Choice' | 'Word Cloud' | 'Open Ended' | 'Scales
 export type Element = TextField | WordCloud;
 
 /** Settings for element position. */
-export type Position = {
-  /** X-coordinate of the element's top edge, in pixels. */
-  x: number;
-  /** Y-coordinate of the element's left edge, in pixels. */
-  y: number;
+export type Size = {
+  /** Y-coordinate of the element's top edge, in pixels. */
+  top: number;
+  /** X-coordinate of the element's left edge, in pixels. */
+  left: number;
+  /** Y-coordinate of the element's bottom edge, in pixels. */
+  bottom: number;
+  /** X-coordinate of the element's right edge, in pixels. */
+  right: number;
 };
 
-/** Settings for element dimensions. */
 export type Dimensions = {
   /** Width of the element, in pixels. */
   width: number;
   /** Height of the element, in pixels. */
   height: number;
-};
+}
 
 /** Settings for backgrounds. */
 export type Background = {
@@ -105,10 +108,8 @@ export type TextField = {
   id: string;
   /** @readonly */
   type: 'Text Field';
-  /** (X, Y) coordinate of the element's top-left vertex, in pixels. */
-  position: Position;
-  /** Dimensions of the element, in pixels. */
-  dimensions: Dimensions;
+  /** (X,Y) coordinates of the element's corners, in pixels. */
+  position: Size;
   /** Information about the element's background. */
   background: Background;
   /** Text styles for the element. */
@@ -141,10 +142,8 @@ export type WordCloud = {
   id: string;
   /** @readonly */
   type: 'Word Cloud';
-  /** (X, Y) coordinate of the element's top-left vertex, in pixels. */
-  position: Position;
-  /** Dimensions of the element, in pixels. */
-  dimensions: Dimensions;
+  /** (X,Y) coordinates of the element's corners, in pixels. */
+  position: Size;
   /** Information about the element's background. */
   background: Background;
   /** Text styles for the element. */

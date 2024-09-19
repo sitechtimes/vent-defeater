@@ -123,12 +123,10 @@ async function createPresentation(preset?: Template) {
             type: 'Text Field',
             id: 'ahgauioghioag',
             position: {
-              x: 100,
-              y: 100
-            },
-            dimensions: {
-              width: 400,
-              height: 100
+              top: 100,
+              left: 100,
+              bottom: 200,
+              right: 500
             },
             background: {
               color: '#ffff00',
