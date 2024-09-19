@@ -120,6 +120,7 @@ function handleMouseDown(element: Element, event: MouseEvent, width?: boolean, h
   // offset between mouse and element's top/left
   offsetX.value = mouseX - element.position.x * scaleFactor.value;
   offsetY.value = mouseY - element.position.y * scaleFactor.value;
+  console.log(offsetX, offsetY)
 
   scaleElementHandler = () => scaleElement(event, width, height);
   document.addEventListener('mousemove', width || height ? scaleElementHandler : moveElement);
@@ -135,19 +136,24 @@ function scaleElement(event: MouseEvent, width?: boolean, height?: boolean) {
   const mouseY = event.clientY - slideRect.top; // left
   console.log(event.clientX, event.clientY);
 
-  // get distance of mouse from original offsetx/y
-  const rawX = mouseX * reverseScaleFactor.value - offsetX.value * reverseScaleFactor.value;
-  const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value;
+  // move same distance as mouse from original offsetx/y
+  const rawX = mouseX * reverseScaleFactor.value - offsetX.value * reverseScaleFactor.value; // position of element's top relative to slide
+  const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value; // position of element's left relative to slide
   console.log(rawX, rawY);
 
-  offsetX.value = mouseX - selectedElement.value.position.x * scaleFactor.value;
+  // check bounds of outer slide
+  console.log(selectedElement.value)
+  selectedElement.value.position.x = rawX;
+  selectedElement.value.position.y = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - selectedElement.value.dimensions.height));
+
+  /*offsetX.value = mouseX - selectedElement.value.position.x * scaleFactor.value;
   offsetY.value = mouseY - selectedElement.value.position.y * scaleFactor.value;
 
   let newWidth = selectedElement.value.dimensions.width;
   let newHeight = selectedElement.value.dimensions.height;
   if (width) newWidth += rawX;
   if (height) newHeight += rawY;
-  console.log(newWidth, newHeight);
+  console.log(newWidth, newHeight);*/
 
   // selectedElement.value.dimensions.width = Math.max(0, Math.min(newWidth));
   // selectedElement.value.dimensions.height = Math.max(0, Math.min(newHeight));
@@ -160,12 +166,15 @@ function moveElement(event: MouseEvent) {
   const slideRect = slideRef.value.getBoundingClientRect();
   const mouseX = event.clientX - slideRect.left; // top
   const mouseY = event.clientY - slideRect.top; // left
+  console.log(event.clientX, event.clientY);
 
   // move same distance as mouse from original offsetx/y
-  const rawX = mouseX * reverseScaleFactor.value - offsetX.value * reverseScaleFactor.value;
-  const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value;
+  const rawX = mouseX * reverseScaleFactor.value - offsetX.value * reverseScaleFactor.value; // position of element's top relative to slide
+  const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value; // position of element's left relative to slide
+  console.log(rawX, rawY);
 
   // check bounds of outer slide
+  console.log(selectedElement.value)
   selectedElement.value.position.x = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - selectedElement.value.dimensions.width));
   selectedElement.value.position.y = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - selectedElement.value.dimensions.height));
 }
