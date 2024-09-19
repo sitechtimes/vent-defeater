@@ -131,11 +131,12 @@ watch(
 watch(
   () => password.value,
   (value) => {
-    if (value != confirmPassword.value) confirmPasswordErr.value = 'Passwords do not match.';
+    if (value != confirmPassword.value) confirmPasswordErr.value = "Passwords do not match.";
+    else confirmPasswordErr.value = "";
 
-    if (value.length < 8) passwordErr.value = 'Password must be at least 8 characters.';
-    else if (value.length > 50) passwordErr.value = 'Password must be less than 50 characters.';
-    else passwordErr.value = '';
+    if (value.length < 8) passwordErr.value = "Password must be at least 8 characters.";
+    else if (value.length > 50) passwordErr.value = "Password must be less than 50 characters.";
+    else passwordErr.value = "";
   }
 );
 
