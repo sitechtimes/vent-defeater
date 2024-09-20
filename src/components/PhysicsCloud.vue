@@ -6,7 +6,7 @@
         v-for="(data, word) in words"
         @mouseenter="cursor(1)"
         @mouseleave="cursor(0)"
-        class="word absolute select-none origin-center"
+        class="word absolute select-none origin-center border-black hover:border-2"
         :key="word"
         :id="String(word)"
         @click="big(word as string)"
@@ -135,7 +135,7 @@ onMounted(() => {
       // let bHole = Matter.Vector.create(window.innerWidth / 2 - center[0], window.innerHeight / 2 - center[1]);
       let bHole = Matter.Vector.create(mouseX - (center[0] + wordData.width / 2), mouseY - (center[1] + wordData.height / 2));
       bHole = Matter.Vector.normalise(bHole);
-      bHole = Matter.Vector.mult(bHole, wordData.area * 0.00001);
+      bHole = Matter.Vector.mult(bHole, wordData.area * 0.000001);
 
       Matter.Body.applyForce(wordData.shape, wordData.shape.position, bHole);
     });
