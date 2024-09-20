@@ -1,7 +1,7 @@
 <template>
-  <div>
+  <div class="w-[100vw] h-[100vh] overflow-hidden">
     <div ref="joe" class="hidden"></div>
-    <div ref="skibidi" id="container" @click="addRandom" @mousemove="getMousePos">
+    <div ref="skibidi" class="screen z-10" @click="addRandom" @mousemove="getMousePos">
       <span
         v-for="(data, word) in words"
         @mouseenter="cursor(1)"
@@ -10,11 +10,12 @@
         :key="word"
         :id="String(word)"
         @click="big(word as string)"
-        :style="`font-size:${data.count * 0.75 + 1}rem;`"
+        :style="`font-size:${data.count * 0.75 + 1.25}rem;`"
         >{{ word }}</span
       >
     </div>
-    <div ref="pointer" class="size-1 bg-red-500 pointer"></div>
+    <marquee class="screen"><img src="https://media1.tenor.com/m/Spmi9HLHEz0AAAAd/despite-all-my-rage.gif" class="h-[100vh]" /></marquee>
+    <div ref="pointer" id="pointer"></div>
   </div>
 </template>
 
@@ -31,19 +32,32 @@ const Events = Matter.Events;
 const joe = ref<HTMLDivElement | undefined>();
 const skibidi = ref<HTMLDivElement | undefined>();
 
-type Word = { count: number; width: number; height: number; shape: Matter.Body | undefined };
+type Word = { count: number; width: number; height: number; area: number; shape: Matter.Body | undefined };
 
-// const words: Ref<{ [key: string]: Word }> = ref({
-//   trump: { count: 3, width: 0, height: 0, shape: undefined },
-//   biden: { count: 2, width: 0, height: 0, shape: undefined },
-//   skibidi: { count: 1, width: 0, height: 0, shape: undefined }
-// });
-const words: Ref<{ [key: string]: Word }> = ref({});
+const words: Ref<{ [key: string]: Word }> = ref({
+  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Duis ut est in diam blandit condimentum a non neque.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Fusce pharetra tortor sit amet aliquet venenatis.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Suspendisse finibus felis quis risus porta, non mattis velit congue.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Morbi placerat arcu eu convallis feugiat.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Donec sed sapien interdum, blandit mi vitae, posuere nulla.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Cras scelerisque nibh at urna fermentum sagittis.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Nulla feugiat nisl quis massa gravida tempor.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Donec et ex nec dui blandit tristique.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Morbi ultricies purus at eros fringilla gravida.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Morbi pretium urna nec arcu elementum pharetra.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Nulla vel elit eu purus ultrices vestibulum a at diam.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Praesent ac dui hendrerit, dapibus dui iaculis, convallis tellus.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Sed in tellus vitae nunc ornare pharetra non ut diam.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  'Nunc egestas mi ac urna maximus blandit.': { count: 0, width: 0, height: 0, area: 0, shape: undefined }
+});
+/* const funny = ``; // bee movie script and bible went here. rip
+words.value[funny] = { count: 1, width: 0, height: 0, shape: undefined }; */
 
 async function addRandom() {
   const id = String(Math.ceil(Math.random() * 100));
   if (!words.value[id]) {
-    words.value[id] = { count: 0, width: 0, height: 0, shape: undefined };
+    words.value[id] = { count: 0, width: 0, height: 0, area: 0, shape: undefined };
     await nextTick();
     const el = document.getElementById(id);
     if (!el) return;
@@ -56,8 +70,8 @@ async function addRandom() {
   big(id);
 }
 
-let mouseX = 0;
-let mouseY = 0;
+let mouseX = window.innerWidth / 2;
+let mouseY = window.innerHeight / 2;
 const pointer: Ref<HTMLDivElement | undefined> = ref();
 
 function getMousePos(e: MouseEvent) {
@@ -68,9 +82,7 @@ function getMousePos(e: MouseEvent) {
   pointer.value.style.top = mouseY + 'px';
 }
 
-function cursor(yes: number) {
-  if (pointer.value) pointer.value.style.width = pointer.value.style.height = yes + 1 + 'em';
-}
+const cursor = (yes: number) => pointer.value && Object.assign(pointer.value.style, { width: `${yes + 1}em`, height: `${yes + 1}em` });
 
 const engine = Engine.create();
 
@@ -84,6 +96,7 @@ function init() {
     words.value[word].width = rect.width;
     words.value[word].height = rect.height;
     add(word);
+    big(word);
   });
   console.log(words.value);
 }
@@ -115,14 +128,14 @@ onMounted(() => {
       if (!el) return;
       const wordData = words.value[word];
       if (!wordData.shape) return;
-      const center = [wordData.shape.position.x - wordData.width / 2, wordData.shape.position.y - wordData.height / 2];
+      const center = [wordData.shape.position.x, wordData.shape.position.y];
       el.style.left = center[0] + 'px';
       el.style.top = center[1] + 'px';
       el.style.transform = `rotate(${wordData.shape.angle}rad)`;
       // let bHole = Matter.Vector.create(window.innerWidth / 2 - center[0], window.innerHeight / 2 - center[1]);
-      let bHole = Matter.Vector.create(mouseX - center[0], mouseY - center[1]);
+      let bHole = Matter.Vector.create(mouseX - (center[0] + wordData.width / 2), mouseY - (center[1] + wordData.height / 2));
       bHole = Matter.Vector.normalise(bHole);
-      bHole = Matter.Vector.mult(bHole, wordData.count * 0.001 + Math.random() * 0.01);
+      bHole = Matter.Vector.mult(bHole, wordData.area * 0.00001);
 
       Matter.Body.applyForce(wordData.shape, wordData.shape.position, bHole);
     });
@@ -139,8 +152,7 @@ async function big(word: string) {
   if (!rect) return;
   wordData.width = rect.width;
   wordData.height = rect.height;
-  console.log(wordData.width);
-  console.log(wordData.height);
+  wordData.area = rect.width * rect.height;
   if (!wordData.shape) return;
   const newShape = Bodies.rectangle(wordData.shape.position.x, wordData.shape.position.y, wordData.width, wordData.height, {
     angle: wordData.shape.angle,
@@ -210,7 +222,7 @@ function add(word: string) {
 </script>
 
 <style scoped>
-#container {
+.screen {
   position: absolute;
   left: 0;
   top: 0;
@@ -218,22 +230,24 @@ function add(word: string) {
   height: 100vh;
   overflow: hidden;
   cursor: none;
-  background-image: url(https://media1.tenor.com/m/Spmi9HLHEz0AAAAd/despite-all-my-rage.gif);
-  background-size: 100% 100%;
 }
 
 .word {
   font-family: 'Comic Sans MS', 'Comic Sans', 'SUSE', sans-serif;
+  max-width: 30vw;
 }
 
-.pointer {
+#pointer {
+  @apply bg-red-500;
+  position: relative;
+  left: -100vw;
+  top: -100vh;
   width: 1em;
   height: 1em;
   transition-property: width, height;
   transition-duration: 100ms;
   transition-timing-function: ease-in;
   border-radius: 500px;
-  position: absolute;
   transform: translate(-50%, -50%);
   pointer-events: none;
   z-index: 5;
