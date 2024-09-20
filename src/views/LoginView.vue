@@ -55,7 +55,7 @@
       >
     </button>
   </div> -->
-  <enterBar />
+  <EnterBar />
 
   
 </template>
@@ -63,7 +63,7 @@
 <script setup lang="ts">
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import enterBar from '../components/enterBar.vue'
+import EnterBar from '../components/EnterBar.vue'
 
 const route = useRoute();
 const router = useRouter();
