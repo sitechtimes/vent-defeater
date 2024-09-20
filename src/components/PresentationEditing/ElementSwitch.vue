@@ -44,6 +44,7 @@
 <script setup lang="ts">
 import type { Element, Slide } from '@/utils/types';
 import TextField from './elements/TextField.vue';
+import { onMounted, watch } from 'vue';
 
 type Props = {
   selectedElement: Slide | Element | undefined;
@@ -56,6 +57,12 @@ type Emits = {
 };
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
+
+onMounted(() => {
+  console.log(props.element.position.right)
+})
+
+watch(() => props.element.position.right, (val) => console.log(val))
 </script>
 
 <style lang="scss" scoped>

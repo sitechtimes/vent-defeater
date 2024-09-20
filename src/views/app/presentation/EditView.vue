@@ -38,7 +38,6 @@
 import LoadingTransition from '@/components/LoadingTransition.vue';
 import ElementOptions from '@/components/PresentationEditing/ElementOptions.vue';
 import ElementSwitch from '@/components/PresentationEditing/ElementSwitch.vue';
-import TextField from '@/components/PresentationEditing/elements/TextField.vue';
 import { useUserStore } from '@/stores/user';
 import type { Element, Slide } from '@/utils/types';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
@@ -66,10 +65,10 @@ const scalePositionHeight = ref<'top' | 'center' | 'bottom'>();
 
 onMounted(() => {
   loaded.value = false;
+  getScaleFactors();
 
   if (!userStore.currentPres) return;
 
-  console.log(userStore.currentPres);
   const slide = userStore.currentPres.slides[currentSlideIndex.value];
   slide.selected = false;
   for (let element of slide.elements) {
@@ -77,7 +76,6 @@ onMounted(() => {
   }
   currentSlide.value = slide;
 
-  getScaleFactors();
 
   window.addEventListener('resize', getScaleFactors);
 });
@@ -103,6 +101,8 @@ function getScaleFactors() {
     scaleFactor.value = heightFactor;
     reverseScaleFactor.value = reverseHeightFactor;
   }
+
+  console.log(scaleFactor.value, reverseScaleFactor.value)
 }
 
 function handleMouseDown(element: Element, event: MouseEvent, width?: 'left' | 'center' | 'right', height?: 'top' | 'center' | 'bottom') {
