@@ -1,5 +1,5 @@
 <template>
-<!--   <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)]">
+  <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)] py-12">
     <a href="/"><img class="h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? ' back' : '' }}!</h1>
 
@@ -21,16 +21,33 @@
 
       <span class="m-4">or using email</span>
 
-      <form class="login flex items-center justify-center flex-col gap-6 w-full" @submit="loginWithEmail">
+      <form class="login flex items-center justify-center flex-col gap-6 w-full" @submit="loginWithEmail" @submit.prevent>
         <div class="flex items-start justify-center flex-col gap-1">
-          <label class="font-medium" for="email">Your email address</label>
-          <input class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500" id="email" type="email" required v-model="email" />
+          <label class="font-medium" for="email">Your email address <span title="Required" class="text-red-500 font-2xl">*</span></label>
+          <input
+            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
+            id="email"
+            type="email"
+            required
+            v-model="email"
+          />
+        </div>
+
+        <div class="flex items-start justify-center flex-col gap-1" v-if="!showLogin">
+          <label class="font-medium" for="name">Your name <span title="Required" class="text-red-500 font-2xl">*</span></label>
+          <input
+            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
+            id="name"
+            type="text"
+            required
+            v-model="name"
+          />
         </div>
 
         <div class="flex items-start justify-center flex-col gap-1">
-          <label class="font-medium" for="password">{{ showLogin ? 'Your' : 'Choose a' }} password</label>
+          <label class="font-medium" for="password">{{ showLogin ? 'Your' : 'Choose a' }} password <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
-            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500"
+            class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
             id="password"
             type="password"
             required
@@ -50,20 +67,20 @@
     <h3 v-show="showLogin">New to Vent Defeater?</h3>
     <h3 v-show="!showLogin">Already have an account?</h3>
     <button class="bg-transparent border-0" @click="showLogin ? router.push('?signup=1') : router.push('')">
-      <a href="#" class="no-underline"
-        ><h3 class="m-0 font-medium">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3></a
-      >
+      <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3>
     </button>
-  </div> -->
+  </div>
+  -->
   <EnterBar />
-
-  
 </template>
 
 <script setup lang="ts">
+import { useUserStore } from '@/stores/user';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import EnterBar from '../components/EnterBar.vue'
+import EnterBar from '../components/EnterBar.vue';
+
+const userStore = useUserStore();
 
 const route = useRoute();
 const router = useRouter();
@@ -71,6 +88,7 @@ const router = useRouter();
 const showLogin = ref(true);
 
 const email = ref('');
+const name = ref('');
 const password = ref('');
 
 watch(
@@ -105,7 +123,8 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  console.log('email');
+  userStore.isAuthenticated = true;
+  router.push('/app/dashboard');
 }
 
 async function loginWithGoogle() {
@@ -122,6 +141,12 @@ async function loginWithFacebook() {
 </script>
 
 <style lang="scss" scoped>
+.login {
+  input:focus {
+    box-shadow: 0 0 0 0.375rem var(--primary-shade-translucent);
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .logo:hover {
     filter: contrast(200%);
@@ -135,7 +160,7 @@ async function loginWithFacebook() {
 
   .login {
     input:hover {
-      outline: 0.15em solid var(--primary);
+      outline: 0.125rem solid var(--primary);
     }
     button:hover {
       background-color: var(--text-color);
