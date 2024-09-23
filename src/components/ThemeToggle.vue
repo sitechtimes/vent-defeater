@@ -7,6 +7,7 @@
     <img
       class="absolute top-0.5 left-1 h-6 transition duration-500"
       :class="{ 'translate-x-8': dark, 'translate-x-10': dark && big }"
+      :style="{ left: dark && big ? '1rem' : '0.25rem' }"
       :src="dark ? '/ui/moon.svg' : '/ui/sun.svg'"
       aria-hidden="true"
     />
