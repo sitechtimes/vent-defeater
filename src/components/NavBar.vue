@@ -23,11 +23,11 @@
     </nav>
     <div class="logins flex items-center justify-center gap-3">
       <ThemeToggle />
-      <RouterLink class="no-underline" to="/login" v-if="!userStore.isAuthenticated"><h3 class="font-bold m-0">Log in</h3></RouterLink>
-      <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/login?signup=1" v-if="!userStore.isAuthenticated"
+      <RouterLink class="no-underline" to="/login" v-if="!userStore.isAuth"><h3 class="font-bold m-0">Log in</h3></RouterLink>
+      <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/login?signup=1" v-if="!userStore.isAuth"
         ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3></RouterLink
       >
-      <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/app" v-if="userStore.isAuthenticated"
+      <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/app" v-if="userStore.isAuth"
         ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Go to dashboard</h3></RouterLink
       >
     </div>
