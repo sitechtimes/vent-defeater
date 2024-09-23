@@ -30,9 +30,7 @@ export const useUserStore = defineStore('userStore', () => {
       body: JSON.stringify({ email, password, name })
     });
     isAuth.value = res.ok;
-    if (isAuth.value) {
-      user.value = await res.json();
-    }
+    if (isAuth.value) user.value = await res.json();
   }
 
   return { user, isAuth, theme, presentations, currentPres, logIn, signUp };

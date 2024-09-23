@@ -131,12 +131,12 @@ watch(
 watch(
   () => password.value,
   (value) => {
-    if (value != confirmPassword.value) confirmPasswordErr.value = "Passwords do not match.";
-    else confirmPasswordErr.value = "";
+    if (value != confirmPassword.value && !showLogin.value) confirmPasswordErr.value = 'Passwords do not match.';
+    else confirmPasswordErr.value = '';
 
-    if (value.length < 8) passwordErr.value = "Password must be at least 8 characters.";
-    else if (value.length > 50) passwordErr.value = "Password must be less than 50 characters.";
-    else passwordErr.value = "";
+    if (value.length < 8) passwordErr.value = 'Password must be at least 8 characters.';
+    else if (value.length > 50) passwordErr.value = 'Password must be less than 50 characters.';
+    else passwordErr.value = '';
   }
 );
 
@@ -152,7 +152,7 @@ watch(
 watch(
   () => confirmPassword.value,
   (value) => {
-    if (value != password.value) confirmPasswordErr.value = 'Passwords do not match.';
+    if (value != password.value && !showLogin.value) confirmPasswordErr.value = 'Passwords do not match.';
     else confirmPasswordErr.value = '';
   }
 );
@@ -185,8 +185,8 @@ async function loginWithEmail() {
   // return
   if (emailErr.value || passwordErr.value || nameErr.value) return;
 
-  if (!showLogin.value) {
-    signupWithEmail();
+  if (showLogin.value) {
+    userStore.logIn(email.value, password.value);
     return;
   } else {
     if (password.value != confirmPassword.value) {
@@ -197,25 +197,21 @@ async function loginWithEmail() {
   }
 
   try {
-    throw new Error("urmom")
-    await userStore.logIn(email.value, password.value);
+    throw new Error('urmom');
   } catch (error) {
-    if (error instanceof Error){
+    if (error instanceof Error) {
       passwordErr.value = error.message;
-      if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
+      if (!error.message) passwordErr.value = 'Something went wrong. Please try again.';
     }
     return;
   }
-
-  if (userStore.isAuth) router.push('/app/dashboard');
-  else passwordErr.value = "Something went wrong. Please try again.";
 }
 
-async function signupWithEmail () {
+async function signupWithEmail() {
   if (emailErr.value || passwordErr.value || nameErr.value) return;
 
   if (password.value != confirmPassword.value) {
-    passwordErr.value = "Passwords do not match.";
+    passwordErr.value = 'Passwords do not match.';
     return;
   }
 
@@ -227,7 +223,7 @@ async function signupWithEmail () {
   }
 
   if (userStore.isAuth) router.push('/app/dashboard');
-  else passwordErr.value = "Something went wrong. Please try again.";
+  else passwordErr.value = 'Something went wrong. Please try again.';
 }
 
 async function loginWithGoogle() {
