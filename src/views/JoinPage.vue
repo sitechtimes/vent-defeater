@@ -8,11 +8,29 @@
       <p class="text-lg text-[color:var(--faded-text-color)]">It's on the screen in front of you</p>
     </div>
 
-    <JoinCode />
+    <div class="box flex gap-3 relative">
+      <div
+        class="w-14 h-14 text-center text-2xl rounded-md border-2 border-[color:var(--faded-bg-color)] bg-[color:var(--faded-bg-color-light)] flex items-center justify-center transition-none"
+        :class="{ current: index == displayedDigits.findIndex((digit) => digit == ''), filled: digit != '', 'ml-3': index == 3 }"
+        v-for="(digit, index) in displayedDigits"
+        :key="index"
+      >
+        {{ digit }}
+      </div>
+      <input ref="inputRef" class="absolute top-0 left-0 w-full h-full text-2xl opacity-0 bg-none border-none outline-none" v-model="code" type="number" @click="selectEverything" />
+    </div>
 
     <div class="flex items-center justify-center gap-4">
       <RouterLink to="/" class="px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-transparent text-[color:var(--text-color)] text-lg font-semibold mt-6">Back</RouterLink>
-      <button class="px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-[color:var(--text-color)] text-[color:var(--bg-color)] text-lg font-semibold mt-6">Join</button>
+      <button
+        @click="join(code)"
+        :disabled="code.length != 6"
+        :class="{ 'cursor-not-allowed': code.length != 6 }"
+        :style="{ 'background-color': code.length == 6 ? 'var(--text-color)' : 'var(--faded-text-color)' }"
+        class="px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] text-[color:var(--bg-color)] text-lg font-semibold mt-6"
+      >
+        Join
+      </button>
     </div>
   </div>
 </template>
@@ -20,15 +38,54 @@
 <script setup lang="ts">
 import JoinCode from '@/components/JoinCode.vue';
 import NavBar from '@/components/NavBar.vue';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
 const showBanner = ref(true);
+
+const inputRef = ref<HTMLInputElement>();
+const displayedDigits = ref(new Array(6).fill(''));
+const code = ref('');
+watch(
+  () => code.value,
+  (input) => {
+    if (input.length > 6) {
+      code.value = String(input).slice(0, 6);
+      return;
+    }
+    code.value = [...String(input)].filter((char) => !isNaN(Number(char))).join('');
+    displayedDigits.value = String(input).split('').concat(new Array(6).fill('')).slice(0, 6);
+
+    if (input.length == 6) join(code.value);
+  }
+);
+
 onMounted(() => {
   showBanner.value = false;
 });
+
+function selectEverything() {
+  if (!inputRef.value) return;
+  inputRef.value.select();
+}
+
+function join(code: string) {
+  console.log('join');
+}
 </script>
 
 <style lang="scss" scoped>
+.filled {
+  border-color: var(--primary-shade-translucent);
+  background-color: transparent;
+}
+
+.box:focus-within {
+  .current {
+    border-color: var(--primary);
+    background-color: transparent;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .logo:hover {
     filter: contrast(200%);
