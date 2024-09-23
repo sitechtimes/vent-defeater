@@ -1,12 +1,12 @@
 <script setup lang="ts">
 const checkDigit = (event: KeyboardEvent) => {
-  if (event.key.length === 1 && isNaN(Number(event.key))) event.preventDefault();
+  if (event.key.length === 1 && isNaN(Number(event.key)) || event.key==' ') event.preventDefault();
 };
 </script>
 
 <template>
   <div class="joe flex rounded-lg bg-gray-200 focus:outline-indigo-400">
-    <input type="text" class="bg-transparent text-left ml-5 text-xl" @hover="" @keydown="checkDigit" maxlength="8" placeholder="1234 5678" />
+    <input type="text" class="bg-transparent text-left ml-5 text-xl" @hover="" @keydown="checkDigit" maxlength="6" placeholder="123456" />
   </div>
 </template>
 
