@@ -21,6 +21,12 @@
                 <img class="flex items-center justify-center p-8 bg-[color:var(--bg-color)] rounded-2xl w-3/4 h-3/4" :src="feature.img" aria-hidden="true" />
                 <p>{{ feature.name }}</p>
               </div>
+              <RouterLink to="/app/settings">
+                <div class="flex items-center justify-center flex-col gap-2 cursor-pointer">
+                  <!-- <img class="flex items-center justify-center p-8 bg-[color:var(--bg-color)] rounded-2xl w-3/4 h-3/4" src="feature.img" aria-hidden="true" /> -->
+                  <p>⚙ settings trust</p>
+                </div>
+              </RouterLink>
             </div>
           </div>
 
