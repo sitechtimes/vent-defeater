@@ -88,14 +88,13 @@
     </button>
   </div>
   -->
-  <EnterBar />
+  
 </template>
 
 <script setup lang="ts">
 import { useUserStore } from '@/stores/user';
 import { onMounted, ref, watch } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
-import EnterBar from '../components/EnterBar.vue';
 
 const userStore = useUserStore();
 
