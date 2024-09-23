@@ -18,7 +18,7 @@ export type Dimensions = {
   width: number;
   /** Height of the element, in pixels. */
   height: number;
-}
+};
 
 /** Settings for backgrounds. */
 export type Background = {
@@ -86,8 +86,6 @@ export type Slide = {
   dimensions: Dimensions;
   /** Information about the background of the slide. */
   background: Background;
-  /** Default text styles for the slide. */
-  text: Text;
   /** Other settings of the slide. */
   settings: {
     /** Whether or not to show the join code on the slide. */

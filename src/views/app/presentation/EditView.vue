@@ -1,36 +1,48 @@
 <template>
   <LoadingTransition @done="loaded = true" />
-  <div class="flex items-center justify-between bg-[color:var(--faded-bg-color)] w-screen h-screen" :class="{ 'opacity-0': !loaded }" v-if="currentSlide">
-    <div class="flex flex-col items-center justify-center">slides</div>
-
-    <div class="slideBackground flex items-center justify-center bg-[color:var(--faded-bg-color-light)] rounded-lg" ref="slideBackgroundRef">
-      <div
-        class="relative rounded-lg cursor-pointer overflow-hidden"
-        :class="{ selected: currentSlide.id == selectedElement?.id }"
-        ref="slideRef"
-        @mousedown="selectElement(currentSlide, $event)"
-        :style="{
-          width: currentSlide.dimensions.width * scaleFactor + 'px',
-          height: currentSlide.dimensions.height * scaleFactor + 'px',
-          backgroundColor: currentSlide.background.color
-        }"
-      >
-        <ElementSwitch
-          v-for="element in currentSlide.elements"
-          :key="element.id"
-          :element="element"
-          :scale-factor="scaleFactor"
-          :selected-element="selectedElement"
-          @mousedown="handleMouseDown(element, $event)"
-          @select="(event) => selectElement(element, event)"
-          @scale="(event, width, height) => handleMouseDown(element, event, width, height)"
-        />
+  <div class="h-screen flex flex-col items-center justify-between bg-[color:var(--faded-bg-color)]">
+    <header class="w-screen h-16 bg-[color:var(--bg-color)] flex items-center justify-between px-8" :class="{ 'opacity-0': !loaded }">
+      <div class="flex items-center justify-center gap-6">
+        <RouterLink to="/app/dashboard"><img class="w-6 h-6 dark:invert" src="/ui/leftArrow.svg" aria-hidden="true" /></RouterLink>
+        <div class="flex items-start justify-center flex-col">
+          <h1 class="text-lg font-450">{{ userStore.currentPres?.name }}</h1>
+          <p class="text-xs text-[color:var(--faded-text-color)]">{{ userStore.currentPres?.type }}</p>
+        </div>
       </div>
+    </header>
+
+    <div class="flex items-center justify-between bg-[color:var(--faded-bg-color)] w-screen h-screen transition" :class="{ 'opacity-0': !loaded }" v-if="currentSlide">
+      <div class="flex flex-col items-center justify-center">slides</div>
+
+      <div class="slideBackground flex items-center justify-center bg-[color:var(--faded-bg-color-light)] rounded-lg" ref="slideBackgroundRef">
+        <div
+          class="relative rounded-lg cursor-pointer overflow-hidden"
+          :class="{ selected: currentSlide.id == selectedElement?.id }"
+          ref="slideRef"
+          @mousedown="selectElement(currentSlide, $event)"
+          :style="{
+            width: currentSlide.dimensions.width * scaleFactor + 'px',
+            height: currentSlide.dimensions.height * scaleFactor + 'px',
+            backgroundColor: currentSlide.background.color
+          }"
+        >
+          <ElementSwitch
+            v-for="element in currentSlide.elements"
+            :key="element.id"
+            :element="element"
+            :scale-factor="scaleFactor"
+            :selected-element="selectedElement"
+            @mousedown="handleMouseDown(element, $event)"
+            @select="(event) => selectElement(element, event)"
+            @scale="(event, width, height) => handleMouseDown(element, event, width, height)"
+          />
+        </div>
+      </div>
+
+      <ElementOptions :selected-element="selectedElement" @close="selectedElement = undefined" />
+
+      <div>themes and shit</div>
     </div>
-
-    <ElementOptions :selected-element="selectedElement" />
-
-    <div>themes and shit</div>
   </div>
 </template>
 
@@ -55,13 +67,16 @@ const reverseScaleFactor = ref(1);
 
 const selectedElement = ref<Slide | Element>();
 const elementMoving = ref(false);
-const offsetX = ref(0);
-const offsetY = ref(0);
-const elementWidth = ref(0);
-const elementHeight = ref(0);
+const offsetLeft = ref(0);
+const offsetTop = ref(0);
+const offsetRight = ref(0);
+const offsetBottom = ref(0);
 
 const scalePositionWidth = ref<'left' | 'center' | 'right'>();
 const scalePositionHeight = ref<'top' | 'center' | 'bottom'>();
+
+// when saving:
+// delete any elements that have top left right bottom all outside bounds of slide
 
 onMounted(() => {
   loaded.value = false;
@@ -75,7 +90,6 @@ onMounted(() => {
     element.selected = false;
   }
   currentSlide.value = slide;
-
 
   window.addEventListener('resize', getScaleFactors);
 });
@@ -102,7 +116,7 @@ function getScaleFactors() {
     reverseScaleFactor.value = reverseHeightFactor;
   }
 
-  console.log(scaleFactor.value, reverseScaleFactor.value)
+  console.log(scaleFactor.value, reverseScaleFactor.value);
 }
 
 function handleMouseDown(element: Element, event: MouseEvent, width?: 'left' | 'center' | 'right', height?: 'top' | 'center' | 'bottom') {
@@ -110,23 +124,20 @@ function handleMouseDown(element: Element, event: MouseEvent, width?: 'left' | '
 
   selectElement(element, event);
   elementMoving.value = true;
-  
+
   scalePositionWidth.value = width;
   scalePositionHeight.value = height;
 
-  // element width and height
-  const el = event.target as HTMLDivElement;
-  elementWidth.value = el.offsetWidth;
-  elementHeight.value = el.offsetHeight;
-
-  // mouse position relative to slide
   const slideRect = slideRef.value.getBoundingClientRect();
-  const mouseX = event.clientX - slideRect.left; // top
-  const mouseY = event.clientY - slideRect.top; // left
+  const mouseLeft = event.clientX - slideRect.left;
+  const mouseTop = event.clientY - slideRect.top;
+  const mouseRight = slideRect.right - event.clientX;
+  const mouseBottom = slideRect.bottom - event.clientY;
 
-  // offset between mouse and element's top/left
-  offsetX.value = mouseX - element.position.left * scaleFactor.value;
-  offsetY.value = mouseY - element.position.top * scaleFactor.value;
+  offsetLeft.value = mouseLeft - element.position.left * scaleFactor.value;
+  offsetTop.value = mouseTop - element.position.top * scaleFactor.value;
+  offsetRight.value = mouseRight - element.position.right * scaleFactor.value;
+  offsetBottom.value = mouseBottom - element.position.bottom * scaleFactor.value;
 
   document.addEventListener('mousemove', width || height ? scaleElement : moveElement);
   document.addEventListener('mouseup', handleMouseUp);
@@ -138,47 +149,41 @@ function scaleElement(event: MouseEvent) {
   const width = scalePositionWidth.value;
   const height = scalePositionHeight.value;
 
-  // mouse position relative to slide
   const slideRect = slideRef.value.getBoundingClientRect();
-  const mouseX = event.clientX - slideRect.left; // top
-  const mouseY = event.clientY - slideRect.top; // left
+  const mouseLeft = event.clientX - slideRect.left;
+  const mouseTop = event.clientY - slideRect.top;
+  const mouseRight = slideRect.right - event.clientX;
+  const mouseBottom = slideRect.bottom - event.clientY;
 
-  // move same distance as mouse from original offsetx/y
-  const rawX = mouseX * reverseScaleFactor.value - offsetX.value * reverseScaleFactor.value; // position of element's top relative to slide
-  const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value; // position of element's left relative to slide
-  console.log(rawX, rawY);
-  // idk man
-  if (width == 'left' && height == 'top') {
-    selectedElement.value.position.left = rawX;
-    selectedElement.value.position.top = rawY;
-  } else if (width == 'right' && height == 'bottom') {
-    selectedElement.value.position.right = rawX;
-    selectedElement.value.position.bottom = rawY;
-  }
+  const rawLeft = mouseLeft * reverseScaleFactor.value - offsetLeft.value * reverseScaleFactor.value;
+  const rawTop = mouseTop * reverseScaleFactor.value - offsetTop.value * reverseScaleFactor.value;
+  const rawRight = mouseRight * reverseScaleFactor.value - offsetRight.value * reverseScaleFactor.value;
+  const rawBottom = mouseBottom * reverseScaleFactor.value - offsetBottom.value * reverseScaleFactor.value;
 
-  // check bounds of outer slide
-  // selectedElement.value.position.x = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - selectedElement.value.dimensions.width));
-  // selectedElement.value.position.y = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - selectedElement.value.dimensions.height));
+  if (height == 'top') selectedElement.value.position.top = rawTop;
+  if (height == 'bottom') selectedElement.value.position.bottom = rawBottom;
+  if (width == 'left') selectedElement.value.position.left = rawLeft;
+  if (width == 'right') selectedElement.value.position.right = rawRight;
 }
 
 function moveElement(event: MouseEvent) {
   if (!elementMoving.value || !selectedElement.value || !slideRef.value || selectedElement.value.type == 'Slide') return;
 
-  // mouse position relative to slide
   const slideRect = slideRef.value.getBoundingClientRect();
-  const mouseX = event.clientX - slideRect.left; // top
-  const mouseY = event.clientY - slideRect.top; // left
-  console.log(event.clientX, event.clientY);
+  const mouseLeft = event.clientX - slideRect.left;
+  const mouseTop = event.clientY - slideRect.top;
+  const mouseRight = slideRect.right - event.clientX;
+  const mouseBottom = slideRect.bottom - event.clientY;
 
-  // move same distance as mouse from original offsetx/y
-  const rawX = mouseX * reverseScaleFactor.value - offsetX.value * reverseScaleFactor.value; // position of element's top relative to slide
-  const rawY = mouseY * reverseScaleFactor.value - offsetY.value * reverseScaleFactor.value; // position of element's left relative to slide
+  const rawLeft = mouseLeft * reverseScaleFactor.value - offsetLeft.value * reverseScaleFactor.value;
+  const rawTop = mouseTop * reverseScaleFactor.value - offsetTop.value * reverseScaleFactor.value;
+  const rawRight = mouseRight * reverseScaleFactor.value - offsetRight.value * reverseScaleFactor.value;
+  const rawBottom = mouseBottom * reverseScaleFactor.value - offsetBottom.value * reverseScaleFactor.value;
 
-  // check bounds of outer slide
-  selectedElement.value.position.right = Math.max(0, Math.min((selectedElement.value.position.right + selectedElement.value.position.left - rawX), slideRect.width * reverseScaleFactor.value - Math.abs(selectedElement.value.position.right - selectedElement.value.position.left)));
-  selectedElement.value.position.bottom = Math.max(0, Math.min((selectedElement.value.position.bottom + selectedElement.value.position.top - rawY), slideRect.height * reverseScaleFactor.value - Math.abs(selectedElement.value.position.bottom - selectedElement.value.position.top)));
-  selectedElement.value.position.left = Math.max(0, Math.min(rawX, slideRect.width * reverseScaleFactor.value - Math.abs(selectedElement.value.position.right - selectedElement.value.position.left)));
-  selectedElement.value.position.top = Math.max(0, Math.min(rawY, slideRect.height * reverseScaleFactor.value - Math.abs(selectedElement.value.position.bottom - selectedElement.value.position.top)));
+  selectedElement.value.position.left = rawLeft;
+  selectedElement.value.position.top = rawTop;
+  selectedElement.value.position.right = rawRight;
+  selectedElement.value.position.bottom = rawBottom;
 }
 
 function handleMouseUp() {

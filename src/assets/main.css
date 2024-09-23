@@ -16,7 +16,7 @@
   --faded-bg-color: rgb(230, 230, 230);
   --faded-bg-color-light: rgb(241, 245, 245);
   --text-color: black;
-  --faded-text-color: rgb(139, 139, 139);
+  --faded-text-color: rgb(70, 70, 70);
   --text-color-contrast: white;
 }
 
@@ -58,6 +58,16 @@ body {
   color: var(--text-color);
   transition-property: color, background-color;
   transition-duration: 0.5s;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'] {
+  -moz-appearance: textfield;
 }
 
 ::-webkit-scrollbar {

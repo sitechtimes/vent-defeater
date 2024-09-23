@@ -1,6 +1,6 @@
 <template>
   <div
-    class="element flex absolute"
+    class="element flex absolute transition-none"
     :class="{
       selected: element.id == selectedElement?.id,
       'cursor-move': element.id == selectedElement?.id,
@@ -26,15 +26,43 @@
     }"
   >
     <div
-      class="absolute hidden bg-[color:var(--primary)] w-2 h-2 cursor-nw-resize"
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-nw-resize top left"
       :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
-      style="top: -0.3rem; left: -0.3rem"
       @mousedown="emit('scale', $event, 'left', 'top')"
     ></div>
     <div
-      class="absolute hidden bg-[color:var(--primary)] w-2 h-2 cursor-nw-resize"
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-n-resize top"
       :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
-      style="bottom: -0.3rem; right: -0.3rem"
+      @mousedown="emit('scale', $event, 'center', 'top')"
+    ></div>
+    <div
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-nw-resize top right"
+      :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
+      @mousedown="emit('scale', $event, 'right', 'top')"
+    ></div>
+    <div
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-e-resize left"
+      :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
+      @mousedown="emit('scale', $event, 'left', 'center')"
+    ></div>
+    <div
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-w-resize right"
+      :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
+      @mousedown="emit('scale', $event, 'right', 'center')"
+    ></div>
+    <div
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-nw-resize bottom left"
+      :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
+      @mousedown="emit('scale', $event, 'left', 'bottom')"
+    ></div>
+    <div
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-s-resize bottom"
+      :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
+      @mousedown="emit('scale', $event, 'center', 'bottom')"
+    ></div>
+    <div
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-nw-resize bottom right"
+      :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
       @mousedown="emit('scale', $event, 'right', 'bottom')"
     ></div>
     <TextField v-if="element.type == 'Text Field'" :element="element" :scale-factor="scaleFactor" @select="(event) => emit('select', event)" />
@@ -57,17 +85,24 @@ type Emits = {
 };
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
-
-onMounted(() => {
-  console.log(props.element.position.right)
-})
-
-watch(() => props.element.position.right, (val) => console.log(val))
 </script>
 
 <style lang="scss" scoped>
 .selected {
   outline: 0.15rem solid var(--primary);
+}
+
+.left {
+  left: -0.35rem;
+}
+.right {
+  right: -0.35rem;
+}
+.top {
+  top: -0.35rem;
+}
+.bottom {
+  bottom: -0.35rem;
 }
 
 @media (hover: hover) and (pointer: fine) {
