@@ -183,6 +183,25 @@ async function loginWithEmail() {
   userStore.isAuth = true;
   router.push('/app/dashboard');
   return;
+  /*if (emailErr.value || passwordErr.value || nameErr.value) return;
+
+  if (!showLogin.value) {
+    signupWithEmail();
+    return;
+  }
+
+  try {
+    await userStore.logIn(email.value, password.value);
+  } catch (error) {
+    if (error instanceof Error){
+      passwordErr.value = error.message;
+      if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
+    }
+    return;
+  }
+
+  if (userStore.isAuth) router.push('/app/dashboard');
+  else passwordErr.value = "Something went wrong. Please try again.";*/
 }
 
 async function signupWithEmail() {
