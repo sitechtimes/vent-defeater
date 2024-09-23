@@ -55,8 +55,8 @@ function handleInput() {
 
 <style lang="scss" scoped>
 div {
-  width: calc(100% - 1.5rem);
-  height: calc(100% - 1.5rem);
+  width: calc(100% - 2rem);
+  height: calc(100% - 2rem);
 }
 .showPlaceholder::before {
   content: attr(placeholder);

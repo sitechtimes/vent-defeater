@@ -36,7 +36,7 @@
       @mousedown="emit('scale', $event, 'center', 'top')"
     ></div>
     <div
-      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-nw-resize top right"
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-ne-resize top right"
       :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
       @mousedown="emit('scale', $event, 'right', 'top')"
     ></div>
@@ -51,7 +51,7 @@
       @mousedown="emit('scale', $event, 'right', 'center')"
     ></div>
     <div
-      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-nw-resize bottom left"
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-sw-resize bottom left"
       :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
       @mousedown="emit('scale', $event, 'left', 'bottom')"
     ></div>
@@ -61,7 +61,7 @@
       @mousedown="emit('scale', $event, 'center', 'bottom')"
     ></div>
     <div
-      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-nw-resize bottom right"
+      class="absolute hidden bg-[color:var(--primary)] w-2.5 h-2.5 cursor-se-resize bottom right"
       :style="{ display: element.id == selectedElement?.id ? 'block' : '' }"
       @mousedown="emit('scale', $event, 'right', 'bottom')"
     ></div>

@@ -1,18 +1,38 @@
 <template>
   <LoadingTransition @done="loaded = true" />
-  <div class="h-screen flex flex-col items-center justify-between bg-[color:var(--faded-bg-color)]">
-    <header class="w-screen h-16 bg-[color:var(--bg-color)] flex items-center justify-between px-8" :class="{ 'opacity-0': !loaded }">
+  <div class="h-screen flex flex-col items-center justify-between bg-[color:var(--faded-bg-color)] transition duration-500">
+    <header class="w-screen h-16 bg-[color:var(--bg-color)] transition duration-500 flex items-center justify-between px-8" :class="{ 'opacity-0': !loaded }">
       <div class="flex items-center justify-center gap-6">
-        <RouterLink to="/app/dashboard"><img class="w-6 h-6 dark:invert" src="/ui/leftArrow.svg" aria-hidden="true" /></RouterLink>
+        <RouterLink title="Go back to dashboard" to="/app/dashboard"><img class="w-6 h-6 dark:invert" src="/ui/leftArrow.svg" aria-hidden="true" /></RouterLink>
         <div class="flex items-start justify-center flex-col">
-          <h1 class="text-lg font-450">{{ userStore.currentPres?.name }}</h1>
+          <div class="flex items-center justify-center gap-2">
+            <h1 class="text-lg font-450">{{ userStore.currentPres?.name }}</h1>
+            <button><img class="w-4 h-4 dark:invert" src="/ui/pencil.svg" alt="Click to edit presentation name" /></button>
+          </div>
           <p class="text-xs text-[color:var(--faded-text-color)]">{{ userStore.currentPres?.type }}</p>
         </div>
+        <button title="Settings" class="settings w-10 h-10 bg-[color:var(--faded-bg-color)] flex items-center justify-center rounded-full">
+          <img class="w-5 h-5 transition dark:invert" src="/ui/settings.svg" aria-hidden="true" />
+        </button>
+      </div>
+      <div class="flex items-center justify-center gap-6">
+        <ThemeToggle big />
       </div>
     </header>
 
-    <div class="flex items-center justify-between bg-[color:var(--faded-bg-color)] w-screen h-screen transition" :class="{ 'opacity-0': !loaded }" v-if="currentSlide">
-      <div class="flex flex-col items-center justify-center">slides</div>
+    <div class="flex items-start justify-between bg-[color:var(--faded-bg-color)] w-screen h-screen transition duration-500 py-5 px-5" :class="{ 'opacity-0': !loaded }" v-if="currentSlide">
+      <div class="flex flex-col items-center justify-center gap-6">
+        <button class="flex items-center justify-center gap-2 bg-[color:var(--text-color)] rounded-full px-6 py-3 text-[color:var(--bg-color)] font-semibold">
+          <img class="w-5 h-5 dark:invert" src="/ui/plus.svg" aria-hidden="true" /> New Slide
+        </button>
+        <div
+          class="smallSlide rounded-lg cursor-pointer bg-[color:var(--bg-color)] flex items-center justify-center"
+          :class="{ selected: currentSlideIndex == index }"
+          v-for="(slide, index) in userStore.currentPres?.slides"
+        >
+          <p>Slide {{ index + 1 }}</p>
+        </div>
+      </div>
 
       <div class="slideBackground flex items-center justify-center bg-[color:var(--faded-bg-color-light)] rounded-lg" ref="slideBackgroundRef">
         <div
@@ -40,8 +60,7 @@
       </div>
 
       <ElementOptions :selected-element="selectedElement" @close="selectedElement = undefined" />
-
-      <div>themes and shit</div>
+      <div class="w-80" v-show="!selectedElement"></div>
     </div>
   </div>
 </template>
@@ -50,6 +69,7 @@
 import LoadingTransition from '@/components/LoadingTransition.vue';
 import ElementOptions from '@/components/PresentationEditing/ElementOptions.vue';
 import ElementSwitch from '@/components/PresentationEditing/ElementSwitch.vue';
+import ThemeToggle from '@/components/ThemeToggle.vue';
 import { useUserStore } from '@/stores/user';
 import type { Element, Slide } from '@/utils/types';
 import { onMounted, onUnmounted, ref, watch } from 'vue';
@@ -215,7 +235,20 @@ function selectElement(element: Slide | Element, event: Event) {
   max-height: 45rem;
 }
 
+.smallSlide {
+  width: 128px;
+  height: 72px;
+}
+
 .selected {
   outline: 0.15rem solid var(--primary);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .settings:hover {
+    img {
+      transform: scale(1.1);
+    }
+  }
 }
 </style>

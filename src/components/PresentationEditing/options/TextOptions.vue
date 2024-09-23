@@ -16,7 +16,7 @@
         <p>Font Size</p>
         <div class="flex items-center jsutify-center gap-1">
           <button class="sizeButton rounded-md transition" @click="options.size--"><img class="w-5 h-5 dark:invert" src="/ui/minus.svg" aria-hidden="true" /></button>
-          <input class="w-10 select-none text-center rounded-md border border-[color:var(--text-color)]" type="number" v-model="options.size" />
+          <input class="w-10 select-none text-center rounded-md border border-[color:var(--text-color)] text-black" type="number" v-model="options.size" />
           <button class="sizeButton rounded-md transition" @click="options.size++"><img class="w-5 h-5 dark:invert" src="/ui/plus.svg" aria-hidden="true" /></button>
         </div>
       </div>
