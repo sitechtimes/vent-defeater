@@ -21,7 +21,9 @@
     </div>
 
     <div class="flex items-center justify-center gap-4">
-      <RouterLink to="/" class="px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-transparent text-[color:var(--text-color)] text-lg font-semibold mt-6">Back</RouterLink>
+      <RouterLink to="/" class="back transition px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-transparent text-[color:var(--text-color)] text-lg font-semibold mt-6"
+        >Back</RouterLink
+      >
       <button
         @click="join(code)"
         :disabled="code.length != 6"
@@ -36,7 +38,6 @@
 </template>
 
 <script setup lang="ts">
-import JoinCode from '@/components/JoinCode.vue';
 import NavBar from '@/components/NavBar.vue';
 import { onMounted, ref, watch } from 'vue';
 
@@ -89,6 +90,10 @@ function join(code: string) {
 @media (hover: hover) and (pointer: fine) {
   .logo:hover {
     filter: contrast(200%);
+  }
+
+  .back:hover {
+    background-color: var(--faded-bg-color);
   }
 }
 </style>
