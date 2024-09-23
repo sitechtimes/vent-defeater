@@ -23,7 +23,7 @@
     <div class="flex items-start justify-between bg-[color:var(--faded-bg-color)] w-screen h-screen transition duration-500 py-5 px-5" :class="{ 'opacity-0': !loaded }" v-if="currentSlide">
       <div class="flex flex-col items-center justify-center gap-6">
         <button class="flex items-center justify-center gap-2 bg-[color:var(--text-color)] rounded-full px-6 py-3 text-[color:var(--bg-color)] font-semibold">
-          <img class="w-5 h-5 dark:invert" src="/ui/plus.svg" aria-hidden="true" /> New Slide
+          <img class="w-5 h-5 invert dark:invert-0" src="/ui/plus.svg" aria-hidden="true" /> New Slide
         </button>
         <div
           class="smallSlide rounded-lg cursor-pointer bg-[color:var(--bg-color)] flex items-center justify-center"
