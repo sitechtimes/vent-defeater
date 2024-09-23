@@ -5,8 +5,8 @@
         <h3 class="mb-3">It’s on the screen in front of you.</h3>
         
         <EnterBar class="izzy"/>
-        <button class="flex items-center justify-center rounded-full bg-[color:var(--text-color)] px-5 border-r border-[color:var(--bg-color)]">
-                <p class="font-semibold text-[color:var(--bg-color)]">New Vent</p>
+        <button class="flex items-center justify-center rounded-full bg-[color:var(--text-color)] px-10 border-r border-[color:var(--bg-color)]">
+                <p class="font-semibold text-[color:var(--bg-color)] text-lg">join!</p>
               </button>
 
       </div>

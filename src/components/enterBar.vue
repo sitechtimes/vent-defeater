@@ -5,8 +5,8 @@ const checkDigit = (event: KeyboardEvent) => {
 </script>
 
 <template>
-  <div class="joe flex justify-center align-center rounded-lg bg-gray-200 outline outline-[color:var(--text-color)] focus:outline-indigo-400">
-    <input type="text" class="bg-transparent text-center" @hover="" @keydown="checkDigit" maxlength="8" placeholder="12345678" />
+  <div class="joe flex rounded-lg bg-gray-200 focus:outline-indigo-400">
+    <input type="text" class="bg-transparent text-left ml-5 text-xl" @hover="" @keydown="checkDigit" maxlength="8" placeholder="1234 5678" />
   </div>
 </template>
 
