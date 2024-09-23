@@ -87,6 +87,8 @@
       <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3>
     </button>
   </div>
+  -->
+  
 </template>
 
 <script setup lang="ts">
