@@ -5,7 +5,7 @@
     <h3>It’s on the screen in front of you.</h3>
 
     <div class="flex flex-col select-none text-center gap-2 max-w-80">
-      <p>Click a number to freeze it. You will take additional <span class="text-blue-500">Freeze</span> damage for every number you have frozen.</p>
+      <p>Click a number to freeze it. On reroll, you will take <span class="text-blue-500">Freeze</span> damage for every number you have frozen.</p>
       <p class="flex gap-2">
         Health: <span class="font-extrabold">{{ Math.floor(health) }}</span>
         <span v-if="health < 100 && regen > 0">Regen: +{{ Math.floor(regen * 100) / 10 }}/sec</span>
@@ -45,15 +45,15 @@ function roll() {
     if (num !== -1) {
       code.value[index] = String(num);
       health.value--;
+      regen.value = -3;
     }
   });
-  health.value--;
   if (health.value < 1) {
     code.value = new Array(6).fill('0');
     frozen.value = new Array(6).fill(-1);
+    alert('You died!');
     health.value = 100;
   }
-  regen.value = -3;
 }
 
 function freeze(index: number) {
