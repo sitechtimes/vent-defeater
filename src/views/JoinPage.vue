@@ -45,7 +45,7 @@ import { onMounted, ref, watch } from 'vue';
 
 const showRPG = ref(false);
 
-const showBanner = ref(true);
+const showBanner = ref(JSON.parse(sessionStorage.getItem('previousIsHome') ?? 'false') as boolean);
 
 const inputRef = ref<HTMLInputElement>();
 const displayedDigits = ref(new Array(6).fill(''));

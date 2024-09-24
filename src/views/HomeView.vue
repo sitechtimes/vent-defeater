@@ -40,6 +40,7 @@ import { onMounted, ref } from 'vue';
 
 const showBanner = ref(false);
 onMounted(() => {
+  sessionStorage.setItem('previousIsHome', 'true');
   showBanner.value = true;
 });
 </script>
