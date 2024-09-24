@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar />
+    <NavBar :show-join-banner="showBanner" />
     <main class="flex flex-col items-center text-center gap-20">
       <section class="flex flex-col gap-3 items-center">
         <h1 class="text-6xl">What will you ask your audience?</h1>
@@ -36,6 +36,12 @@
 
 <script setup lang="ts">
 import NavBar from '@/components/NavBar.vue';
+import { onMounted, ref } from 'vue';
+
+const showBanner = ref(false);
+onMounted(() => {
+  showBanner.value = true;
+});
 </script>
 
 <style scoped>
