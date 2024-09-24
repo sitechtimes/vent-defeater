@@ -36,8 +36,35 @@
       </button>
     </div>
 
-    <div class="absolute top-20 left-4 flex items-center justify-center bg-[color:var(--bg-color-contrast)] p-2 rounded-xl w-40" v-show="showRPG">
-      <p class="timer font-semibold text-4xl">{{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor(timer / 1000 % 60).toString().length == 1 ? '0' : '') + Math.floor(timer / 1000 % 60) }}.<span class="timer text-2xl">{{ Math.floor(timer % 1000).toString().slice(0, 2) }}</span></p>
+    <div class="absolute top-20 left-4 flex items-center justify-center flex-col bg-[color:var(--bg-color-contrast)] py-2 px-10 w-48 rounded-xl" v-show="showRPG">
+      <p class="timer font-semibold text-4xl" :class="{ worse: pb && timer >= pb }">
+        {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span
+          class="timer text-2xl"
+          :class="{ worse: pb && timer > pb }"
+        >
+          {{
+            Math.floor(timer % 1000).toString().length == 1
+              ? '0'
+              : '' +
+                Math.floor(timer % 1000)
+                  .toString()
+                  .slice(0, 2)
+          }}
+        </span>
+      </p>
+      <div class="flex items-center justify-between w-full">
+        <p class="font-semibold text-xl text-[color:var(--gray)]">PB:</p>
+        <p class="font-semibold text-xl text-[color:var(--gray)]" v-if="pb">
+          {{ Math.floor(pb / 1000 / 60) }}:{{ (Math.floor((pb / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((pb / 1000) % 60) }}.{{
+            Math.floor(pb % 1000).toString().length == 1
+              ? '0'
+              : '' +
+                Math.floor(pb % 1000)
+                  .toString()
+                  .slice(0, 2)
+          }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -50,16 +77,26 @@ import { onMounted, ref, watch } from 'vue';
 
 const showRPG = ref(false);
 const startTime = ref(new Date().getTime());
-watch(() => showRPG.value, async () => {
-  while (showRPG.value) {
-    timer.value = new Date().getTime() - startTime.value;
-    await delay(10);
+watch(
+  () => showRPG.value,
+  async () => {
+    while (showRPG.value) {
+      timer.value = new Date().getTime() - startTime.value;
+      await delay(20);
+    }
   }
-})
+);
 const counter = ref(0);
-watch(() => counter.value, (value) => showRPG.value = value % 5 == 0);
+watch(
+  () => counter.value,
+  (value) => {
+    showRPG.value = value % 5 == 0;
+    if (value % 5 == 0) startTime.value = new Date().getTime();
+  }
+);
 /** Milliseconds */
 const timer = ref(0);
+const pb = ref<number>();
 
 const showBanner = ref(JSON.parse(sessionStorage.getItem('previousIsHome') ?? 'false') as boolean);
 
@@ -83,6 +120,11 @@ watch(
 onMounted(() => {
   showBanner.value = false;
   showRPG.value = Math.floor(Math.random() * 1001) == 420;
+  const localPB = localStorage.getItem('codePB');
+  if (localPB) {
+    const { time, date } = JSON.parse(localPB) as { time: number; date: number };
+    pb.value = time;
+  }
 });
 
 function selectEverything() {
@@ -91,7 +133,18 @@ function selectEverything() {
 }
 
 function join(code: string) {
+  if (showRPG.value) storePB();
+
   console.log('join');
+}
+
+function storePB() {
+  const localPB = localStorage.getItem('codePB');
+  if (localPB) {
+    const { time, date } = JSON.parse(localPB) as { time: number; date: number };
+    if (time < timer.value) return;
+  }
+  localStorage.setItem('codePB', JSON.stringify({ time: timer.value, date: new Date().getTime() }));
 }
 </script>
 
@@ -111,6 +164,13 @@ function join(code: string) {
 .timer {
   color: transparent;
   background: linear-gradient(to bottom, var(--secondary), var(--secondary-shade));
+  background-clip: text;
+  width: fit-content;
+}
+
+.worse {
+  color: transparent;
+  background: linear-gradient(to bottom, var(--primary-light), var(--primary-shade));
   background-clip: text;
   width: fit-content;
 }
