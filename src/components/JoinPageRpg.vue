@@ -19,42 +19,65 @@
       </div>
     </div>
 
-    <button @click="roll" class="rounded-full bg-[color:var(--text-color)] px-10 border-r border-[color:var(--bg-color)] text-[color:var(--bg-color)] text-lg font-semibold">Reroll 🎲</button>
+    <div class="flex items-center justify-center gap-4">
+      <button
+        @click="roll"
+        :disabled="frozen.every((num) => num != -1)"
+        :class="{ 'cursor-not-allowed': frozen.every((num) => num != -1), disabled: frozen.every((num) => num != -1) }"
+        class="back transition px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6"
+      >
+        Reroll 🎲
+      </button>
 
-    <button @click="emit('join', code.join(''))" class="flex items-center justify-center rounded-full bg-[color:var(--text-color)] px-10 border-r border-[color:var(--bg-color)]">
-      <p class="font-semibold text-[color:var(--bg-color)] text-lg">Join</p>
-    </button>
+      <button
+        @click="emit('join', code.join(''))"
+        class="px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] text-[color:var(--bg-color)] text-lg font-semibold mt-6 bg-[color:var(--text-color)]"
+      >
+        <p class="font-semibold text-[color:var(--bg-color)] text-lg">Join</p>
+      </button>
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, type Ref } from 'vue';
+import { onMounted, ref } from 'vue';
 
 type Emits = {
   join: [code: string];
+  die: [void];
 };
 
 const emit = defineEmits<Emits>();
 
-const code: Ref<string[]> = ref(new Array(6).fill('0'));
-const frozen: Ref<number[]> = ref(new Array(6).fill(-1));
-const health: Ref<number> = ref(100);
+const code = ref<string[]>(new Array(6).fill('0'));
+const frozen = ref<number[]>(new Array(6).fill(-1));
+const health = ref(100);
+
+onMounted(() => {
+  health.value = 100;
+  frozen.value = new Array(6).fill(-1);
+});
 
 function roll() {
   let rand = String(Math.floor(Math.random() * 1000000));
   while (rand.length < 6) rand = '0' + rand;
   code.value = rand.split('');
+  if (frozen.value.every((num) => num == -1)) {
+    health.value--;
+    regen.value = -3;
+  }
   frozen.value.forEach((num, index) => {
     if (num !== -1) {
       code.value[index] = String(num);
-      health.value--;
+      health.value -= 5;
       regen.value = -3;
     }
   });
-  if (health.value < 1) {
+  if (health.value <= 0) {
     code.value = new Array(6).fill('0');
     frozen.value = new Array(6).fill(-1);
     alert('You died!');
+    emit('die');
     health.value = 100;
   }
 }
@@ -90,4 +113,14 @@ setInterval(() => {
 }, 100);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.disabled {
+  background-color: var(--faded-bg-color);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .back:hover {
+    background-color: var(--faded-bg-color);
+  }
+}
+</style>
