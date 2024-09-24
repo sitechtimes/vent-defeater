@@ -33,5 +33,21 @@ export const useUserStore = defineStore('userStore', () => {
     if (isAuth.value) user.value = await res.json();
   }
 
-  return { user, isAuth, theme, presentations, currentPres, logIn, signUp };
+  async function verify() {
+    const match = document.cookie.match(/csrftoken=(\w+)/);
+    if (!match) return false;
+    try {
+      const res = await fetch(import.meta.env.VITE_BACKEND_URL + '/auth/token/verify/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: match[1] })
+      });
+      console.log(await res.json());
+      return res.ok;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  return { user, isAuth, verify, theme, presentations, currentPres, logIn, signUp };
 });
