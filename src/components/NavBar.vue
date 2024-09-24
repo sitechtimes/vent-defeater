@@ -37,8 +37,9 @@
         <div class="w-screen flex items-center justify-center gap-3 bg-[color:var(--primary-light)] rounded-b-3xl py-3 relative bottom-0 z-10" v-show="showJoinBanner">
           <p class="text-lg font-medium">Trying to join a live Vent?</p>
           <RouterLink to="/join" class="flex items-center justify-center gap-1 rounded-full bg-[color:var(--bg-color)] text-[color:var(--text-color)] font-semibold px-4 py-2"
-            >Go <img class="w-5 h-5 dark:invert" src="/ui/rightArrow.svg" aria-hidden="true"
+            >Join <img class="w-5 h-5 dark:invert" src="/ui/rightArrow.svg" aria-hidden="true"
           /></RouterLink>
+          <button class="close absolute right-12 rounded-full w-8 h-8 flex items-center justify-center" @click="showJoinBanner = false"><img class="w-5 h-5 dark:invert" src="/ui/x.svg" aria-hidden="true"></button>
         </div>
       </Transition>
     </header>
@@ -258,6 +259,10 @@ const navButtons: NavButtons[] = [
       opacity: 1;
       pointer-events: auto;
     }
+  }
+
+  .close:hover {
+    background-color: var(--primary-shade-translucent);
   }
 
   .logins {

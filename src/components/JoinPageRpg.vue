@@ -19,11 +19,14 @@
       </div>
     </div>
 
-    <button @click="roll" class="rounded-full bg-[color:var(--text-color)] px-10 border-r border-[color:var(--bg-color)] text-[color:var(--bg-color)] text-lg font-semibold">Reroll 🎲</button>
-
-    <button @click="emit('join', code.join(''))" class="flex items-center justify-center rounded-full bg-[color:var(--text-color)] px-10 border-r border-[color:var(--bg-color)]">
-      <p class="font-semibold text-[color:var(--bg-color)] text-lg">Join</p>
-    </button>
+    <div class="flex items-center justify-center gap-4">
+      <button @click="roll" class="back transition px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-transparent text-[color:var(--text-color)] text-lg font-semibold mt-6">Reroll 🎲</button>
+  
+      <button @click="emit('join', code.join(''))"
+        class="px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] text-[color:var(--bg-color)] text-lg font-semibold mt-6 bg-[color:var(--text-color)]">
+        <p class="font-semibold text-[color:var(--bg-color)] text-lg">Join</p>
+      </button>
+    </div>
   </div>
 </template>
 
@@ -32,6 +35,7 @@ import { ref, type Ref } from 'vue';
 
 type Emits = {
   join: [code: string];
+  die: [void];
 };
 
 const emit = defineEmits<Emits>();
@@ -51,10 +55,11 @@ function roll() {
       regen.value = -3;
     }
   });
-  if (health.value < 1) {
+  if (health.value <= 0) {
     code.value = new Array(6).fill('0');
     frozen.value = new Array(6).fill(-1);
     alert('You died!');
+    emit('die');
     health.value = 100;
   }
 }
@@ -90,4 +95,10 @@ setInterval(() => {
 }, 100);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@media (hover: hover) and (pointer: fine) {
+  .back:hover {
+    background-color: var(--faded-bg-color);
+  }
+}
+</style>
