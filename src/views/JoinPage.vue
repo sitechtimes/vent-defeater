@@ -8,7 +8,7 @@
       <p class="text-lg text-[color:var(--faded-text-color)]">It's on the screen in front of you</p>
     </div>
 
-    <div class="box flex gap-3 relative">
+    <div class="box flex gap-3 relative" v-if="!showRPG">
       <div
         class="w-14 h-14 text-center text-2xl rounded-md border-2 border-[color:var(--faded-bg-color)] bg-[color:var(--faded-bg-color-light)] flex items-center justify-center transition-none"
         :class="{ current: index == displayedDigits.findIndex((digit) => digit == ''), filled: digit != '', 'ml-3': index == 3 }"
@@ -19,8 +19,9 @@
       </div>
       <input ref="inputRef" class="absolute top-0 left-0 w-full h-full text-2xl opacity-0 bg-none border-none outline-none" v-model="code" type="number" @click="selectEverything" />
     </div>
+    <JoinPageRpg v-else @join="(code) => join(code)" />
 
-    <div class="flex items-center justify-center gap-4">
+    <div class="flex items-center justify-center gap-4" v-if="!showRPG">
       <RouterLink to="/" class="back transition px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-transparent text-[color:var(--text-color)] text-lg font-semibold mt-6"
         >Back</RouterLink
       >
@@ -38,8 +39,11 @@
 </template>
 
 <script setup lang="ts">
+import JoinPageRpg from '@/components/JoinPageRpg.vue';
 import NavBar from '@/components/NavBar.vue';
 import { onMounted, ref, watch } from 'vue';
+
+const showRPG = ref(false);
 
 const showBanner = ref(true);
 
@@ -62,6 +66,7 @@ watch(
 
 onMounted(() => {
   showBanner.value = false;
+  showRPG.value = Math.floor(Math.random() * 1001) == 420;
 });
 
 function selectEverything() {
