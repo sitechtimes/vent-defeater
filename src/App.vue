@@ -11,6 +11,7 @@ import { useUserStore } from './stores/user';
 const userStore = useUserStore();
 
 onBeforeMount(() => {
+  sessionStorage.removeItem('previousIsHome');
   // sample shit
 
   userStore.presentations = [
@@ -52,9 +53,9 @@ onBeforeMount(() => {
     }
   ];
 
-  if (localStorage.getItem("authToken")) {
+  if (localStorage.getItem('authToken')) {
     // do auth shit
-    userStore.isAuthenticated = true;
+    userStore.isAuth = true;
   }
 
   if (localStorage.getItem('theme') === 'dark') {
