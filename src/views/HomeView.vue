@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :show-join-banner="showBanner" />
+    <NavBar :show-join-banner="showBanner" @toggle-banner="showBanner = !showBanner" />
     <main class="flex flex-col items-center text-center gap-20">
       <section class="flex flex-col gap-3 items-center">
         <h1 class="text-6xl">What will you ask your audience?</h1>
