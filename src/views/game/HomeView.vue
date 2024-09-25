@@ -2,7 +2,13 @@
   <div class="absolute top-4 right-4">
     <ThemeToggle big />
   </div>
-  <div class="overflow-hidden">
+  <div class="flex items-center justify-around w-screen h-screen overflow-hidden">
+    <Transition name="left">
+      <div class="h-screen flex items-start justify-center p-3 bg-[color:var(--faded-bg-color)] w-[50rem]" v-show="level != 0">
+        <h1 class="text-4xl font-bold">Inventory</h1>
+      </div>
+    </Transition>
+
     <Intro v-show="level == 0" @next="level++" />
     <Transition name="page">
       <Level v-show="level == 1" />
@@ -32,5 +38,16 @@ const level = ref(0);
 .page-leave-to {
   opacity: 0;
   transform: translate(-50vw);
+}
+
+.left-enter-active,
+.left-leave-active {
+  transition: all 1.25s ease;
+}
+
+.left-enter-from,
+.left-leave-to {
+  opacity: 0;
+  transform: translateX(-50vw);
 }
 </style>
