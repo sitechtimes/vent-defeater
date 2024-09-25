@@ -6,6 +6,9 @@
     <Transition name="left">
       <div class="h-screen flex items-start justify-center p-3 bg-[color:var(--faded-bg-color)] w-[50rem]" v-show="level != 0">
         <h1 class="text-4xl font-bold">Inventory</h1>
+        <div>
+
+        </div>
       </div>
     </Transition>
 
@@ -23,6 +26,8 @@ import ThemeToggle from '@/components/ThemeToggle.vue';
 import { ref } from 'vue';
 
 const level = ref(0);
+const health = ref(100);
+const shield = ref(100);
 </script>
 
 <style lang="scss" scoped>
