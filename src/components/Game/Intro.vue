@@ -13,8 +13,8 @@
     </Transition>
 
     <Transition name="up">
-      <button class="flex items-center justify-center" :class="{ 'cursor-none': delayedShowAnimation }" @click="showAnimation = true" v-show="onmountTransitions[1]">
-        <div class="start border-[color:#5900ff] duration-250 border-4 text-3xl font-bold rounded-l-full py-6 pl-12 pr-8" :class="{ move: showAnimation }">Start</div>
+      <button class="start flex items-center justify-center" :class="{ 'cursor-none': delayedShowAnimation }" @click="start" v-show="onmountTransitions[1]">
+        <div class="button border-[color:#5900ff] duration-250 border-4 text-3xl font-bold rounded-l-full py-6 pl-12 pr-8" :class="{ move: showAnimation }">Start</div>
         <div class="portal right-[1.5rem] w-32 h-32 no-underline rounded-full border-[color:#5900ff] border-4"></div>
       </button>
     </Transition>
@@ -72,8 +72,8 @@ watch(
   }
 );
 const delayedShowAnimation = ref(false);
-
 const onmountTransitions = ref([false, false, false]);
+
 onMounted(async () => {
   await delay(200);
   for (let i = 0; i < onmountTransitions.value.length; i++) {
@@ -81,6 +81,12 @@ onMounted(async () => {
     await delay(700);
   }
 });
+
+function start() {
+  showAnimation.value = true;
+  const page = document.documentElement;
+  page.requestFullscreen({ navigationUI: 'hide' });
+}
 </script>
 
 <style lang="scss" scoped>
@@ -100,10 +106,10 @@ onMounted(async () => {
     background-size: 3% 3%;
   }
   70% {
+    transform: rotate(720deg);
     background-size: 125% 125%;
   }
   100% {
-    transform: rotate(1040deg);
     background-size: 500% 500%;
   }
 }
@@ -179,7 +185,9 @@ onMounted(async () => {
 
 @media (hover: hover) and (pointer: fine) {
   .start:hover {
-    background-color: #d15cff;
+    .button {
+      background-color: #d15cff;
+    }
   }
 }
 </style>
