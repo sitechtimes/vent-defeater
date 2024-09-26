@@ -1,6 +1,6 @@
 <template>
   <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)] py-12">
-    <a href="/"><img class="h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
+    <a href="/"><img class="logo h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? ' back' : '' }}!</h1>
 
     <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4">
@@ -87,6 +87,7 @@
       <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3>
     </button>
   </div>
+  -->
 </template>
 
 <script setup lang="ts">

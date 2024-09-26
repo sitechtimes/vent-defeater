@@ -3,6 +3,7 @@
 @tailwind utilities;
 :root {
   --primary: #802392;
+  --primary-light: #e9d2f0;
   --primary-shade: #90479c;
   --primary-shade-translucent: #90479c33;
   --secondary: #2df199;
@@ -22,8 +23,9 @@
 
 .dark {
   --primary: #682172;
+  --primary-light: #442b49;
   --primary-shade: #74417e;
-  --primary-shade-translucent: #703c7a33;
+  --primary-shade-translucent: #a82ec04b;
   --secondary: #17975e;
   --secondary-shade: #2a7c57;
   --faded-blue: #a0b9c6;
