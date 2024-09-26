@@ -1,10 +1,10 @@
 <template>
   <button class="absolute top-16 right-4 border-2 border-neutral-950" @click="level++">(testing) next lvl</button>
-  <div class="absolute top-4 right-4">
+  <div class="absolute top-4 right-4 select-none">
     <ThemeToggle big />
   </div>
 
-  <div class="flex items-center justify-around w-screen h-screen overflow-hidden">
+  <div class="flex items-center justify-around w-screen h-screen overflow-hidden select-none">
     <Transition name="left">
       <div class="h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-[color:var(--faded-bg-color-light)] w-[50rem] z-20" v-show="level != 0">
         <div class="w-3/4 flex items-center justify-center gap-1">
@@ -29,38 +29,37 @@
           <button
             @click="selectedElement = element"
             class="element flex flex-col items-center justify-center bg-[color:var(--faded-bg-color)] rounded-2xl border-2 p-2 select-none"
-            :disabled="element.level == 0"
+            :disabled="element.currentLevel == 0"
             :class="{
-              disabled: element.level == 0,
-              grayscale: element.level == 0,
-              'cursor-not-allowed': element.level == 0,
-              'blur-sm': element.level == 0,
-              'border-green-500': element.stats.name == selectedElement.stats.name,
-              'border-transparent': element.stats.name != selectedElement.stats.name
+              disabled: element.currentLevel == 0,
+              grayscale: element.currentLevel == 0,
+              'cursor-not-allowed': element.currentLevel == 0,
+              'blur-sm': element.currentLevel == 0,
+              'border-green-500': element.name == selectedElement?.name,
+              'border-transparent': element.name != selectedElement?.name
             }"
             v-for="element in elements"
-            :key="element.stats.name"
+            :key="element.name"
           >
-            <img class="w-[25%] h-[25%]" :src="element.stats.img" :alt="'Open tech tree of ' + element.stats.name" />
-            <p class="mt-2 text-xl">Level {{ element.level }}</p>
-            <p>{{ element.stats.name[0].toUpperCase() + element.stats.name.slice(1) }}</p>
+            <img class="w-[25%] h-[25%]" :src="element.img" :alt="'Open tech tree of ' + element.name" />
+            <p class="mt-2 text-xl">Level {{ element.currentLevel }}</p>
+            <p>{{ element.name[0].toUpperCase() + element.name.slice(1) }}</p>
           </button>
         </div>
 
-        <div class="flex flex-col items-center justify-center w-full p-3 bg-[color:var(--faded-bg-color)] rounded-2xl">
-          <h2 class="text-4xl">{{ selectedElement.stats.name[0].toUpperCase() + selectedElement.stats.name.slice(1) }}</h2>
-          <p class="text-lg">Level {{ selectedElement.level }}</p>
+        <div class="flex flex-col items-center justify-center w-full p-3 bg-[color:var(--faded-bg-color)] rounded-2xl" v-if="selectedElement">
+          <h2 class="text-4xl">{{ selectedElement.name[0].toUpperCase() + selectedElement.name.slice(1) }}</h2>
+          <p class="text-lg">Level {{ selectedElement.currentLevel }}</p>
 
           <div class="w-full flex flex-col items-center justify-center gap-4">
             <div
-              class="w-full flex items-center justify-around rounded-lg py-2"
-              :class="{ 'blur-sm': selectedElement.level < level.level }"
-              :style="{ backgroundColor: selectedElement.level != level.level ? 'var(--faded-bg-color)' : 'var(--secondary)' }"
-              v-for="level in selectedElement.stats.levels"
+              class="w-full flex items-center justify-around rounded-lg py-2 transition-none"
+              v-for="level in selectedElement.levels"
+              :style="{ backgroundColor: selectedElement.currentLevel != level.level ? 'var(--faded-bg-color)' : 'var(--secondary)' }"
               :key="level.level"
             >
               <p class="text-3xl">{{ level.level }}</p>
-              <p class="text-wrap w-3/4 text-center select-none">
+              <p class="text-wrap w-3/4 text-center transition-none" :class="{ 'blur-sm': selectedElement.currentLevel < level.level, 'cursor-not-allowed': selectedElement.currentLevel < level.level }">
                 <span :class="{ 'font-bold': part.bold }" v-for="part in formatDescription(level.description)">{{ part.text }}</span>
               </p>
             </div>
@@ -80,39 +79,25 @@
 import Intro from '@/components/Game/Intro.vue';
 import Level from '@/components/Game/Level.vue';
 import ThemeToggle from '@/components/ThemeToggle.vue';
+import { useGameStore } from '@/stores/game';
 import { air, earth, fire, ice, formatDescription } from '@/utils/elements';
 import type { Element } from '@/utils/elements';
 import { parseJsonText } from 'typescript';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, watch } from 'vue';
 
-type Stat = {
-  level: number;
-  stats: Element;
-};
+const store = useGameStore();
 
 const level = ref(0);
 const health = ref(100);
 const shield = ref(50);
 
-const elements = ref<Stat[]>([
-  {
-    level: 2,
-    stats: ice
-  },
-  {
-    level: 1,
-    stats: fire
-  },
-  {
-    level: 0,
-    stats: air
-  },
-  {
-    level: 0,
-    stats: earth
-  }
-]);
-const selectedElement = ref<Stat>(elements.value[0]);
+const elements = ref<Element[]>([ice, fire, air, earth]);
+const selectedElement = ref<Element>();
+watch(() => selectedElement.value, (stat) => store.currentElement = stat);
+
+onMounted(() => {
+  elements.value[2].currentLevel = 1;
+})
 </script>
 
 <style lang="scss" scoped>

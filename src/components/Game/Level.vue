@@ -1,9 +1,12 @@
 <template>
   <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 py-10 overflow-hidden">
-    <h1>level</h1>
+    <Enemy :lives="1" :slots="2" />
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import JoinPageRpg from '../JoinPageRpg.vue';
+import Enemy from './Enemy.vue';
+</script>
 
 <style lang="scss" scoped></style>

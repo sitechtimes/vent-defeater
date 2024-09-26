@@ -20,6 +20,9 @@
   --text-color: black;
   --faded-text-color: rgb(70, 70, 70);
   --text-color-contrast: white;
+
+  --ice: rgb(149, 197, 253);
+  --air: rgb(199, 195, 248);
 }
 
 .dark {
@@ -41,6 +44,9 @@
   --text-color: white;
   --faded-text-color: rgb(230, 230, 230);
   --text-color-contrast: black;
+
+  --ice: rgb(32, 127, 235);
+  --air: rgb(72, 60, 194);
 }
 
 body {

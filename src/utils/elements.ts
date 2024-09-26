@@ -1,8 +1,14 @@
 export type Element = {
+  /** Name of the element. */
   name: 'ice' | 'fire' | 'air' | 'earth';
   img: string;
+  /** Current level of the element during the run. */
+  currentLevel: number;
+  /** All levels of the element. */
   levels: {
+    /** Level number */
     level: number;
+    /** Description of the level */
     description: string;
   }[];
 };
@@ -10,6 +16,7 @@ export type Element = {
 export const ice: Element = {
   name: 'ice',
   img: '/game/elements/ice.svg',
+  currentLevel: 0,
   levels: [
     {
       level: 1,
@@ -33,6 +40,7 @@ export const ice: Element = {
 export const fire: Element = {
   name: 'fire',
   img: '/game/elements/fire.svg',
+  currentLevel: 0,
   levels: [
     {
       level: 1,
@@ -57,6 +65,7 @@ export const fire: Element = {
 export const air: Element = {
   name: 'air',
   img: '/game/elements/air.svg',
+  currentLevel: 0,
   levels: [
     {
       level: 1,
@@ -81,6 +90,7 @@ export const air: Element = {
 export const earth: Element = {
   name: 'earth',
   img: '/game/elements/earth.svg',
+  currentLevel: 0,
   levels: [
     {
       level: 1,
