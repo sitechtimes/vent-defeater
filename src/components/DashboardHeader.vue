@@ -48,8 +48,9 @@
       </div>
 
       <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]">
-        <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/user.svg" aria-hidden="true" />
+        <img class="transition duration-300 w-1/2 h-1/2 dark:invert" @click="userPopUp = !userPopUp" src="/ui/user.svg" aria-hidden="true" />
       </button>
+      <div v-if="userPopUp">hiii</div>
     </div>
   </header>
 </template>
@@ -62,7 +63,7 @@ import ThemeToggle from './ThemeToggle.vue';
 
 const userStore = useUserStore();
 const presentations = ref<Presentation[]>([]);
-
+  const userPopUp = ref(true)
 const searchInput = ref('');
 watch(
   () => searchInput.value,
