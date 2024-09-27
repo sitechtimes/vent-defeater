@@ -29,7 +29,7 @@ export const ice: Element = {
     {
       level: 3,
       description:
-        '**Frozen** tiles will now never thaw out naturally, and will now **freeze** adjacent **burning** tiles. You can now also reselect **frozen** tiles to manually thaw them out at no additional cost.'
+        '**Frozen** tiles will now never thaw out naturally. You can now also reselect **frozen** tiles to manually thaw them out at no additional cost.'
     },
     {
       level: 4,
@@ -47,22 +47,22 @@ export const fire: Element = {
     {
       level: 1,
       description:
-        '**Burn** a tile. When rerolling, **burning** tiles will heal **0.1** max HP each, up to a maximum of **5** HP per level. If **3** adjacent tiles are **burning**, they will explode and return to a **normal** state. You will take **25** damage from the resulting second-degree burns.'
+        '**Burn** a tile. When rerolling, **burning** tiles will heal **0.1** max HP each. If **2** adjacent tiles are **burning**, all **burning** tiles will explode and return to a **normal** state. You will take **25** damage from the resulting second-degree burns.'
     },
     {
       level: 2,
       description:
-        '**Burning** tiles will spread **fire** to adjacent tiles every **3** rerolls, and the threshold for an explosion is increased to **10** adjacent tiles. The max HP heal limit is also increased to **10** HP per level.'
+        '**Burning** tiles will spread **fire** to adjacent tiles every **3** rerolls, and the threshold for an explosion is increased to **4** adjacent tiles. However, **burning** tiles will only heal **0.05** max HP each.'
     },
     {
       level: 3,
       description:
-        '**Burning** tiles will no longer explode, and will turn adjacent **grounded** tiles into **burning** tiles as well. The max HP heal limit is further increased to **15** HP per level.'
+        '**Burning** tiles will no longer explode, but **burning** tiles will only heal **0.033** max HP each.'
     },
     {
       level: 4,
       description:
-        'Your inner arsonist emerges, and you begin to set the world on fire. Every 10 rerolls, the outermost non-**burning** tiles will be set on **fire**. The HP healed per **burning** tile is increased to **0.2** HP, and the max HP heal limit is now **20** HP per level.'
+        'Your inner arsonist emerges, and you begin to set the world on fire. Every 3 rerolls, a random non-**burning** tiles will be set on **fire**. The max HP healed per **burning** tile is increased back to **0.05** HP.'
     }
   ]
 };

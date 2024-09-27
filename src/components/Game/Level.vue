@@ -1,7 +1,7 @@
 <template>
   <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 py-10 overflow-hidden">
     <Enemy :lives="enemyLives" :slots="enemySlots" @damaged="(damage) => emit('damaged', damage)" />
-    <Player :rows="playerRows" :columns="playerColumns" :reroll="reroll" @regen="(hp, energy) => emit('regen', hp, energy)" />
+    <Player :rows="playerRows" :columns="playerColumns" :reroll="reroll" @damaged="(damage) => emit('damaged', damage)" @regen="(hp, energy) => emit('regen', hp, energy)" />
     <button @click="roll" class="back transition px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6">Reroll 🎲</button>
   </div>
 </template>

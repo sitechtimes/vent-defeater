@@ -24,7 +24,7 @@
       <div class="h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-[color:var(--faded-bg-color-light)] w-[50rem] z-20" v-show="level != 0">
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/health.svg" aria-hidden="true" />
-          <h3 class="text-2xl font-semibold w-16">{{ health }}</h3>
+          <h3 class="text-2xl font-semibold w-16">{{ Math.floor(health) }}</h3>
           <div class="flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]">
             <div class="h-full rounded-full bg-red-500" :style="{ width: Math.min(100, health) + '%' }"></div>
           </div>
@@ -157,6 +157,7 @@ watch(
 
 onMounted(() => {
   elements.value.ice.currentLevel = 4;
+  elements.value.fire.currentLevel = 4;
   elements.value.air.currentLevel = 4;
 });
 

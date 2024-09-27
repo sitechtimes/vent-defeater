@@ -22,6 +22,7 @@
   --text-color-contrast: white;
 
   --ice: rgb(149, 197, 253);
+  --fire: rgb(253, 156, 149);
   --air: rgb(199, 195, 248);
 }
 
@@ -46,6 +47,7 @@
   --text-color-contrast: black;
 
   --ice: rgb(32, 127, 235);
+  --fire: rgb(235, 56, 32);
   --air: rgb(72, 60, 194);
 }
 
