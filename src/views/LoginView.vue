@@ -78,7 +78,7 @@
           <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
         </div>
 
-        <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] mt-4 transition duration-500" type="submit">
+        <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] mt-4 transition duration-500" type="submit" :disabled="loading">
           {{ showLogin ? 'Log in' : 'Sign up' }}
         </button>
         <RouterLink to="/reset-password" class="no-underline font-medium" v-if="showLogin">Forgot password?</RouterLink>
@@ -115,6 +115,7 @@ const emailErr = ref('');
 const nameErr = ref('');
 const passwordErr = ref('');
 const confirmPasswordErr = ref('');
+const loading = ref(false);
 
 const verifyNag = ref(false);
 
@@ -192,22 +193,28 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  if (emailErr.value || passwordErr.value || nameErr.value) return;
-
+  if (emailErr.value || passwordErr.value || nameErr.value || loading.value) return;
+  loading.value = true;
   if (showLogin.value) {
-    userStore.logIn(email.value, password.value);
-    return;
+    const data = await userStore.logIn(email.value, password.value);
+    if (data === 'Success') {
+      router.push('/');
+    } else {
+      if ('email' in data) passwordErr.value = data.password.join(' ');
+      if ('non_field_errors' in data) emailErr.value = data.non_field_errors.join(' ');
+    }
+  } else if (confirmPasswordErr.value) {
+  } else {
+    const data = await userStore.signUp(email.value, password.value, name.value);
+    if (data === 'Success') {
+      verifyNag.value = true;
+    } else {
+      if ('password' in data) passwordErr.value = data.password.join(' ');
+      if ('email' in data) emailErr.value = data.email.join(' ');
+      if ('name' in data) nameErr.value = data.name.join(' ');
+    }
   }
-  if (confirmPasswordErr.value) return;
-
-  let data = await userStore.signUp(email.value, password.value, name.value);
-  if (data == 'Success') {
-    verifyNag.value = true;
-    return;
-  }
-  if ('password' in data) passwordErr.value = data.password.join(' ');
-  if ('email' in data) emailErr.value = data.email.join(' ');
-  if ('name' in data) nameErr.value = data.name.join(' ');
+  loading.value = false;
 }
 
 async function loginWithGoogle() {

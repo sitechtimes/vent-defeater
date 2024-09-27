@@ -16,10 +16,11 @@ export const useUserStore = defineStore('userStore', () => {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
-    isAuth.value = res.ok;
-    if (isAuth.value) {
-      user.value = await res.json();
-    }
+    if (!res.ok) return await res.json();
+    // isAuth.value = res.ok;
+    // if (isAuth.value) {
+    //   user.value = await res.json();
+    // }
   }
 
   async function signUp(email: string, password: string, name: string) {
