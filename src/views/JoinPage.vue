@@ -1,0 +1,187 @@
+<template>
+  <div class="flex flex-col items-center justify-start gap-4 w-screen h-screen">
+    <NavBar :show-join-banner="showBanner" />
+    <button @click="counter++"><img class="logo h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></button>
+
+    <div class="flex flex-col items-center justify-center gap-2">
+      <h1 class="text-3xl">Enter the code to join</h1>
+      <p class="text-lg text-[color:var(--faded-text-color)]">It's on the screen in front of you</p>
+    </div>
+
+    <div class="box flex gap-3 relative" v-show="!showRPG">
+      <div
+        class="w-14 h-14 text-center text-2xl rounded-md border-2 border-[color:var(--faded-bg-color)] bg-[color:var(--faded-bg-color-light)] flex items-center justify-center transition-none"
+        :class="{ current: index == displayedDigits.findIndex((digit) => digit == ''), filled: digit != '', 'ml-3': index == 3 }"
+        v-for="(digit, index) in displayedDigits"
+        :key="index"
+      >
+        {{ digit }}
+      </div>
+      <input ref="inputRef" class="absolute top-0 left-0 w-full h-full text-2xl opacity-0 bg-none border-none outline-none" v-model="code" type="number" @click="selectEverything" />
+    </div>
+    <JoinPageRpg v-show="showRPG" @join="(code) => join(code)" @die="startTime = new Date().getTime()" />
+
+    <div class="flex items-center justify-center gap-4" v-if="!showRPG">
+      <RouterLink to="/" class="back transition px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-transparent text-[color:var(--text-color)] text-lg font-semibold mt-6"
+        >Back</RouterLink
+      >
+      <button
+        @click="join(code)"
+        :disabled="code.length != 6"
+        :class="{ 'cursor-not-allowed': code.length != 6 }"
+        :style="{ 'background-color': code.length == 6 ? 'var(--text-color)' : 'var(--faded-text-color)' }"
+        class="px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] text-[color:var(--bg-color)] text-lg font-semibold mt-6"
+      >
+        Join
+      </button>
+    </div>
+
+    <div class="absolute top-20 left-4 flex items-center justify-center flex-col bg-[color:var(--bg-color-contrast)] py-2 px-10 w-48 rounded-xl" v-show="showRPG">
+      <p class="timer font-semibold text-4xl" :class="{ worse: pb && timer >= pb }">
+        {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span
+          class="timer text-2xl"
+          :class="{ worse: pb && timer > pb }"
+        >
+          {{
+            Math.floor(timer % 1000).toString().length == 1
+              ? '0'
+              : '' +
+                Math.floor(timer % 1000)
+                  .toString()
+                  .slice(0, 2)
+          }}
+        </span>
+      </p>
+      <div class="flex items-center justify-between w-full">
+        <p class="font-semibold text-xl text-[color:var(--gray)]">PB:</p>
+        <p class="font-semibold text-xl text-[color:var(--gray)]" v-if="pb">
+          {{ Math.floor(pb / 1000 / 60) }}:{{ (Math.floor((pb / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((pb / 1000) % 60) }}.{{
+            Math.floor(pb % 1000).toString().length == 1
+              ? '0'
+              : '' +
+                Math.floor(pb % 1000)
+                  .toString()
+                  .slice(0, 2)
+          }}
+        </p>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import JoinPageRpg from '@/components/JoinPageRpg.vue';
+import NavBar from '@/components/NavBar.vue';
+import { delay } from '@/utils/functions';
+import { onMounted, ref, watch } from 'vue';
+
+const showRPG = ref(false);
+const startTime = ref(new Date().getTime());
+watch(
+  () => showRPG.value,
+  async () => {
+    while (showRPG.value) {
+      timer.value = new Date().getTime() - startTime.value;
+      await delay(20);
+    }
+  }
+);
+const counter = ref(0);
+watch(
+  () => counter.value,
+  (value) => {
+    showRPG.value = value % 5 == 0;
+    if (value % 5 == 0) startTime.value = new Date().getTime();
+  }
+);
+/** Milliseconds */
+const timer = ref(0);
+const pb = ref<number>();
+
+const showBanner = ref(JSON.parse(sessionStorage.getItem('previousIsHome') ?? 'false') as boolean);
+
+const inputRef = ref<HTMLInputElement>();
+const displayedDigits = ref(new Array(6).fill(''));
+const code = ref('');
+watch(
+  () => code.value,
+  (input) => {
+    if (input.length > 6) {
+      code.value = String(input).slice(0, 6);
+      return;
+    }
+    code.value = [...String(input)].filter((char) => !isNaN(Number(char))).join('');
+    displayedDigits.value = String(input).split('').concat(new Array(6).fill('')).slice(0, 6);
+
+    if (input.length == 6) join(code.value);
+  }
+);
+
+onMounted(() => {
+  showBanner.value = false;
+  showRPG.value = Math.floor(Math.random() * 1001) == 420;
+  const localPB = localStorage.getItem('codePB');
+  if (localPB) {
+    const { time, date } = JSON.parse(localPB) as { time: number; date: number };
+    pb.value = time;
+  }
+});
+
+function selectEverything() {
+  if (!inputRef.value) return;
+  inputRef.value.select();
+}
+
+function join(code: string) {
+  if (showRPG.value) storePB();
+
+  console.log('join');
+}
+
+function storePB() {
+  const localPB = localStorage.getItem('codePB');
+  if (localPB) {
+    const { time, date } = JSON.parse(localPB) as { time: number; date: number };
+    if (time < timer.value) return;
+  }
+  localStorage.setItem('codePB', JSON.stringify({ time: timer.value, date: new Date().getTime() }));
+}
+</script>
+
+<style lang="scss" scoped>
+.filled {
+  border-color: var(--primary-shade-translucent);
+  background-color: transparent;
+}
+
+.box:focus-within {
+  .current {
+    border-color: var(--primary);
+    background-color: transparent;
+  }
+}
+
+.timer {
+  color: transparent;
+  background: linear-gradient(to bottom, var(--secondary), var(--secondary-shade));
+  background-clip: text;
+  width: fit-content;
+}
+
+.worse {
+  color: transparent;
+  background: linear-gradient(to bottom, var(--primary-light), var(--primary-shade));
+  background-clip: text;
+  width: fit-content;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .logo:hover {
+    filter: contrast(200%);
+  }
+
+  .back:hover {
+    background-color: var(--faded-bg-color);
+  }
+}
+</style>

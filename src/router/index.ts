@@ -21,6 +21,14 @@ const router = createRouter({
       }
     },
     {
+      path: '/join',
+      name: 'join',
+      component: () => import('../views/JoinPage.vue'),
+      meta: {
+        requiresAuth: false
+      }
+    },
+    {
       path: '/app/',
       name: 'app',
       redirect: '/app/dashboard',

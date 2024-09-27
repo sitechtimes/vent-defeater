@@ -12,6 +12,8 @@ const userStore = useUserStore();
 
 onBeforeMount(() => {
   userStore.verify();
+  sessionStorage.removeItem('previousIsHome');
+  // sample shit
 
   userStore.presentations = [
     {
