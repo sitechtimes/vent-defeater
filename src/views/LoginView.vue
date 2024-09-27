@@ -136,7 +136,7 @@ watch(
     else confirmPasswordErr.value = '';
 
     if (value.length < 8) passwordErr.value = 'Password must be at least 8 characters.';
-    else if (value.length > 50) passwordErr.value = 'Password must be less than 50 characters.';
+    else if (value.length > 50) passwordErr.value = 'Password must be less than 30 characters.';
     else passwordErr.value = '';
   }
 );
@@ -188,13 +188,18 @@ async function loginWithEmail() {
     userStore.logIn(email.value, password.value);
     return;
   }
-  if (password.value != confirmPassword.value) {
-    passwordErr.value = 'Passwords do not match.';
-    return;
-  }
+  if (confirmPasswordErr.value) return;
+
   try {
     let data = await userStore.signUp(email.value, password.value, name.value);
+    if (data == 'Success') {
+      router.push('/');
+      return;
+    }
     console.log(data.password);
+    if ('password' in data) passwordErr.value = data.password.join(' ');
+    if ('email' in data) emailErr.value = data.email.join(' ');
+    if ('name' in data) nameErr.value = data.name.join(' ');
   } catch (error) {
     console.log(error, 'booooo');
     if (error instanceof Error) passwordErr.value = error.message;

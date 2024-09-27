@@ -23,18 +23,13 @@ export const useUserStore = defineStore('userStore', () => {
   }
 
   async function signUp(email: string, password: string, name: string) {
-    try {
-      const res = await fetch(import.meta.env.VITE_BACKEND_URL + '/auth/signup/', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, name })
-      });
-      if (!res.ok) return await res.json();
-      isAuth.value = res.ok;
-      if (isAuth.value) user.value = await res.json();
-    } catch (error) {
-      console.error(error, 'ahhhh');
-    }
+    const res = await fetch(import.meta.env.VITE_BACKEND_URL + '/auth/signup/', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email, password, name })
+    });
+    if (!res.ok) return await res.json();
+    return 'Success';
   }
 
   async function verify() {
