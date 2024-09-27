@@ -1,9 +1,10 @@
-import { defineStore } from "pinia";
-import { ice, type Element } from "@/utils/elements";
-import { ref } from "vue";
+import { defineStore } from 'pinia';
+import { ice, type Element } from '@/utils/elements';
+import { ref } from 'vue';
 
 export const useGameStore = defineStore('gameStore', () => {
-    const currentElement = ref<Element>();
+  const energy = ref(100);
+  const currentElement = ref<Element>();
 
-    return { currentElement }
+  return { energy, currentElement };
 });
