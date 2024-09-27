@@ -32,12 +32,12 @@
         <p class="m-0 text-[color:var(--text-color)] font-semibold">Upgrade</p>
       </button>
 
-      <div class="notificationsButton relative">
+      <div class="ButtonPopUp relative">
         <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--faded-bg-color)]">
           <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/bell.svg" aria-hidden="true" />
         </button>
         <div
-          class="notifications opacity-0 pointer-events-none absolute right-0 flex items-center justify-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
+          class="popUpButton opacity-0 pointer-events-none absolute right-0 flex items-center justify-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
         >
           <h1 class="text-lg text-left w-full mt-4">Notifications</h1>
           <div class="flex items-center justify-center flex-col w-80 bg-[color:var(--faded-bg-color)] p-6 rounded-lg">
@@ -47,11 +47,23 @@
         </div>
       </div>
 
+      
+      <div class="ButtonPopUp relative">
       <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]">
-        <img class="transition duration-300 w-1/2 h-1/2 dark:invert" @click="userPopUp = !userPopUp" src="/ui/user.svg" aria-hidden="true" />
+        <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/user.svg" aria-hidden="true" />
       </button>
-      <div v-if="userPopUp">hiii</div>
+      <div
+          class="popUpButton opacity-0 pointer-events-none absolute right-0 flex items-center justify-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
+        >
+          <h1 class="text-lg text-left w-full mt-4">aaaaaaaaaaaaaaa</h1>
+          <div class="flex ite ms-center justify-center flex-col w-80 bg-[color:var(--faded-bg-color)] p-6 rounded-lg">
+            <p class="m-0 font-bold">aaaaaaaaaaaaaaa</p>
+            <p class="m-0">aaaaaaaaaaaaaaa</p>
+          </div>
+        </div>
     </div>
+  </div>
+
   </header>
 </template>
 
@@ -63,7 +75,7 @@ import ThemeToggle from './ThemeToggle.vue';
 
 const userStore = useUserStore();
 const presentations = ref<Presentation[]>([]);
-  const userPopUp = ref(true)
+  const userPopUp = ref(false)
 const searchInput = ref('');
 watch(
   () => searchInput.value,
@@ -102,14 +114,14 @@ function search(input: string) {
   }
 }
 
-.notificationsButton:focus-within {
-  .notifications {
+.ButtonPopUp:focus-within {
+  .popUpButton {
     opacity: 1;
     pointer-events: all;
   }
 }
 
-.notifications {
+.popUpButton {
   box-shadow: 0 0 0 0.05rem var(--bg-color-contrast-translucent);
 }
 
@@ -118,7 +130,7 @@ function search(input: string) {
     outline: 0.125rem solid var(--primary);
   }
 
-  .presentation:hover {
+  .popUpButton:hover {
     background-color: var(--faded-bg-color);
   }
 
@@ -126,7 +138,7 @@ function search(input: string) {
     background-color: var(--faded-bg-color);
   }
 
-  .notificationsButton {
+  .buttonPopUp {
     button:hover {
       background-color: var(--faded-bg-color-light);
     }
