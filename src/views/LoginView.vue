@@ -1,7 +1,7 @@
 <template>
   <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)] py-12 overflow-x-hidden">
     <div class="w-screen z-10 px-4 h-20 bg-yellow-200 rounded-md flex justify-center items-center text-2xl fixed transition-[top] ease-out duration-500" :class="verifyNag ? 'top-0' : '-top-20'">
-      <p>please verify your email so we can sell your data thx</p>
+      <p>Check your email to verify your account.</p>
     </div>
 
     <a href="/"><img class="logo h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
@@ -123,6 +123,7 @@ watch(
   (value) => {
     if (value) showLogin.value = false;
     else showLogin.value = true;
+    verifyNag.value = false;
   }
 );
 
@@ -132,6 +133,7 @@ watch(
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (value.length != 0 && !emailRegex.test(value)) emailErr.value = 'Invalid email.';
     else emailErr.value = '';
+    verifyNag.value = false;
   }
 );
 
@@ -144,6 +146,7 @@ watch(
     if (value.length < 8) passwordErr.value = 'Password must be at least 8 characters.';
     else if (value.length > 50) passwordErr.value = 'Password must be less than 30 characters.';
     else passwordErr.value = '';
+    verifyNag.value = false;
   }
 );
 
@@ -153,6 +156,7 @@ watch(
     if (value.length < 2) nameErr.value = 'Name must be at least 2 characters.';
     else if (value.length > 40) nameErr.value = 'name must be less than 40 characters.';
     else nameErr.value = '';
+    verifyNag.value = false;
   }
 );
 
@@ -196,21 +200,14 @@ async function loginWithEmail() {
   }
   if (confirmPasswordErr.value) return;
 
-  try {
-    let data = await userStore.signUp(email.value, password.value, name.value);
-    if (data == 'Success') {
-      router.push('/');
-      return;
-    }
-    console.log(data.password);
-    if ('password' in data) passwordErr.value = data.password.join(' ');
-    if ('email' in data) emailErr.value = data.email.join(' ');
-    if ('name' in data) nameErr.value = data.name.join(' ');
-  } catch (error) {
-    console.log(error, 'booooo');
-    if (error instanceof Error) passwordErr.value = error.message;
+  let data = await userStore.signUp(email.value, password.value, name.value);
+  if (data == 'Success') {
+    verifyNag.value = true;
     return;
   }
+  if ('password' in data) passwordErr.value = data.password.join(' ');
+  if ('email' in data) emailErr.value = data.email.join(' ');
+  if ('name' in data) nameErr.value = data.name.join(' ');
 }
 
 async function loginWithGoogle() {
