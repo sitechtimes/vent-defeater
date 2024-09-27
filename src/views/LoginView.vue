@@ -1,6 +1,11 @@
 <template>
-  <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)] py-12">
+  <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)] py-12 overflow-x-hidden">
+    <div class="w-screen z-10 px-4 h-20 bg-yellow-200 rounded-md flex justify-center items-center text-2xl fixed transition-[top] ease-out duration-500" :class="verifyNag ? 'top-0' : '-top-20'">
+      <p>please verify your email so we can sell your data thx</p>
+    </div>
+
     <a href="/"><img class="logo h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
+
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? ' back' : '' }}!</h1>
 
     <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4">
@@ -87,7 +92,6 @@
       <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3>
     </button>
   </div>
-  -->
 </template>
 
 <script setup lang="ts">
@@ -111,6 +115,8 @@ const emailErr = ref('');
 const nameErr = ref('');
 const passwordErr = ref('');
 const confirmPasswordErr = ref('');
+
+const verifyNag = ref(false);
 
 watch(
   () => route.query.signup,
