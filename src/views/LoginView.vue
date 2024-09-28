@@ -1,10 +1,15 @@
 <template>
   <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)] py-12 overflow-x-hidden">
-    <div class="w-screen z-10 px-4 h-20 bg-yellow-200 rounded-md flex justify-center items-center text-2xl fixed transition-[top] ease-out duration-500" :class="verifyNag ? 'top-0' : '-top-20'">
+    <div
+      class="w-screen z-10 h-20 bg-[var(--primary-light)] rounded-b-3xl flex justify-center items-center text-2xl fixed transition-[top] ease-out duration-500"
+      :class="verifyNag ? 'top-0' : '-top-20'"
+    >
       <p>please verify your email so we can sell your data thx</p>
     </div>
 
     <a href="/"><img class="logo h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
+
+    <input type="checkbox" v-model="verifyNag" />
 
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? ' back' : '' }}!</h1>
 
