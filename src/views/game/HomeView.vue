@@ -1,4 +1,13 @@
 <template>
+  <div
+    class="w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none"
+    :style="{
+      opacity: (energy - 100) / 25,
+      backgroundImage: `radial-gradient(circle, transparent, yellow)${energy > 110 ? ', radial-gradient(circle, rgba(255, 255, 0, ' + (energy - 110) / 15 + '), yellow)' : ''}`
+    }"
+    v-if="energy > 100"
+    id="shock"
+  ></div>
   <button class="absolute top-16 right-4 border-2 border-neutral-950" @click="level++">(testing) next lvl</button>
   <div class="absolute top-4 right-4 select-none">
     <ThemeToggle big />
@@ -35,7 +44,6 @@
           <h3 class="text-2xl font-semibold w-16">{{ energy }}</h3>
           <div class="relative flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]">
             <div class="h-full rounded-full bg-yellow-500 min-w-[10%]" :style="{ width: Math.min(100, energy) + '%' }"></div>
-            <div class="h-full rounded-full bg-orange-500 min-w-[10%] max-w-full absolute left-0" v-if="energy > 100" :style="{ width: (energy - 100) * 4 + '%' }"></div>
           </div>
         </div>
 
@@ -229,5 +237,9 @@ function handleRegen(hp: number, nrg: number) {
   .disabled:hover {
     background-color: var(--faded-bg-color);
   }
+}
+
+#shock {
+  z-index: 999;
 }
 </style>
