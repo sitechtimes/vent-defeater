@@ -109,9 +109,9 @@ onMounted(async () => {
 
 async function createPresentation(preset?: Template) {
   // load sample presentation into pinia
-  userStore.currentPresentation = {
+  userStore.currentPres = {
     id: 'sdbhugu89wdgh89weghwn9g',
-    name: 'Awesome Presentation',
+    name: 'its joever bidone',
     type: 'Presentation',
     lastOpened: new Date().getTime() / 1000,
     slides: [
@@ -123,12 +123,10 @@ async function createPresentation(preset?: Template) {
             type: 'Text Field',
             id: 'ahgauioghioag',
             position: {
-              x: 250,
-              y: 107.5
-            },
-            dimensions: {
-              width: 400,
-              height: 100
+              top: 50,
+              left: 100,
+              bottom: 50,
+              right: 100
             },
             background: {
               color: '#ffff00',
@@ -165,19 +163,6 @@ async function createPresentation(preset?: Template) {
         background: {
           color: '#ffffff',
           image: null
-        },
-        text: {
-          font: 'Arial',
-          color: '#000000',
-          size: 75,
-          styles: {
-            bold: false,
-            italics: false,
-            underline: false,
-            strikethrough: false,
-            align: 'center',
-            wrap: true
-          }
         },
         settings: {
           showCode: true,
