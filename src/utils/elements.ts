@@ -109,7 +109,7 @@ export const air: Element = {
 export const earth: Element = {
   name: 'earth',
   img: '/game/elements/earth.svg',
-  currentLevel: 0,
+  currentLevel: 4,
   levels: [
     {
       level: 1,
@@ -123,12 +123,12 @@ export const earth: Element = {
     },
     {
       level: 3,
-      name: 'CaseOh',
+      name: 'tbd',
       description: '**Grounded** tiles create a dust storm. Enemies have a chance to miss their attacks, scaling with how many **grounded** tiles there are.'
     },
     {
       level: 4,
-      name: 'Nikocado Avocado',
+      name: 'Ur mom',
       description:
         'When attacked, there is a chance to trigger an earthquake. This will empty the action bars of all enemies and stun them. Earthquake chance and stun duration scale with how many **grounded** tiles there are. Half of all **grounded** tiles will be freed afterwards.'
     }

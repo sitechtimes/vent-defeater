@@ -1,30 +1,34 @@
 <template>
-  <div class="w-screen h-screen flex flex-col items-center justify-center gap-8 py-10 overflow-hidden">
-    <div class="w-2/3 h-[45%] flex items-center justify-end">
-      <div class="flex flex-col items-center justify-center">
-        <Enemy :lives="enemyLives" :slots="enemySlots" :reroll="reroll" @on-reroll="(board) => handleReroll(board, 'enemy')" @damaged="(damage) => emit('damaged', damage)" />
-        <Amogus color="#ff0000" />
+  <div class="background w-screen h-screen flex items-center justify-around overflow-hidden">
+    <div class="w-[50em]"></div>
+
+    <div class="w-full h-full gap-8 py-10 flex flex-col items-center justify-around">
+      <div class="w-2/3 h-[45%] flex items-center justify-end">
+        <div class="flex flex-col items-center justify-center">
+          <Enemy :lives="enemyLives" :slots="enemySlots" :reroll="reroll" @on-reroll="(board) => handleReroll(board, 'enemy')" @damaged="(damage) => emit('damaged', damage)" />
+          <Amogus color="#ff0000" />
+        </div>
       </div>
-    </div>
-    <div class="w-2/3 h-[45%] flex items-center justify-start">
-      <div class="flex flex-col items-center justify-center">
-        <Player
-          :rows="playerRows"
-          :columns="playerColumns"
-          :reroll="reroll"
-          :match="matchedBoard"
-          @on-reroll="(board) => handleReroll(board, 'player')"
-          @damaged="(damage) => emit('damaged', damage)"
-          @regen="(hp, energy) => emit('regen', hp, energy)"
-        />
-        <button
-          @click="roll"
-          class="reroll back transition w-48 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6"
-          :disabled="matchedBoard"
-          :class="{ 'cursor-not-allowed': matchedBoard }"
-        >
-          Reroll 🎲
-        </button>
+      <div class="w-2/3 h-[45%] flex items-center justify-start">
+        <div class="flex flex-col items-center justify-center">
+          <Player
+            :rows="playerRows"
+            :columns="playerColumns"
+            :reroll="reroll"
+            :match="matchedBoard"
+            @on-reroll="(board) => handleReroll(board, 'player')"
+            @damaged="(damage) => emit('damaged', damage)"
+            @regen="(hp, energy) => emit('regen', hp, energy)"
+          />
+          <button
+            @click="roll"
+            class="reroll back transition w-48 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6"
+            :disabled="matchedBoard != undefined"
+            :class="{ 'cursor-not-allowed': matchedBoard }"
+          >
+            Reroll 🎲
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -147,6 +151,13 @@ async function roll() {
 </script>
 
 <style lang="scss" scoped>
+.background {
+  background-image: url('/game/map/empty.png');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 @media (hover: hover) and (pointer: fine) {
   .reroll:hover {
     background-color: var(--faded-bg-color);

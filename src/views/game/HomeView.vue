@@ -20,7 +20,7 @@
     </p>
   </div>
 
-  <div class="relative flex items-center justify-around w-screen h-screen overflow-hidden select-none" :class="{ background: level == 1 }">
+  <div class="relative flex items-center justify-center w-screen h-screen overflow-hidden select-none" :class="{ 'bg-black': level != 0 }">
     <Transition name="left">
       <div class="absolute left-0 h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-[color:var(--bg-color-contrast-translucent)] w-[35rem] z-20" v-show="level != 0">
         <div class="w-3/4 flex items-center justify-center gap-1">
@@ -96,8 +96,6 @@
         </Transition>
       </div>
     </Transition>
-
-    <div class="w-[50rem]" v-show="level != 0"></div>
 
     <Intro
       v-show="level == 0"
@@ -257,13 +255,6 @@ function getBarColor(element: Element, bar: number) {
 .opacity-enter-from,
 .opacity-leave-to {
   opacity: 0;
-}
-
-.background {
-  background-image: url('/game/bg.jpg');
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
 }
 
 .timer {
