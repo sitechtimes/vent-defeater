@@ -120,9 +120,9 @@ const emailErr = ref('');
 const nameErr = ref('');
 const passwordErr = ref('');
 const confirmPasswordErr = ref('');
-const loading = ref(false);
 
 const verifyNag = ref(false);
+const loading = ref(false);
 
 watch(
   () => route.query.signup,
@@ -198,20 +198,21 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  if (emailErr.value || passwordErr.value || nameErr.value || loading.value) return;
+  if (emailErr.value || passwordErr.value || nameErr.value) return;
   loading.value = true;
   if (showLogin.value) {
     const data = await userStore.logIn(email.value, password.value);
-    if (data === 'Success') {
+    if (data == 'Success') {
       router.push('/');
     } else {
-      if ('email' in data) passwordErr.value = data.password.join(' ');
       if ('non_field_errors' in data) emailErr.value = data.non_field_errors.join(' ');
+      if ('password' in data) passwordErr.value = data.password.join(' ');
+      if ('email' in data) emailErr.value = data.email.join(' ');
     }
   } else if (confirmPasswordErr.value) {
   } else {
-    const data = await userStore.signUp(email.value, password.value, name.value);
-    if (data === 'Success') {
+    let data = await userStore.signUp(email.value, password.value, name.value);
+    if (data == 'Success') {
       verifyNag.value = true;
     } else {
       if ('password' in data) passwordErr.value = data.password.join(' ');
