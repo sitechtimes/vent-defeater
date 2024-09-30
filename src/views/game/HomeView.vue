@@ -1,41 +1,33 @@
 <template>
-  <div
-    class="w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none"
-    :style="{
-      opacity: (energy - 100) / 25,
-      backgroundImage: `radial-gradient(circle, transparent, yellow)${energy > 110 ? ', radial-gradient(circle, rgba(255, 255, 0, ' + (energy - 110) / 15 + '), yellow)' : ''}`
-    }"
-    v-if="energy > 100"
-    id="shock"
-  ></div>
-  <button class="absolute top-16 right-4 border-2 border-neutral-950" @click="level++">(testing) next lvl</button>
-  <div class="absolute top-4 right-4 select-none">
-    <ThemeToggle big />
+  <div class="energyOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl" :style="{ opacity: (energy - 100) / 25 }" v-if="energy > 100"></div>
+  <Transition name="opacity">
+    <div class="healthOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl" v-if="health < 50 || showHealthOverlay"></div>
+  </Transition>
+
+  <button class="z-10 absolute top-4 right-4 border-2 bg-white border-neutral-950" @click="level++">(testing) next lvl</button>
+  <div class="z-10 absolute bottom-4 right-4 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl" v-if="level != 0">
+    <p class="timer font-semibold text-4xl">
+      {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
+        {{
+          Math.floor(timer % 1000).toString().length == 1
+            ? '0'
+            : '' +
+              Math.floor(timer % 1000)
+                .toString()
+                .slice(0, 2)
+        }}
+      </span>
+    </p>
   </div>
 
-  <div class="flex items-center justify-around w-screen h-screen overflow-hidden select-none">
-    <div class="absolute bottom-4 right-4 flex items-center justify-center flex-col bg-[color:var(--bg-color-contrast)] py-2 px-10 w-48 rounded-xl" v-if="level != 0">
-      <p class="timer font-semibold text-4xl">
-        {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
-          {{
-            Math.floor(timer % 1000).toString().length == 1
-              ? '0'
-              : '' +
-                Math.floor(timer % 1000)
-                  .toString()
-                  .slice(0, 2)
-          }}
-        </span>
-      </p>
-    </div>
-
+  <div class="relative flex items-center justify-around w-screen h-screen overflow-hidden select-none" :class="{ background: level == 1 }">
     <Transition name="left">
-      <div class="h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-[color:var(--faded-bg-color-light)] w-[50rem] z-20" v-show="level != 0">
+      <div class="absolute left-0 h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-[color:var(--bg-color-contrast-translucent)] w-[35rem] z-20" v-show="level != 0">
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/health.svg" aria-hidden="true" />
           <h3 class="text-2xl font-semibold w-16">{{ Math.floor(health) }}</h3>
           <div class="flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]">
-            <div class="h-full rounded-full bg-red-500" :style="{ width: Math.min(100, health) + '%' }"></div>
+            <div class="transition-all duration-500 h-full rounded-full bg-red-500" :style="{ width: Math.min(100, health) + '%' }"></div>
           </div>
         </div>
 
@@ -43,7 +35,8 @@
           <img class="w-6 h-6 dark:invert" src="/game/elements/electric.svg" aria-hidden="true" />
           <h3 class="text-2xl font-semibold w-16">{{ energy }}</h3>
           <div class="relative flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]">
-            <div class="h-full rounded-full bg-yellow-500 min-w-[10%]" :style="{ width: Math.min(100, energy) + '%' }"></div>
+            <div class="transition-all duration-500 h-full rounded-full bg-yellow-500 min-w-[10%]" :style="{ width: Math.min(100, energy) + '%' }"></div>
+            <div class="transition-all duration-500 absolute left-0 h-full rounded-full bg-orange-500 max-w-full" :style="{ width: ((energy - 100) / 25) * 100 + '%' }"></div>
           </div>
         </div>
 
@@ -72,30 +65,39 @@
         </div>
 
         <Transition name="down">
-          <div class="flex flex-col items-center justify-center w-full p-3 bg-[color:var(--faded-bg-color)] rounded-2xl" v-if="selectedElement">
-            <h2 class="text-4xl">{{ selectedElement.name[0].toUpperCase() + selectedElement.name.slice(1) }}</h2>
-            <p class="text-lg">Level {{ selectedElement.currentLevel }}</p>
+          <div class="flex items-center justify-center w-full p-3 rounded-2xl" v-if="selectedElement">
+            <div class="flex flex-col items-center justify-center w-40">
+              <h2 class="text-4xl">{{ selectedElement.name[0].toUpperCase() + selectedElement.name.slice(1) }}</h2>
+              <p class="text-lg">Level {{ selectedElement.currentLevel }}</p>
+            </div>
 
-            <div class="w-full flex flex-col items-center justify-center gap-4">
+            <div class="w-full h-10 flex items-center justify-center gap-[0.125rem] bg-[color:var(--bg-color-contrast)] border-2 border-[color:var(--bg-color-contrast)] rounded-full">
               <div
-                class="w-full flex items-center justify-around rounded-lg py-2 transition-none"
+                class="level relative w-full h-full flex items-center justify-around py-2 cursor-help"
                 v-for="level in selectedElement.levels"
-                :style="{ backgroundColor: selectedElement.currentLevel != level.level ? 'var(--faded-bg-color)' : 'var(--secondary)' }"
+                :class="getBarColor(selectedElement, level.level)"
                 :key="level.level"
               >
-                <p class="text-3xl">{{ level.level }}</p>
-                <p
-                  class="text-wrap w-3/4 text-center transition-none"
-                  :class="{ 'blur-sm': selectedElement.currentLevel < level.level, 'cursor-not-allowed': selectedElement.currentLevel < level.level }"
+                <div
+                  class="description shadow-[color:var(--text-color)] shadow-sm pointer-events-none hidden absolute top-0 left-28 w-96 rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap"
+                  :class="getBarColor(selectedElement, level.level)"
                 >
-                  <span :class="{ 'font-bold': part.bold }" v-for="part in formatDescription(level.description)">{{ part.text }}</span>
-                </p>
+                  <h4 class="text-xl font-semibold">{{ level.name }}</h4>
+                  <p
+                    class="text-wrap w-3/4 text-center transition-none"
+                    :class="{ 'blur-sm': selectedElement.currentLevel < level.level, 'cursor-not-allowed': selectedElement.currentLevel < level.level }"
+                  >
+                    <span :class="{ 'font-bold': part.bold }" v-for="part in formatDescription(level.description)">{{ part.text }}</span>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
         </Transition>
       </div>
     </Transition>
+
+    <div class="w-[50rem]" v-show="level != 0"></div>
 
     <Intro
       v-show="level == 0"
@@ -130,6 +132,7 @@ import { onMounted, ref, watch } from 'vue';
 
 const store = useGameStore();
 
+const showHealthOverlay = ref(false);
 const startTime = ref<number>();
 const timer = ref(0);
 watch(
@@ -150,39 +153,62 @@ watch(
   async (value) => (energy.value = value)
 );
 
-const rows = ref(5);
+const rows = ref(3);
 const columns = ref(3);
 
 const elements = ref<Record<string, Element>>({ ice, fire, air, earth });
 const selectedElement = ref<Element>();
 
-const currentEnemy = ref({ lives: 1, slots: 3 });
+const currentEnemy = ref({ lives: 1, slots: 2 });
 
 watch(
   () => selectedElement.value,
   (stat) => (store.currentElement = stat)
 );
 
-onMounted(() => {
-  elements.value.ice.currentLevel = 4;
-  elements.value.fire.currentLevel = 4;
-  elements.value.air.currentLevel = 4;
-});
-
-function handleDamage(damage: number) {
+async function handleDamage(damage: number) {
   health.value -= damage;
+  showOverlay();
   if (health.value < 0) {
     // die
+  }
+
+  async function showOverlay() {
+    showHealthOverlay.value = true;
+    await delay(300);
+    showHealthOverlay.value = false;
   }
 }
 
 function handleRegen(hp: number, nrg: number) {
   health.value = Math.min(100, health.value + hp);
-  energy.value += nrg;
+  if (selectedElement.value) energy.value += nrg;
   store.energy = energy.value;
   if (energy.value >= 125) {
     // die
   }
+}
+
+function getBarColor(element: Element, bar: number) {
+  /* yes this is necessary
+  fuck tailwind
+  dont trump me
+  dont do it
+  i swear to god i will remove the 2 from tf2 */
+
+  if (element.currentLevel < bar) return 'bg-[color:var(--faded-bg-color)]';
+
+  if (element.currentLevel == bar) {
+    if (element.name == 'ice') return 'ice';
+    if (element.name == 'fire') return 'fire';
+    if (element.name == 'air') return 'air';
+    if (element.name == 'earth') return 'earth';
+  }
+
+  if (element.name == 'ice') return 'iceSecondary';
+  if (element.name == 'fire') return 'fireSecondary';
+  if (element.name == 'air') return 'airSecondary';
+  if (element.name == 'earth') return 'earthSecondary';
 }
 </script>
 
@@ -223,11 +249,73 @@ function handleRegen(hp: number, nrg: number) {
   transform: translateY(-2rem);
 }
 
+.opacity-enter-active,
+.opacity-leave-active {
+  transition: all 0.25s ease;
+}
+
+.opacity-enter-from,
+.opacity-leave-to {
+  opacity: 0;
+}
+
+.background {
+  background-image: url('/game/bg.jpg');
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 .timer {
   color: transparent;
   background: linear-gradient(to bottom, var(--secondary), var(--secondary-shade));
   background-clip: text;
   width: fit-content;
+}
+
+.energyOverlay {
+  background-image: radial-gradient(transparent 50%, yellow);
+  mask-image: radial-gradient(transparent 30%, yellow);
+}
+
+.healthOverlay {
+  background-image: radial-gradient(transparent 50%, rgba(255, 0, 0, 0.85));
+  mask-image: radial-gradient(transparent 30%, rgba(255, 0, 0, 0.85));
+}
+
+.level:first-child {
+  border-top-left-radius: 500em;
+  border-bottom-left-radius: 500em;
+}
+
+.level:last-child {
+  border-top-right-radius: 500em;
+  border-bottom-right-radius: 500em;
+}
+
+.ice {
+  background-color: var(--ice);
+}
+.iceSecondary {
+  background-color: var(--ice-secondary);
+}
+.fire {
+  background-color: var(--fire);
+}
+.fireSecondary {
+  background-color: var(--fire-secondary);
+}
+.air {
+  background-color: var(--air);
+}
+.airSecondary {
+  background-color: var(--air-secondary);
+}
+.earth {
+  background-color: var(--earth);
+}
+.earthSecondary {
+  background-color: var(--earth-secondary);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -237,9 +325,11 @@ function handleRegen(hp: number, nrg: number) {
   .disabled:hover {
     background-color: var(--faded-bg-color);
   }
-}
 
-#shock {
-  z-index: 999;
+  .level:hover {
+    .description {
+      display: flex;
+    }
+  }
 }
 </style>

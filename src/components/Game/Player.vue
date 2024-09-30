@@ -4,9 +4,18 @@
       <span
         v-for="(num, numIndex) in row"
         :key="numIndex"
-        class="w-14 h-14 text-center text-2xl rounded-md border-2 border-[color:var(--faded-bg-color)] flex items-center justify-center duration-250 cursor-pointer transition-none"
+        class="w-14 h-14 text-center text-2xl rounded-md border-2 border-[color:var(--faded-bg-color)] flex items-center justify-center duration-250 transition-none"
         @click="attack(store.currentElement, rowIndex, numIndex)"
-        :class="{ 'bg-[color:var(--ice)]': elementGrid[rowIndex][numIndex] == 1, 'bg-[color:var(--fire)]': elementGrid[rowIndex][numIndex] == 2, 'bg-[color:var(--faded-bg-color-light)]': elementGrid[rowIndex][numIndex] == 0 }"
+        :class="{
+          'cursor-default': !store.currentElement,
+          'cursor-pointer': store.currentElement,
+          'cursor-not-allowed': store.currentElement?.name == 'air',
+          'bg-[color:var(--ice)]': elementGrid[rowIndex][numIndex] == 1,
+          'bg-[color:var(--fire)]': elementGrid[rowIndex][numIndex] == 2,
+          'bg-[color:var(--earth)]': elementGrid[rowIndex][numIndex] == 4,
+          'bg-[color:var(--enemy)]': elementGrid[rowIndex][numIndex] == 99,
+          'bg-[color:var(--you)]': elementGrid[rowIndex][numIndex] == 0
+        }"
         >{{ num }}</span
       >
     </div>
@@ -15,7 +24,7 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/stores/game';
-import { type Element } from '@/utils/elements';
+import { fire, ice, type Element } from '@/utils/elements';
 import { delay, getRandomInt } from '@/utils/functions';
 import { onMounted, ref, watch } from 'vue';
 
@@ -23,11 +32,13 @@ type Props = {
   rows: number;
   columns: number;
   reroll: boolean;
+  match: number[][] | undefined;
 };
 
 type Emits = {
   damaged: [damage: number];
   regen: [health: number, energy: number];
+  onReroll: [board: number[][]];
 };
 
 const store = useGameStore();
@@ -37,6 +48,12 @@ watch(
   () => props.reroll,
   (active) => {
     if (active) reroll();
+  }
+);
+watch(
+  () => props.match,
+  (match) => {
+    if (match) highlightMatch(match);
   }
 );
 
@@ -49,12 +66,6 @@ const generalWinterCooldown = ref(0);
 const arsonCooldown = ref(0);
 
 onMounted(() => {
-  /* yes this is necessary
-  array.fill does funky shit with the ice attack
-  dont trump meme me
-  dont do it lawrence
-  i know you want to dont do it
-  dont fucking do it */
   for (let i = 0; i < props.rows; i++) {
     const displayedRow: number[] = [];
     const elementRow: number[] = [];
@@ -66,43 +77,50 @@ onMounted(() => {
     elementGrid.value.push(elementRow);
   }
   loaded.value = true;
+  emit('onReroll', displayedGrid.value);
 });
 
-function getAdjacentTiles (i: number, j: number) {
-  let left: number | undefined, right: number | undefined, up: number | undefined, down: number | undefined;
-      try {
-        left = elementGrid.value[i][j - 1];
-      } catch (e) {}
-      try {
-        right = elementGrid.value[i][j + 1];
-      } catch (e) {}
-      try {
-        up = elementGrid.value[i - 1][j];
-      } catch (e) {}
-      try {
-        down = elementGrid.value[i + 1][j];
-      } catch (e) {}
+function highlightMatch(match: number[][]) {
+  for (let coord of match) {
+    elementGrid.value[coord[0]][coord[1]] = 99;
+  }
+}
 
-      return [left, right, up, down];
+function getAdjacentTiles(i: number, j: number) {
+  let left: number | undefined, right: number | undefined, up: number | undefined, down: number | undefined;
+  try {
+    left = elementGrid.value[i][j - 1];
+  } catch (e) {}
+  try {
+    right = elementGrid.value[i][j + 1];
+  } catch (e) {}
+  try {
+    up = elementGrid.value[i - 1][j];
+  } catch (e) {}
+  try {
+    down = elementGrid.value[i + 1][j];
+  } catch (e) {}
+
+  return [left, right, up, down];
 }
 
 function reroll() {
   let explode = false;
   for (let i = 0; i < props.rows; i++) {
     for (let j = 0; j < props.columns; j++) {
-      if (!explode && fireExplode(i, j)) explode = true;
+      if (!explode && elementGrid.value[i][j] == 2 && fireExplode(i, j)) explode = true;
+      if (elementGrid.value[i][j] == 2) emit('regen', fire.currentLevel == 4 ? 0.05 : 0.1 / fire.currentLevel, 0);
       if (iceThaw(i, j)) continue;
       displayedGrid.value[i][j] = getNewNumber(displayedGrid.value[i][j]);
-      if (store.currentElement?.name == 'fire' && elementGrid.value[i][j] == 2) emit("regen", store.currentElement.currentLevel == 4 ? 0.05 : (0.1 / store.currentElement.currentLevel), 0);
     }
   }
   if (explode) {
-    elementGrid.value = elementGrid.value.map((row) => row.map((elem) => elem == 2 ? 0 : elem));
-    emit("damaged", 25);
+    elementGrid.value = elementGrid.value.map((row) => row.map((elem) => (elem == 2 ? 0 : elem)));
+    emit('damaged', 25);
   }
   generalWinter();
   arson();
-  emit('regen', 0, 5);
+  emit('onReroll', displayedGrid.value);
 
   function getNewNumber(replace: number) {
     let random = getRandomInt(0, 9);
@@ -113,7 +131,7 @@ function reroll() {
   }
 
   function iceThaw(i: number, j: number) {
-    const level = store.currentElement?.currentLevel;
+    const level = ice.currentLevel;
 
     if (elementGrid.value[i][j] != 1) return false;
 
@@ -136,23 +154,28 @@ function reroll() {
     return true;
   }
 
-  function fireExplode (i: number, j: number) {
-    const level = store.currentElement?.currentLevel;
+  function fireExplode(i: number, j: number) {
+    const level = fire.currentLevel;
 
-    if (level && level <= 2) { // check for explosions
+    if (level <= 2) {
+      // check for explosions
       const directions = getAdjacentTiles(i, j);
       let adjacentFire = 0;
+      console.log(elementGrid.value);
+      console.log(i, j, displayedGrid.value[i][j], directions);
       for (let direction of directions) {
+        console.log(direction);
         if (direction == 2) adjacentFire++;
       }
 
+      console.log(adjacentFire);
       if (adjacentFire >= (level == 1 ? 2 : 4)) return true;
     }
     return false;
   }
 
   function generalWinter() {
-    if (store.currentElement?.currentLevel == 4 && store.currentElement?.name == 'ice') {
+    if (ice.currentLevel == 4) {
       if (generalWinterCooldown.value < 2) generalWinterCooldown.value++;
       else {
         let row = getRandomInt(0, props.rows - 1);
@@ -163,14 +186,14 @@ function reroll() {
           column = getRandomInt(0, props.columns - 1);
           tries++;
         }
-        if (tries >= props.rows * props.columns) elementGrid.value[row][column] = 1;
+        if (tries <= props.rows * props.columns) elementGrid.value[row][column] = 1;
         generalWinterCooldown.value = 0;
       }
     }
   }
 
   function arson() {
-    if (store.currentElement?.currentLevel == 4 && store.currentElement?.name == 'fire') {
+    if (fire.currentLevel == 4) {
       if (arsonCooldown.value < 2) arsonCooldown.value++;
       else {
         let row = getRandomInt(0, props.rows - 1);
@@ -181,7 +204,7 @@ function reroll() {
           column = getRandomInt(0, props.columns - 1);
           tries++;
         }
-        if (tries >= props.rows * props.columns) elementGrid.value[row][column] = 2;
+        if (tries <= props.rows * props.columns) elementGrid.value[row][column] = 2;
         arsonCooldown.value = 0;
       }
     }
@@ -196,30 +219,27 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
   else if (element.name == 'earth') earth(element, rowIndex, numIndex);
 
   function ice(element: Element, rowIndex: number, numIndex: number) {
-    if (element.currentLevel >= 3 && elementGrid.value[rowIndex][numIndex] == 1) { // freeze adjacent fire tiles
+    if (store.energy < 5 || elementGrid.value[rowIndex][numIndex] > 1) return;
+
+    if (elementGrid.value[rowIndex][numIndex] == 1 && element.currentLevel >= 3) {
       elementGrid.value[rowIndex][numIndex] = 0;
       return;
     }
 
-    if (elementGrid.value[rowIndex][numIndex] != 0 || store.energy < 5) return;
-
-    if (element.currentLevel >= 1) { // basic attack
+    if (element.currentLevel >= 1) {
+      // basic attack
       elementGrid.value[rowIndex][numIndex] = 1;
       store.energy -= 5;
     }
   }
 
   function fire(element: Element, rowIndex: number, numIndex: number) {
-    if (element.currentLevel >= 1) { // basic attack
+    if (elementGrid.value[rowIndex][numIndex] != 0 || store.energy < 5) return;
+
+    if (element.currentLevel >= 1) {
+      // basic attack
       elementGrid.value[rowIndex][numIndex] = 2;
       store.energy -= 5;
-    }
-
-    if (element.currentLevel >= 3) { // burn adjacent ground tiles
-      const directions = getAdjacentTiles(rowIndex, numIndex);
-      for (let direction of directions) {
-        if (direction == 4) elementGrid.value[rowIndex][numIndex] = 2;
-      }
     }
   }
 

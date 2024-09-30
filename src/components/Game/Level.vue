@@ -1,8 +1,32 @@
 <template>
-  <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 py-10 overflow-hidden">
-    <Enemy :lives="enemyLives" :slots="enemySlots" @damaged="(damage) => emit('damaged', damage)" />
-    <Player :rows="playerRows" :columns="playerColumns" :reroll="reroll" @damaged="(damage) => emit('damaged', damage)" @regen="(hp, energy) => emit('regen', hp, energy)" />
-    <button @click="roll" class="back transition px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6">Reroll 🎲</button>
+  <div class="w-screen h-screen flex flex-col items-center justify-center gap-8 py-10 overflow-hidden">
+    <div class="w-2/3 h-[45%] flex items-center justify-end">
+      <div class="flex flex-col items-center justify-center">
+        <Enemy :lives="enemyLives" :slots="enemySlots" :reroll="reroll" @on-reroll="(board) => handleReroll(board, 'enemy')" @damaged="(damage) => emit('damaged', damage)" />
+        <Amogus color="#ff0000" />
+      </div>
+    </div>
+    <div class="w-2/3 h-[45%] flex items-center justify-start">
+      <div class="flex flex-col items-center justify-center">
+        <Player
+          :rows="playerRows"
+          :columns="playerColumns"
+          :reroll="reroll"
+          :match="matchedBoard"
+          @on-reroll="(board) => handleReroll(board, 'player')"
+          @damaged="(damage) => emit('damaged', damage)"
+          @regen="(hp, energy) => emit('regen', hp, energy)"
+        />
+        <button
+          @click="roll"
+          class="reroll back transition w-48 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6"
+          :disabled="matchedBoard"
+          :class="{ 'cursor-not-allowed': matchedBoard }"
+        >
+          Reroll 🎲
+        </button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -11,6 +35,8 @@ import { ref } from 'vue';
 import Enemy from './Enemy.vue';
 import Player from './Player.vue';
 import { delay } from '@/utils/functions';
+import { useGameStore } from '@/stores/game';
+import Amogus from './Amogus.vue';
 
 type Emits = {
   damaged: [damage: number];
@@ -24,15 +50,106 @@ type Props = {
   playerColumns: number;
 };
 
+const store = useGameStore();
+
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 const reroll = ref(false);
+const matchedBoard = ref<number[][]>();
+
+const enemyBoard = ref<number[]>();
+const playerBoard = ref<number[][]>();
+
+function handleReroll(board: number[] | number[][], from: 'enemy' | 'player') {
+  if (from == 'enemy') enemyBoard.value = board as number[];
+  else playerBoard.value = board as number[][];
+
+  if (!enemyBoard.value || !playerBoard.value) return;
+
+  const match = findMatches(playerBoard.value, enemyBoard.value);
+  if (!match) return;
+
+  console.log(match);
+  matchedBoard.value = match;
+
+  // i love chatgpt
+  function findMatches(player: number[][], enemy: number[]) {
+    const rows = player.length;
+    const cols = player[0].length;
+    const seqLength = enemy.length;
+    const reversedSequence = [...enemy].reverse();
+
+    // Check if a sub-array matches the target sequence or its reverse
+    function checkMatch(arr: number[]) {
+      return arr.join() === enemy.join() || arr.join() === reversedSequence.join();
+    }
+
+    // Check horizontal and vertical sequences
+    for (let row = 0; row < rows; row++) {
+      for (let col = 0; col < cols; col++) {
+        // Horizontal right
+        if (col + seqLength <= cols) {
+          const horizontalRight = player[row].slice(col, col + seqLength);
+          if (checkMatch(horizontalRight)) {
+            // Return positions for horizontal right
+            return Array.from({ length: seqLength }, (_, i) => [row, col + i]);
+          }
+        }
+
+        // Vertical down
+        if (row + seqLength <= rows) {
+          const verticalDown = [];
+          for (let i = 0; i < seqLength; i++) {
+            verticalDown.push(player[row + i][col]);
+          }
+          if (checkMatch(verticalDown)) {
+            // Return positions for vertical down
+            return Array.from({ length: seqLength }, (_, i) => [row + i, col]);
+          }
+        }
+
+        // Diagonal down-right
+        if (row + seqLength <= rows && col + seqLength <= cols) {
+          const diagonalRight = [];
+          for (let i = 0; i < seqLength; i++) {
+            diagonalRight.push(player[row + i][col + i]);
+          }
+          if (checkMatch(diagonalRight)) {
+            // Return positions for diagonal down-right
+            return Array.from({ length: seqLength }, (_, i) => [row + i, col + i]);
+          }
+        }
+
+        // Diagonal down-left
+        if (row + seqLength <= rows && col - seqLength + 1 >= 0) {
+          const diagonalLeft = [];
+          for (let i = 0; i < seqLength; i++) {
+            diagonalLeft.push(player[row + i][col - i]);
+          }
+          if (checkMatch(diagonalLeft)) {
+            // Return positions for diagonal down-left
+            return Array.from({ length: seqLength }, (_, i) => [row + i, col - i]);
+          }
+        }
+      }
+    }
+
+    return null;
+  }
+}
 
 async function roll() {
   reroll.value = true;
-  await delay(500);
+  emit('regen', 0, 5);
+  await delay(50);
   reroll.value = false;
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@media (hover: hover) and (pointer: fine) {
+  .reroll:hover {
+    background-color: var(--faded-bg-color);
+  }
+}
+</style>
