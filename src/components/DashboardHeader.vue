@@ -32,12 +32,12 @@
         <p class="m-0 text-[color:var(--text-color)] font-semibold">Upgrade</p>
       </button>
 
-      <div class="ButtonPopUp relative">
+      <div class="button-pop-up relative">
         <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--faded-bg-color)]">
           <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/bell.svg" aria-hidden="true" />
         </button>
         <div
-          class="popUpButton opacity-0 pointer-events-none absolute right-0 flex items-center justify-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
+          class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center justify-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
         >
           <h1 class="text-lg text-left w-full mt-4">Notifications</h1>
           <div class="flex items-center justify-center flex-col w-80 bg-[color:var(--faded-bg-color)] p-6 rounded-lg">
@@ -48,18 +48,14 @@
       </div>
 
       
-      <div class="ButtonPopUp relative">
+      <div class="button-pop-up relative">
       <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]">
         <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/user.svg" aria-hidden="true" />
       </button>
-      <div
-          class="popUpButton opacity-0 pointer-events-none absolute right-0 flex items-center justify-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
+      <div 
+           class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
         >
-          <h1 class="text-lg text-left w-full mt-4">aaaaaaaaaaaaaaa</h1>
-          <div class="flex ite ms-center justify-center flex-col w-80 bg-[color:var(--faded-bg-color)] p-6 rounded-lg">
-            <p class="m-0 font-bold">aaaaaaaaaaaaaaa</p>
-            <p class="m-0">aaaaaaaaaaaaaaa</p>
-          </div>
+          <span class="block" v-for="option in options" :to="option.path" :key="option.name">{{ option.name }}</span>
         </div>
     </div>
   </div>
@@ -73,6 +69,38 @@ import type { Presentation } from '@/utils/types';
 import { onBeforeMount, ref, watch } from 'vue';
 import ThemeToggle from './ThemeToggle.vue';
 
+type options = {
+  name: string;
+  path: string;
+  dropdown?: { name: string; path: string }[];
+};
+
+const options: options[] = [
+  {
+    name: 'Work',
+    path: '/',
+  },
+  {
+    name: 'Education',
+    path: '/',
+  },
+  {
+    name: 'Features',
+    path: '/',
+  },
+  {
+    name: 'Resources',
+    path: '/',
+  },
+  {
+    name: 'Pricing',
+    path: '/'
+  },
+  {
+    name: 'Talk to Sales',
+    path: '/'
+  }
+];
 const userStore = useUserStore();
 const presentations = ref<Presentation[]>([]);
   const userPopUp = ref(false)
@@ -114,14 +142,14 @@ function search(input: string) {
   }
 }
 
-.ButtonPopUp:focus-within {
-  .popUpButton {
+.button-pop-up:focus-within {
+  .pop-up-button {
     opacity: 1;
     pointer-events: all;
   }
 }
 
-.popUpButton {
+.pop-up-button {
   box-shadow: 0 0 0 0.05rem var(--bg-color-contrast-translucent);
 }
 
@@ -130,7 +158,7 @@ function search(input: string) {
     outline: 0.125rem solid var(--primary);
   }
 
-  .popUpButton:hover {
+  .pop-up-button:hover {
     background-color: var(--faded-bg-color);
   }
 
@@ -138,7 +166,7 @@ function search(input: string) {
     background-color: var(--faded-bg-color);
   }
 
-  .buttonPopUp {
+  .button-pop-up {
     button:hover {
       background-color: var(--faded-bg-color-light);
     }
