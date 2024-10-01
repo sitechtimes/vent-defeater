@@ -130,9 +130,9 @@ import Map from '@/components/Game/Map.vue';
 import ThemeToggle from '@/components/ThemeToggle.vue';
 import { useGameStore } from '@/stores/game';
 import { air, earth, fire, ice, formatDescription } from '@/utils/elements';
-import type { Element } from '@/utils/elements';
-import { delay } from '@/utils/functions';
-import { onMounted, ref, toRef, watch } from 'vue';
+import type { Element, Level as LevelType } from '@/utils/elements';
+import { delay, getRandomInt, getRandomItemFromArray } from '@/utils/functions';
+import { onBeforeMount, onMounted, ref, toRef, watch } from 'vue';
 
 const store = useGameStore();
 
@@ -170,6 +170,98 @@ watch(
   () => selectedElement.value,
   (stat) => (store.currentElement = stat)
 );
+
+onBeforeMount(() => {
+  store.levels = generateNewMap();
+});
+
+function generateNewMap () {
+  const levels: LevelType[] = [];
+
+  levels.push({
+    id: 0,
+    x: 90,
+    y: 450,
+    levelImg: "/game/firstperson/navigation.png",
+    mapImg: "/ui/sun.svg",
+    type: 'fight',
+    mystery: false,
+    completed: false,
+    color: "#ffffff",
+    enemy: {
+      lives: 1,
+      slots: 3,
+      color: "#ff0000"
+    },
+    nextLevels: [1, 2, 15]
+  });
+
+  levels.push(generateNewLevel(1, 200, 500, "o2", 1, "mystery", [2]));
+  levels.push(generateNewLevel(2, 250, 500, "asteroid", 1, "fight", [3]));
+  levels.push(generateNewLevel(3, 300, 500, "cafeteria1", 2, "fight", [4, 11, 12]));
+  levels.push(generateNewLevel(4, 350, 500, "cafeteria3", 2, "mystery", [5]));
+  levels.push(generateNewLevel(5, 400, 500, "cafeteria4", 2, "harderFight", [6]));
+  levels.push(generateNewLevel(6, 450, 500, "gen1", 2, "fight", [7]));
+  levels.push(generateNewLevel(7, 500, 500, "gen2", 2, "mystery", [8]));
+  levels.push(generateNewLevel(7, 550, 500, "reactor1", 3, "fight", [9]));
+  levels.push(generateNewLevel(8, 600, 500, "reactor2", 3, "harderFight", [10]));
+  levels.push(generateNewLevel(10, 650, 500, "cams", 3, "boss", null));
+  levels.push(generateNewLevel(11, 700, 500, "emergency", 3, "shop", [5]));
+  levels.push(generateNewLevel(12, 750, 500, "cafeteria2", 2, "mystery", [13, 19]));
+  levels.push(generateNewLevel(13, 800, 500, "admin1", 2, "fight", [14]));
+  levels.push(generateNewLevel(14, 850, 500, "admin2", 2, "mystery", [19]));
+  levels.push(generateNewLevel(15, 900, 500, "route1vent1", 1, "fight", [16]));
+  levels.push(generateNewLevel(16, 950, 500, "route1vent2", 1, "fight", [17, 18, 19]));
+  levels.push(generateNewLevel(17, 1000, 500, "comms", 2, "mystery", [18, 19]));
+  levels.push(generateNewLevel(18, 1050, 500, "chute", 2, "mystery", [20, 23]));
+  levels.push(generateNewLevel(19, 1100, 500, "shop", 3, "shop", [20, 23]));
+  levels.push(generateNewLevel(20, 1150, 500, "electrical1", 2, "mystery", [21]));
+  levels.push(generateNewLevel(21, 1200, 500, "electrical2", 2, "fight", [22]));
+  levels.push(generateNewLevel(22, 1250, 500, "medbay", 2, "harderFight", [6]));
+  levels.push(generateNewLevel(23, 1300, 500, "gen1", 2, "fight", [24]));
+  levels.push(generateNewLevel(24, 1350, 500, "gen2", 3, "mystery", [8]));
+
+  return levels;
+
+  function generateNewLevel (id: number, x: number, y: number, levelImg: string, difficulty: 1 | 2 | 3, type: "mystery" | "fight" | "harderFight" | "boss" | "shop", nextLevels: number[] | null): LevelType {
+    const determinedType = type == 'mystery' ? getRandomItemFromArray(["fight", "harderFight", "relic", "shop"]) : type;
+    return {
+      id,
+      x,
+      y,
+      levelImg: "/game/firstperson/" + levelImg + ".png",
+      mapImg: "",
+      type: determinedType,
+      mystery: type == 'mystery',
+      completed: false,
+      color: getColor(type),
+      enemy: determinedType != 'shop' && determinedType != 'relic' ? generateNewEnemy(difficulty, determinedType) : null,
+      nextLevels
+    }
+  }
+
+  function getColor(type: "mystery" | "fight" | "harderFight" | "boss" | "shop") {
+    if (type == "mystery") return "#ffffff";
+    if (type == "fight") return "#ffa500";
+    if (type == "harderFight") return "#ff0000";
+    if (type == "boss") return "#ffff00";
+    return "#00ff00";
+  }
+
+  function generateNewEnemy (difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
+    return {
+      lives: getLives(difficulty, type),
+      slots: getRandomInt(1.75 * difficulty, 2.25 * difficulty),
+      color: getRandomItemFromArray(["#ff0000", "#00ff00", "#56deff", "#ffff00", "#ff00ff", "#00ffff", "#f7f7f7"]),
+    }
+
+    function getLives (difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
+      if (type == "fight") return getRandomInt(1 * difficulty, 2 * difficulty);
+      if (type == 'harderFight') return getRandomInt(2 * difficulty, 3 * difficulty);
+      return 50;
+    }
+  }
+}
 
 async function handleDamage(damage: number) {
   let defense = 0;
@@ -211,7 +303,7 @@ function getBarColor(element: Element, bar: number) {
 
   if (element.currentLevel < bar) return 'bg-[color:var(--faded-bg-color)]';
   if (element.currentLevel == bar) return element.name;
-  return element.name + 'Secondary';
+  return element.name + "Secondary";
 }
 </script>
 

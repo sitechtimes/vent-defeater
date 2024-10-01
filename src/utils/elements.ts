@@ -16,6 +16,8 @@ export type Element = {
 };
 
 export type Level = {
+  /** ID of level */
+  id: number;
   /** X-position of the level on the map, in pixels. */
   x: number;
   /** Y-position of the level on the map, in pixels. */
@@ -32,7 +34,7 @@ export type Level = {
   completed: boolean;
   /** Hex code of the level marker's color on the map. */
   color: string;
-  /** Enemy stats. */
+  /** Enemy stats, if applicable. */
   enemy: {
     /** Number of lives. */
     lives: number;
@@ -40,9 +42,9 @@ export type Level = {
     slots: number;
     /** Hex code color of the enemy. */
     color: string;
-  };
-  /** Array of children levels, if applicable. */
-  nextLevels: Level[] | null;
+  } | null;
+  /** Array of children level IDs, if applicable. */
+  nextLevels: number[] | null;
 };
 
 export const ice: Element = {
