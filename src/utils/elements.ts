@@ -15,6 +15,36 @@ export type Element = {
   }[];
 };
 
+export type Level = {
+  /** X-position of the level on the map, in pixels. */
+  x: number;
+  /** Y-position of the level on the map, in pixels. */
+  y: number;
+  /** Background image of the level during game phase. */
+  levelImg: string;
+  /** Image of the level marker on the map. */
+  mapImg: string;
+  /** Type of level */
+  type: 'fight' | 'harderFight' | 'shop' | 'relic' | 'boss';
+  /** Whether or not the level appears on the map as a mystery level. */
+  mystery: boolean;
+  /** Whether or not the level was completed or is no longer accessible. */
+  completed: boolean;
+  /** Hex code of the level marker's color on the map. */
+  color: string;
+  /** Enemy stats. */
+  enemy: {
+    /** Number of lives. */
+    lives: number;
+    /** Number of slots. */
+    slots: number;
+    /** Hex code color of the enemy. */
+    color: string;
+  };
+  /** Array of children levels, if applicable. */
+  nextLevels: Level[] | null;
+};
+
 export const ice: Element = {
   name: 'ice',
   img: '/game/elements/ice.svg',

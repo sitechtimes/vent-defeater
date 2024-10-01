@@ -22,10 +22,10 @@
 
   <div class="relative flex items-center justify-center w-screen h-screen overflow-hidden select-none" :class="{ 'bg-black': level != 0 }">
     <Transition name="left">
-      <div class="absolute left-0 h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-[color:var(--bg-color-contrast-translucent)] w-[35rem] z-20" v-show="level != 0">
+      <div class="absolute left-0 h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-black bg-opacity-65 w-[35rem] z-20" v-show="level == 1">
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/health.svg" aria-hidden="true" />
-          <h3 class="text-2xl font-semibold w-16">{{ Math.floor(health) }}</h3>
+          <h3 class="text-2xl font-semibold w-16 text-[color:var(--bg-color)]">{{ Math.floor(health) }}</h3>
           <div class="flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]">
             <div class="transition-all duration-500 h-full rounded-full bg-red-500" :style="{ width: Math.min(100, health) + '%' }"></div>
           </div>
@@ -33,19 +33,19 @@
 
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/elements/electric.svg" aria-hidden="true" />
-          <h3 class="text-2xl font-semibold w-16">{{ energy }}</h3>
+          <h3 class="text-2xl font-semibold w-16 text-[color:var(--bg-color)]">{{ energy }}</h3>
           <div class="relative flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]">
             <div class="transition-all duration-500 h-full rounded-full bg-yellow-500 min-w-[10%]" :style="{ width: Math.min(100, energy) + '%' }"></div>
             <div class="transition-all duration-500 absolute left-0 h-full rounded-full bg-orange-500 max-w-full" :style="{ width: ((energy - 100) / 25) * 100 + '%' }"></div>
           </div>
         </div>
 
-        <h1 class="text-4xl font-bold">Inventory</h1>
+        <h1 class="text-4xl font-bold text-[color:var(--bg-color)]">Inventory</h1>
 
         <div class="flex items-center justify-center w-full gap-4">
           <button
             @click="selectedElement = element"
-            class="element flex flex-col items-center justify-center bg-[color:var(--faded-bg-color)] rounded-2xl border-2 p-2 select-none"
+            class="element flex flex-col items-center justify-center bg-[color:var(--bg-color)] rounded-2xl border-2 p-2 select-none"
             :disabled="element.currentLevel == 0"
             :class="{
               disabled: element.currentLevel == 0,
@@ -67,8 +67,8 @@
         <Transition name="down">
           <div class="flex items-center justify-center w-full p-3 rounded-2xl" v-if="selectedElement">
             <div class="flex flex-col items-center justify-center w-40">
-              <h2 class="text-4xl">{{ selectedElement.name[0].toUpperCase() + selectedElement.name.slice(1) }}</h2>
-              <p class="text-lg">Level {{ selectedElement.currentLevel }}</p>
+              <h2 class="text-4xl text-[color:var(--bg-color)]">{{ selectedElement.name[0].toUpperCase() + selectedElement.name.slice(1) }}</h2>
+              <p class="text-lg text-[color:var(--bg-color)]">Level {{ selectedElement.currentLevel }}</p>
             </div>
 
             <div class="w-full h-10 flex items-center justify-center gap-[0.125rem] bg-[color:var(--bg-color-contrast)] border-2 border-[color:var(--bg-color-contrast)] rounded-full">
@@ -115,12 +115,17 @@
         @regen="(hp, energy) => handleRegen(hp, energy)"
       />
     </Transition>
+
+    <Transition name="pageOther">
+      <Map class="absolute left-0 top-0" v-show="level == 2" />
+    </Transition>
   </div>
 </template>
 
 <script setup lang="ts">
 import Intro from '@/components/Game/Intro.vue';
 import Level from '@/components/Game/Level.vue';
+import Map from '@/components/Game/Map.vue';
 import ThemeToggle from '@/components/ThemeToggle.vue';
 import { useGameStore } from '@/stores/game';
 import { air, earth, fire, ice, formatDescription } from '@/utils/elements';
@@ -211,9 +216,12 @@ function getBarColor(element: Element, bar: number) {
 </script>
 
 <style lang="scss" scoped>
-.page-enter-active,
-.page-leave-active {
+.page-enter-active {
   transition: all 1.25s ease;
+}
+
+.page-leave-active {
+  transition: all 0.5s ease;
 }
 
 .page-enter-from {
@@ -222,7 +230,20 @@ function getBarColor(element: Element, bar: number) {
 }
 .page-leave-to {
   opacity: 0;
-  transform: translate(-50vw);
+}
+
+.pageOther-enter-active,
+.pageOther-leave-active {
+  transition: all 1s ease;
+}
+
+.pageOther-enter-from {
+  opacity: 0;
+  transform: translate(100vw);
+}
+.pageOther-leave-to {
+  opacity: 0;
+  transform: translate(-100vw);
 }
 
 .left-enter-active,
@@ -311,7 +332,7 @@ function getBarColor(element: Element, bar: number) {
 
 @media (hover: hover) and (pointer: fine) {
   .element:hover {
-    background-color: var(--bg-color-contrast-translucent);
+    background-color: var(--faded-bg-color-dark);
   }
   .disabled:hover {
     background-color: var(--faded-bg-color);

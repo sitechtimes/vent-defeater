@@ -29,8 +29,8 @@
   --fire-secondary: rgb(253, 156, 149);
   --air: rgb(125, 111, 248);
   --air-secondary: rgb(156, 149, 253);
-  --earth: rgb(181, 179, 212);
-  --earth-secondary: hsl(244, 16%, 79%);
+  --earth: rgb(223, 222, 236);
+  --earth-secondary: hsl(244, 7%, 62%);
 }
 
 .dark {
@@ -52,17 +52,6 @@
   --text-color: white;
   --faded-text-color: rgb(230, 230, 230);
   --text-color-contrast: black;
-
-  --enemy: rgb(68, 0, 0);
-  --you: rgb(0, 51, 0);
-  --ice: rgb(2, 76, 160);
-  --ice-secondary: rgb(2, 49, 102);
-  --fire: rgb(167, 14, 3);
-  --fire-secondary: rgb(92, 7, 1);
-  --air: rgb(18, 3, 156);
-  --air-secondary: rgb(8, 1, 105);
-  --earth: rgb(81, 80, 94);
-  --earth-secondary: hsl(240, 11%, 12%);
 }
 
 body {

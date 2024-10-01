@@ -1,5 +1,5 @@
 <template>
-  <div class="background w-screen h-screen flex items-center justify-around overflow-hidden">
+  <div class="background w-screen h-screen flex items-center justify-around overflow-hidden" :style="{ backgroundImage: `url(/game/firstperson/route1vent2.png)` }">
     <div class="w-[50em]"></div>
 
     <div class="w-full h-full gap-8 py-10 flex flex-col items-center justify-around">
@@ -152,7 +152,6 @@ async function roll() {
 
 <style lang="scss" scoped>
 .background {
-  background-image: url('/game/map/empty.png');
   background-position: center;
   background-repeat: no-repeat;
   background-size: cover;
