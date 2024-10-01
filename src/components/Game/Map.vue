@@ -1,6 +1,7 @@
 <template>
   <div class="w-screen h-screen flex items-center justify-center">
-    <div class="relative w-[1536px] h-[864px] map">
+    <div class="relative">
+      <img class="w-[80vw]" src="/game/map/map.png" aria-hidden="true" />
       <div class="absolute w-10 h-10 bg-red-500" :style="{ left: level.x * 0.8 + 'px', top: level.y * 0.8 + 'px' }" v-for="level in levels"></div>
     </div>
   </div>
