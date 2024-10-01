@@ -203,7 +203,7 @@ async function loginWithEmail() {
   if (showLogin.value) {
     const data = await userStore.logIn(email.value, password.value);
     if (data == 'Success') {
-      router.push('/');
+      router.push('/app/dashboard');
     } else {
       if ('non_field_errors' in data) emailErr.value = data.non_field_errors.join(' ');
       if ('password' in data) passwordErr.value = data.password.join(' ');

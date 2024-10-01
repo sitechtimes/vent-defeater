@@ -25,6 +25,7 @@ export const useUserStore = defineStore('userStore', () => {
     user.value = data.user;
     authToken.value = data.token;
     refreshToken.value = data.refresh;
+    return 'Success';
   }
 
   async function signUp(email: string, password: string, name: string) {
