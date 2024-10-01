@@ -53,9 +53,9 @@
         <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/user.svg" aria-hidden="true" />
       </button>
       <div 
-           class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
+           class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center flex-col gap-2 w-48 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
         >
-          <span class="block" v-for="option in options" :to="option.path" :key="option.name">{{ option.name }}</span>
+          <button class="block w-48 rounded-lg text-lg" v-for="option in options" :to="option.path" :key="option.name">{{ option.name }}</button>
         </div>
     </div>
   </div>
@@ -77,29 +77,45 @@ type options = {
 
 const options: options[] = [
   {
-    name: 'Work',
+    name: 'settings',
     path: '/',
   },
   {
-    name: 'Education',
+    name: 'hamburger',
     path: '/',
   },
   {
-    name: 'Features',
+    name: 'hamburger',
     path: '/',
   },
   {
-    name: 'Resources',
+    name: 'hamburger',
     path: '/',
   },
   {
-    name: 'Pricing',
+    name: 'hamburger',
     path: '/'
   },
   {
-    name: 'Talk to Sales',
+    name: 'hamburger',
     path: '/'
-  }
+  },
+  {
+    name: 'hamburger',
+    path: '/'
+  },
+  {
+    name: 'hamburger',
+    path: '/'
+  },
+  {
+    name: 'hamburger',
+    path: '/'
+  },
+  {
+    name: 'hamburger',
+    path: '/'
+  },
 ];
 const userStore = useUserStore();
 const presentations = ref<Presentation[]>([]);
@@ -165,7 +181,7 @@ function search(input: string) {
   .upgrade:hover {
     background-color: var(--faded-bg-color);
   }
-
+  
   .button-pop-up {
     button:hover {
       background-color: var(--faded-bg-color-light);
