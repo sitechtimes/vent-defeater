@@ -26,7 +26,7 @@
 import { useGameStore } from '@/stores/game';
 import { fire, ice, type Element } from '@/utils/elements';
 import { delay, getRandomInt } from '@/utils/functions';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, toRef, watch } from 'vue';
 
 type Props = {
   rows: number;
@@ -58,7 +58,7 @@ watch(
 );
 
 const displayedGrid = ref<number[][]>([]);
-const elementGrid = ref<number[][]>([]);
+const elementGrid = toRef(store.elementGrid);
 
 const loaded = ref(false);
 
@@ -110,6 +110,10 @@ function reroll() {
     for (let j = 0; j < props.columns; j++) {
       if (!explode && elementGrid.value[i][j] == 2 && fireExplode(i, j)) explode = true;
       if (elementGrid.value[i][j] == 2) emit('regen', fire.currentLevel == 4 ? 0.05 : 0.1 / fire.currentLevel, 0);
+      if (elementGrid.value[i][j] == 4) {
+        displayedGrid.value[i][j] = Math.max(0, Math.min(9, displayedGrid.value[i][j] + getRandomInt(-1, 1)));
+        continue;
+      }
       if (iceThaw(i, j)) continue;
       displayedGrid.value[i][j] = getNewNumber(displayedGrid.value[i][j]);
     }
@@ -243,7 +247,13 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
     }
   }
 
-  function earth(element: Element, rowIndex: number, numIndex: number) {}
+  function earth(element: Element, rowIndex: number, numIndex: number) {
+    if (element.currentLevel >= 1) {
+      // basic attack
+      elementGrid.value[rowIndex][numIndex] = 4;
+      store.energy -= 5;
+    }
+  }
 }
 </script>
 

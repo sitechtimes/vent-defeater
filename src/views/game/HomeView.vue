@@ -5,6 +5,7 @@
   </Transition>
 
   <button class="z-10 absolute top-4 right-4 border-2 bg-white border-neutral-950" @click="level++">(testing) next lvl</button>
+  <button class="z-10 absolute top-16 right-4 border-2 bg-white border-neutral-950" @click="handleDamage(8)">take 8 damage</button>
   <div class="z-10 absolute bottom-4 right-4 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl" v-if="level != 0">
     <p class="timer font-semibold text-4xl">
       {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
@@ -131,7 +132,7 @@ import { useGameStore } from '@/stores/game';
 import { air, earth, fire, ice, formatDescription } from '@/utils/elements';
 import type { Element } from '@/utils/elements';
 import { delay } from '@/utils/functions';
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, toRef, watch } from 'vue';
 
 const store = useGameStore();
 
@@ -150,7 +151,8 @@ watch(
 
 const level = ref(0);
 const health = ref(100);
-const energy = ref(store.energy);
+const energy = toRef(store.energy);
+const elementGrid = toRef(store.elementGrid);
 watch(
   () => store.energy,
   async (value) => (energy.value = value)
@@ -162,7 +164,7 @@ const columns = ref(3);
 const elements = ref<Record<string, Element>>({ ice, fire, air, earth });
 const selectedElement = ref<Element>();
 
-const currentEnemy = ref({ lives: 1, slots: 2 });
+const currentEnemy = ref({ lives: 1, slots: 3 });
 
 watch(
   () => selectedElement.value,
@@ -170,15 +172,23 @@ watch(
 );
 
 async function handleDamage(damage: number) {
-  health.value -= damage;
+  let defense = 0;
+  elementGrid.value.forEach((arr) => {
+    arr.forEach((el) => {
+      if (el === 4) defense++;
+    });
+  });
+  console.log(defense);
+  const ouch = Math.max(0, damage - defense);
+  health.value -= ouch;
   showOverlay();
-  if (health.value < 0) {
+  if (health.value <= 0) {
     // die
   }
 
   async function showOverlay() {
     showHealthOverlay.value = true;
-    await delay(300);
+    await delay(ouch < 1 ? 50 : 300);
     showHealthOverlay.value = false;
   }
 }
@@ -200,18 +210,8 @@ function getBarColor(element: Element, bar: number) {
   i swear to god i will remove the 2 from tf2 */
 
   if (element.currentLevel < bar) return 'bg-[color:var(--faded-bg-color)]';
-
-  if (element.currentLevel == bar) {
-    if (element.name == 'ice') return 'ice';
-    if (element.name == 'fire') return 'fire';
-    if (element.name == 'air') return 'air';
-    if (element.name == 'earth') return 'earth';
-  }
-
-  if (element.name == 'ice') return 'iceSecondary';
-  if (element.name == 'fire') return 'fireSecondary';
-  if (element.name == 'air') return 'airSecondary';
-  if (element.name == 'earth') return 'earthSecondary';
+  if (element.currentLevel == bar) return element.name;
+  return element.name + 'Secondary';
 }
 </script>
 
