@@ -2,16 +2,18 @@
   <div class="background w-screen h-screen flex items-center justify-around overflow-hidden" :style="{ backgroundImage: `url(${level.levelImg})` }">
     <div class="winOverlay w-screen h-screen fixed left-0 top-0 transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
 
-    <div class="absolute card z-[101] bg-white w-screen py-6 gap-4 flex items-center justify-center flex-col" v-if="showWin">
-      <h1 class="text-4xl font-semibold">You win!</h1>
-      <p class="text-xl font-semibold">Pick your reward:</p>
-      <Reward @select="(reward) => (selectedReward = reward)" />
-      <button @click="next" :disabled="!selectedReward" class="text-2xl rounded-full px-10 py-2 mt-6" :class="{ 'bg-green-900': !selectedReward, 'bg-green-300': selectedReward }">Next</button>
-    </div>
+    <Transition name="left">
+      <div class="absolute card z-[101] bg-white w-screen py-6 gap-4 flex items-center justify-center flex-col" v-if="showWin">
+        <h1 class="text-4xl font-semibold">You win!</h1>
+        <p class="text-xl font-semibold">Pick your reward:</p>
+        <Reward :level="level" @select="(reward) => (selectedReward = reward)" />
+        <button @click="next" :disabled="!selectedReward" class="text-2xl rounded-full px-10 py-2 mt-6" :class="{ 'bg-green-900': !selectedReward, 'bg-green-300': selectedReward }">Next</button>
+      </div>
+    </Transition>
 
     <div class="w-[50em]"></div>
 
-    <div class="w-full h-full gap-8 py-10 flex flex-col items-center justify-around">
+    <div class="w-full h-full gap-8 py-10 flex flex-col items-center justify-around" v-if="level.type != 'shop' && level.type != 'relic'">
       <div class="w-2/3 h-[45%] flex items-center justify-end">
         <div class="flex flex-col items-center justify-center">
           <Enemy
@@ -46,6 +48,7 @@
         </div>
       </div>
     </div>
+    <Shop v-if="level.type == 'shop'" />
   </div>
 </template>
 
@@ -58,6 +61,7 @@ import { useGameStore } from '@/stores/game';
 import Amogus from './Amogus.vue';
 import type { Element, Level } from '@/utils/elements';
 import Reward from './Reward.vue';
+import Shop from './Shop.vue';
 
 type Emits = {
   reward: [reward: Element];
@@ -110,17 +114,15 @@ function handleReroll(board: number[] | number[][], from: 'enemy' | 'player') {
   if (!enemyBoard.value || !playerBoard.value) return;
 
   const match = findMatches(playerBoard.value, enemyBoard.value);
-  console.log(match);
   if (!match) return;
   if (winCooldown.value) {
     roll();
     return;
   }
 
-  console.log(match);
   matchedBoard.value = match;
-  /*props.level.completed = true;
-  showWin.value = true;*/
+  props.level.completed = true;
+  showWin.value = true;
 
   function findMatches(player: number[][], enemy: number[]) {
     const rows = player.length;
@@ -173,26 +175,20 @@ function handleReroll(board: number[] | number[][], from: 'enemy' | 'player') {
 
 async function roll() {
   reroll.value = true;
-  emit('regen', 0, 5);
+  if (!winCooldown.value) emit('regen', 0, 5);
   await delay(50);
   reroll.value = false;
 }
 </script>
 
 <style lang="scss" scoped>
-.card {
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
-
-.up-enter-active,
-.up-leave-active {
+.left-enter-active,
+.left-leave-active {
   transition: all 0.75s ease;
 }
 
-.up-enter-from,
-.up-leave-to {
+.left-enter-from,
+.left-leave-to {
   opacity: 0;
   transform: translate(-100vw);
 }

@@ -50,7 +50,7 @@ export type Level = {
 export const ice: Element = {
   name: 'ice',
   img: '/game/elements/ice.svg',
-  currentLevel: 3,
+  currentLevel: 0,
   levels: [
     {
       level: 1,

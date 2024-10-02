@@ -111,10 +111,7 @@
         :level="level"
         :player-rows="rows"
         :player-columns="columns"
-        @win="
-          previousLevel = level;
-          level = 'map';
-        "
+        @win="handleWin"
         @reward="(reward) => handleReward(reward)"
         @damaged="(damage) => handleDamage(damage)"
         @regen="(hp, energy) => handleRegen(hp, energy)"
@@ -193,7 +190,7 @@ function generateNewMap() {
     color: '#ffff00',
     enemy: {
       lives: 1,
-      slots: 3,
+      slots: 2,
       color: '#ffff00'
     },
     nextLevels: [1, 2, 15]
@@ -270,7 +267,7 @@ function generateNewMap() {
   function generateNewEnemy(difficulty: 1 | 2 | 3, type: 'fight' | 'harderFight' | 'boss') {
     return {
       lives: getLives(difficulty, type),
-      slots: getRandomInt(1.75 * difficulty, 2.25 * difficulty),
+      slots: type == 'boss' ? 9 : getRandomInt(1.5 * difficulty, 2.75 * difficulty) + (type == 'harderFight' ? 1 : 0),
       color: getRandomItemFromArray(['#ff0000', '#00ff00', '#56deff', '#ffff00', '#ff00ff', '#00ffff', '#f7f7f7'])
     };
 
@@ -282,12 +279,26 @@ function generateNewMap() {
   }
 }
 
+function handleWin() {
+  if (!level.value || typeof level.value == 'string') return;
+  energy.value = 100;
+
+  previousLevel.value = level.value;
+  level.value = 'map';
+
+  if (previousLevel.value.id == 0) {
+    rows.value++;
+    columns.value++;
+  }
+}
+
 function handleReward(reward: Element) {
   if (reward.name == 'ice') elements.value.ice.currentLevel++;
   if (reward.name == 'fire') elements.value.fire.currentLevel++;
   if (reward.name == 'air') elements.value.air.currentLevel++;
   if (reward.name == 'earth') elements.value.earth.currentLevel++;
-  console.log(elements.value, reward.currentLevel);
+
+  selectedElement.value = Object.values(elements.value).find((el) => el.currentLevel != 0);
 }
 
 async function handleDamage(damage: number) {

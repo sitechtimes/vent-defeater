@@ -78,7 +78,6 @@ onBeforeMount(() => {
     elementGrid.value.push(elementRow);
   }
   loaded.value = true;
-  console.log(elementGrid.value);
   emit('onReroll', displayedGrid.value);
 });
 
@@ -230,7 +229,7 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
     if (elementGrid.value[rowIndex][numIndex] == 1 && element.currentLevel >= 3) {
       elementGrid.value[rowIndex][numIndex] = 0;
       return;
-    }
+    } else if (elementGrid.value[rowIndex][numIndex] != 0) return;
 
     if (element.currentLevel >= 1) {
       // basic attack
