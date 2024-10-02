@@ -148,7 +148,7 @@ watch(
   (value) => {
     if (value != confirmPassword.value && !showLogin.value) confirmPasswordErr.value = 'Passwords do not match.';
     else confirmPasswordErr.value = '';
-
+    if (emailErr.value == 'Unable to log in with provided credentials.') emailErr.value = '';
     if (value.length < 8) passwordErr.value = 'Password must be at least 8 characters.';
     else if (value.length > 50) passwordErr.value = 'Password must be less than 30 characters.';
     else passwordErr.value = '';

@@ -13,6 +13,7 @@ export const useUserStore = defineStore('userStore', () => {
   async function logIn(email: string, password: string) {
     const res = await fetch(import.meta.env.VITE_BACKEND_URL + '/auth/login/', {
       method: 'POST',
+      credentials: 'include',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ email, password })
     });
@@ -40,7 +41,7 @@ export const useUserStore = defineStore('userStore', () => {
     try {
       const res = await fetch(import.meta.env.VITE_BACKEND_URL + '/auth/user/', {
         method: 'GET',
-        credentials: 'include', // Ensures cookies are sent
+        credentials: 'same-origin', // Ensures cookies are sent
         headers: {
           'Content-Type': 'application/json'
         }
