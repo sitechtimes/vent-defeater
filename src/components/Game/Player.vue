@@ -8,7 +8,7 @@
         @click="attack(store.currentElement, rowIndex, numIndex)"
         :class="{
           'cursor-default': !store.currentElement,
-          'cursor-pointer': store.currentElement,
+          'cursor-pointer': store.currentElement?.name != 'air',
           'cursor-not-allowed': store.currentElement?.name == 'air',
           'bg-[color:var(--ice)]': elementGrid[rowIndex][numIndex] == 1,
           'bg-[color:var(--fire)]': elementGrid[rowIndex][numIndex] == 2,
@@ -26,7 +26,7 @@
 import { useGameStore } from '@/stores/game';
 import { fire, ice, type Element } from '@/utils/elements';
 import { delay, getRandomInt } from '@/utils/functions';
-import { onMounted, ref, toRef, watch } from 'vue';
+import { onBeforeMount, onMounted, ref, toRef, watch } from 'vue';
 
 type Props = {
   rows: number;
@@ -65,7 +65,8 @@ const loaded = ref(false);
 const generalWinterCooldown = ref(0);
 const arsonCooldown = ref(0);
 
-onMounted(() => {
+onBeforeMount(() => {
+  elementGrid.value = [];
   for (let i = 0; i < props.rows; i++) {
     const displayedRow: number[] = [];
     const elementRow: number[] = [];
@@ -77,6 +78,7 @@ onMounted(() => {
     elementGrid.value.push(elementRow);
   }
   loaded.value = true;
+  console.log(elementGrid.value);
   emit('onReroll', displayedGrid.value);
 });
 

@@ -6,7 +6,7 @@ export const useGameStore = defineStore('gameStore', () => {
   const energy = ref(100);
   const currentElement = ref<Element>();
   const elementGrid = ref<number[][]>([]);
-  const levels = ref<Level[]> ([]);
+  const levels = ref<Level[]>([]);
 
   return { energy, currentElement, elementGrid, levels };
 });

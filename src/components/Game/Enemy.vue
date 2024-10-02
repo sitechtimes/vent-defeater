@@ -7,7 +7,7 @@
       @click="attack(store.currentElement, index)"
       :class="{
         'cursor-default': !store.currentElement,
-        'cursor-pointer': store.currentElement,
+        'cursor-pointer': store.currentElement?.name == 'air',
         'cursor-not-allowed': store.currentElement && store.currentElement?.name != 'air',
         'bg-[color:var(--air)]': elementNumbers[index] == 3,
         'bg-[color:var(--enemy)]': elementNumbers[index] != 3

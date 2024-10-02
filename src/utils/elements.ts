@@ -50,7 +50,7 @@ export type Level = {
 export const ice: Element = {
   name: 'ice',
   img: '/game/elements/ice.svg',
-  currentLevel: 0,
+  currentLevel: 3,
   levels: [
     {
       level: 1,
@@ -111,7 +111,7 @@ export const fire: Element = {
 export const air: Element = {
   name: 'air',
   img: '/game/elements/air.svg',
-  currentLevel: 4,
+  currentLevel: 0,
   levels: [
     {
       level: 1,
@@ -141,7 +141,7 @@ export const air: Element = {
 export const earth: Element = {
   name: 'earth',
   img: '/game/elements/earth.svg',
-  currentLevel: 4,
+  currentLevel: 0,
   levels: [
     {
       level: 1,
