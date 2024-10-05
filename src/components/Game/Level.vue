@@ -1,9 +1,12 @@
 <template>
   <div class="background w-screen h-screen flex items-center justify-around overflow-hidden" :style="{ backgroundImage: `url(${level.levelImg})` }">
-    <div class="winOverlay w-screen h-screen fixed left-0 top-0 transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
+    \
+    <Transition name="opacity">
+      <div class="winOverlay w-screen h-screen fixed left-0 top-0 transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
+    </Transition>
 
     <Transition name="left">
-      <div class="absolute card z-[101] bg-white w-screen py-6 gap-4 flex items-center justify-center flex-col" v-if="showWin">
+      <div class="absolute card z-[101] bg-white w-screen py-6 gap-4 flex items-center justify-center flex-col" v-if="showReward">
         <h1 class="text-4xl font-semibold">You win!</h1>
         <p class="text-xl font-semibold">Pick your reward:</p>
         <Reward :level="level" @select="(reward) => (selectedReward = reward)" />
@@ -62,6 +65,7 @@ import Amogus from './Amogus.vue';
 import type { Element, Level } from '@/utils/elements';
 import Reward from './Reward.vue';
 import Shop from './Shop.vue';
+import { RefSymbol } from '@vue/reactivity';
 
 type Emits = {
   reward: [reward: Element];
@@ -84,6 +88,7 @@ const reroll = ref(false);
 const matchedBoard = ref<number[][]>();
 
 const showWin = ref(false);
+const showReward = ref(false);
 const selectedReward = ref<Element>();
 
 const enemyBoard = ref<number[]>();
@@ -92,14 +97,18 @@ const playerBoard = ref<number[][]>();
 const winCooldown = ref(true);
 
 onMounted(async () => {
-  winCooldown.value = true;
-  await delay(100);
-  winCooldown.value = false;
+  await winProtection();
 });
 
 onBeforeUnmount(() => {
   showWin.value = false;
 });
+
+async function winProtection() {
+  winCooldown.value = true;
+  await delay(100);
+  winCooldown.value = false;
+}
 
 function next() {
   if (!selectedReward.value) return;
@@ -107,11 +116,11 @@ function next() {
   emit('reward', selectedReward.value);
 }
 
-function handleReroll(board: number[] | number[][], from: 'enemy' | 'player') {
+async function handleReroll(board: number[] | number[][], from: 'enemy' | 'player') {
   if (from == 'enemy') enemyBoard.value = board as number[];
   else playerBoard.value = board as number[][];
 
-  if (!enemyBoard.value || !playerBoard.value) return;
+  if (!enemyBoard.value || !playerBoard.value || !props.level.enemy) return;
 
   const match = findMatches(playerBoard.value, enemyBoard.value);
   if (!match) return;
@@ -120,9 +129,18 @@ function handleReroll(board: number[] | number[][], from: 'enemy' | 'player') {
     return;
   }
 
-  matchedBoard.value = match;
-  props.level.completed = true;
+  props.level.enemy.lives--;
   showWin.value = true;
+  matchedBoard.value = match;
+
+  if (props.level.enemy.lives == 0) {
+    showReward.value = true;
+    props.level.completed = true;
+  } else {
+    await delay(200);
+    showWin.value = false;
+    matchedBoard.value = undefined;
+  }
 
   function findMatches(player: number[][], enemy: number[]) {
     const rows = player.length;
@@ -191,6 +209,16 @@ async function roll() {
 .left-leave-to {
   opacity: 0;
   transform: translate(-100vw);
+}
+
+.opacity-enter-active,
+.opacity-leave-active {
+  transition: all 0.25s ease;
+}
+
+.opacity-enter-from,
+.opacity-leave-to {
+  opacity: 0;
 }
 
 .background {

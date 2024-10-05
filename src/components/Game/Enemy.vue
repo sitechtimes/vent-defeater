@@ -1,19 +1,30 @@
 <template>
-  <div class="flex gap-3 relative py-2 px-5">
-    <span
-      v-for="(num, index) in displayedNumbers"
-      :key="index"
-      class="w-14 h-14 text-center text-2xl rounded-md border-2 border-[color:var(--faded-bg-color)] flex items-center justify-center duration-250 transition-none"
-      @click="attack(store.currentElement, index)"
-      :class="{
-        'cursor-default': !store.currentElement,
-        'cursor-pointer': store.currentElement?.name == 'air',
-        'cursor-not-allowed': store.currentElement && store.currentElement?.name != 'air',
-        'bg-[color:var(--air)]': elementNumbers[index] == 3,
-        'bg-[color:var(--enemy)]': elementNumbers[index] != 3
-      }"
-      >{{ num }}</span
-    >
+  <div class="flex flex-col items-center justify-center gap-3 py-2 px-5">
+    <div class="flex gap-3">
+      <span
+        v-for="(num, index) in displayedNumbers"
+        :key="index"
+        class="w-14 h-14 text-center text-2xl rounded-md border-2 border-[color:var(--faded-bg-color)] flex items-center justify-center duration-250 transition-none"
+        @click="attack(store.currentElement, index)"
+        :class="{
+          'cursor-default': !store.currentElement,
+          'cursor-pointer': store.currentElement?.name == 'air',
+          'cursor-not-allowed': store.currentElement && store.currentElement?.name != 'air',
+          'bg-[color:var(--air)]': elementNumbers[index] == 3,
+          'bg-[color:var(--enemy)]': elementNumbers[index] != 3
+        }"
+        >{{ num }}</span
+      >
+    </div>
+    <div class="w-[133%] flex items-center justify-center gap-4">
+      <div class="w-full h-4 bg-white rounded-full flex items-center justify-start" :class="{ shaky: attackMeter >= 100 }">
+        <div class="transition-all duration-500 h-4 rounded-full bg-[color:var(--enemy)] min-w-[10%]" :style="{ width: attackMeter + '%' }"></div>
+      </div>
+      <div class="flex items-center justify-center gap-1">
+        <img class="w-6 h-6" src="/game/life.svg" aria-hidden="true" />
+        <h3 class="text-2xl font-semibold text-[color:var(--bg-color)]">{{ props.lives }}</h3>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -35,8 +46,24 @@ type Emits = {
 };
 
 const store = useGameStore();
-const emit = defineEmits<Emits>();
 const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
+watch(
+  () => props.reroll,
+  (active) => {
+    console.log(active);
+    if (active) enemyAttack();
+  }
+);
+watch(
+  () => props.lives,
+  () => {
+    attackMeter.value = 10;
+    displayedNumbers.value = generateNewArray();
+  }
+);
+
+const attackMeter = ref(10);
 
 const displayedNumbers = ref<number[]>([]);
 const elementNumbers = ref<number[]>([]);
@@ -53,6 +80,14 @@ function generateNewArray() {
     array.push(getRandomInt(0, 9));
   }
   return array;
+}
+
+function enemyAttack() {
+  attackMeter.value += getRandomInt(5, 10);
+  if (attackMeter.value <= 115) return;
+
+  emit('damaged', getRandomInt(10, 20));
+  attackMeter.value = 10;
 }
 
 async function attack(element: Element | undefined, index: number) {
@@ -121,4 +156,29 @@ async function attack(element: Element | undefined, index: number) {
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@keyframes shake {
+  0% {
+    transform: translate(0.5rem, 0);
+  }
+  20% {
+    transform: translate(0, 0.75rem);
+  }
+  40% {
+    transform: translate(-0.35rem, 0.35rem);
+  }
+  60% {
+    transform: translate(0.75rem, -0.35rem);
+  }
+  80% {
+    transform: translate(-0.75rem, 0);
+  }
+  100% {
+    transform: translate(0.5rem, 0);
+  }
+}
+
+.shaky {
+  animation: shake 0.25s infinite linear;
+}
+</style>

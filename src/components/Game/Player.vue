@@ -8,7 +8,7 @@
         @click="attack(store.currentElement, rowIndex, numIndex)"
         :class="{
           'cursor-default': !store.currentElement,
-          'cursor-pointer': store.currentElement?.name != 'air',
+          'cursor-pointer': store.currentElement && store.currentElement?.name != 'air',
           'cursor-not-allowed': store.currentElement?.name == 'air',
           'bg-[color:var(--ice)]': elementGrid[rowIndex][numIndex] == 1,
           'bg-[color:var(--fire)]': elementGrid[rowIndex][numIndex] == 2,
@@ -48,12 +48,6 @@ watch(
   () => props.reroll,
   (active) => {
     if (active) reroll();
-  }
-);
-watch(
-  () => props.match,
-  (match) => {
-    if (match) highlightMatch(match);
   }
 );
 
@@ -249,6 +243,8 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
   }
 
   function earth(element: Element, rowIndex: number, numIndex: number) {
+    if (elementGrid.value[rowIndex][numIndex] != 0 || store.energy < 5) return;
+
     if (element.currentLevel >= 1) {
       // basic attack
       elementGrid.value[rowIndex][numIndex] = 4;

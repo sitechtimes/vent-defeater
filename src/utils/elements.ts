@@ -151,7 +151,7 @@ export const earth: Element = {
     {
       level: 2,
       name: "Peeker's Advantage",
-      description: 'Each **grounded** tile grants +1 defense to incoming damage.'
+      description: 'Each **grounded** tile grants +1 **defense** to incoming damage. **Defense** decreases incoming damage by 1, but you will still take a minimum of 1 damage from damage sources.'
     },
     {
       level: 3,

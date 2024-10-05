@@ -4,8 +4,18 @@
     <div class="healthOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl" v-if="health < 50 || showHealthOverlay"></div>
   </Transition>
 
-  <button class="z-10 absolute top-4 right-4 border-2 bg-white border-neutral-950" @click="level = 'map'">(testing) next lvl</button>
-  <button class="z-10 absolute top-16 right-4 border-2 bg-white border-neutral-950" @click="handleDamage(8)">take 8 damage</button>
+  <img v-if="health <= 0 || energy > 125" class="fixed explode z-[100]" src="/game/explosion.svg" aria-hidden="true" />
+  <div v-if="health <= 0 || energy > 125" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
+    <h2 class="text-4xl font-semibold">You lost 😦</h2>
+    <div class="flex items-center justify-center gap-3">
+      <button @click="restart" class="flex items-center justify-center gap-2 bg-green-300 py-3 px-10 rounded-full">
+        <img class="w-6 h-6 duration-1000" src="/ui/restart.svg" aria-hidden="true" />Restart
+      </button>
+    </div>
+  </div>
+
+  <button class="z-10 absolute top-4 right-4 border-2 bg-white border-neutral-950" @click="testLevel">(testing) next lvl</button>
+  <button class="z-10 absolute top-16 right-4 border-2 bg-white border-neutral-950" @click="handleDamage(100)">die</button>
   <div class="z-10 absolute bottom-4 right-4 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl" v-if="level">
     <p class="timer font-semibold text-4xl">
       {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
@@ -27,7 +37,7 @@
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/health.svg" aria-hidden="true" />
           <h3 class="text-2xl font-semibold w-16 text-[color:var(--bg-color)]">{{ Math.floor(health) }}</h3>
-          <div class="flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]">
+          <div class="flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]" :class="{ shaky: health < 20 }">
             <div class="transition-all duration-500 h-full rounded-full bg-red-500" :style="{ width: Math.min(100, health) + '%' }"></div>
           </div>
         </div>
@@ -35,9 +45,9 @@
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/elements/electric.svg" aria-hidden="true" />
           <h3 class="text-2xl font-semibold w-16 text-[color:var(--bg-color)]">{{ energy }}</h3>
-          <div class="relative flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]">
+          <div class="relative flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]" :class="{ shaky: energy > 115 }">
             <div class="transition-all duration-500 h-full rounded-full bg-yellow-500 min-w-[10%]" :style="{ width: Math.min(100, energy) + '%' }"></div>
-            <div class="transition-all duration-500 absolute left-0 h-full rounded-full bg-orange-500 max-w-full" :style="{ width: ((energy - 100) / 25) * 100 + '%' }"></div>
+            <div class="transition-all duration-500 absolute left-0 h-full rounded-full bg-orange-500 max-w-full" v-if="energy > 100" :style="{ width: ((energy - 100) / 25) * 100 + '%' }"></div>
           </div>
         </div>
 
@@ -175,6 +185,10 @@ onBeforeMount(() => {
   store.levels = generateNewMap();
 });
 
+function testLevel() {
+  level.value = store.levels.find((lvl) => lvl.id == 0);
+}
+
 function generateNewMap() {
   const levels: LevelType[] = [];
 
@@ -309,12 +323,9 @@ async function handleDamage(damage: number) {
     });
   });
   console.log(defense);
-  const ouch = Math.max(0, damage - defense);
+  const ouch = Math.max(1, damage - defense);
   health.value -= ouch;
   showOverlay();
-  if (health.value <= 0) {
-    // die
-  }
 
   async function showOverlay() {
     showHealthOverlay.value = true;
@@ -327,9 +338,10 @@ function handleRegen(hp: number, nrg: number) {
   health.value = Math.min(100, health.value + hp);
   if (selectedElement.value) energy.value += nrg;
   store.energy = energy.value;
-  if (energy.value >= 125) {
-    // die
-  }
+}
+
+function restart() {
+  window.location.reload();
 }
 
 function getBarColor(element: Element, bar: number) {
@@ -408,6 +420,79 @@ function getBarColor(element: Element, bar: number) {
   opacity: 0;
 }
 
+@keyframes shake {
+  0% {
+    transform: translate(0.5rem, 0);
+  }
+  20% {
+    transform: translate(0, 0.75rem);
+  }
+  40% {
+    transform: translate(-0.35rem, 0.35rem);
+  }
+  60% {
+    transform: translate(0.75rem, -0.35rem);
+  }
+  80% {
+    transform: translate(-0.75rem, 0);
+  }
+  100% {
+    transform: translate(0.5rem, 0);
+  }
+}
+
+.shaky {
+  animation: shake 0.25s infinite linear;
+}
+
+@keyframes explode {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(3);
+  }
+}
+
+.explode {
+  width: 100vw;
+  height: 100vw;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(3);
+  animation: explode 1s linear;
+}
+
+@keyframes grow {
+  0% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  85% {
+    transform: translate(-50%, -50%) scale(0);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+.lost {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  animation: grow 1.25s linear;
+
+  button {
+    filter: grayscale(0.5) brightness(0.66);
+  }
+}
+
 .timer {
   color: transparent;
   background: linear-gradient(to bottom, var(--secondary), var(--secondary-shade));
@@ -466,6 +551,16 @@ function getBarColor(element: Element, bar: number) {
   }
   .disabled:hover {
     background-color: var(--faded-bg-color);
+  }
+
+  .lost {
+    button:hover {
+      filter: grayscale(0) brightness(1.05);
+
+      img {
+        transform: rotate(360deg);
+      }
+    }
   }
 
   .level:hover {
