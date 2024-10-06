@@ -1,4 +1,6 @@
 export type Element = {
+  /** @readonly Type checking stuff */
+  type: 'Element';
   /** Name of the element. */
   name: 'ice' | 'fire' | 'air' | 'earth';
   img: string;
@@ -47,7 +49,188 @@ export type Level = {
   nextLevels: number[] | null;
 };
 
+export type Relic = {
+  /** @readonly Type checking stuff */
+  type: 'Relic';
+  /** Name of the relic */
+  name: string;
+  /** ID of the relic */
+  id: number;
+  /** Image of the relic */
+  img: string;
+  /** Description of the relic */
+  description: string;
+  /** Whether or not the relic is unlocked during the run */
+  unlocked: boolean;
+  /** Whether or not the relic is broken during the run
+   *
+   * Only applies to JETT REBIBE ME
+   */
+  broken?: boolean;
+};
+
+export type Powerup = {
+  /** @readonly Type checking stuff */
+  type: 'Powerup';
+  /** Name of the powerup */
+  name: string;
+  /** ID of the powerup */
+  id: number;
+  /** Image of the powerup */
+  img: string;
+  /** Description of the powerup */
+  description: string;
+  /** Number of this powerup in this run */
+  count: number;
+};
+
+export const relics: Relic[] = [
+  {
+    type: 'Relic',
+    name: 'Green Energy',
+    id: 0,
+    img: '/game/relics/leaf.svg',
+    description: "As the mayor of NotYamogusCity, you've invested heavily into greener energy. Using an element costs **20% less energy.**",
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Global Warming? Fake News',
+    id: 1,
+    img: '/game/relics/factory.svg',
+    description: "Climate change isn't real, it can't hurt us. Using an element costs **20% more energy.**",
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Battery Pack',
+    id: 2,
+    img: '/game/relics/battery.svg',
+    description: 'You bought a battery pack. Increase max energy by **50** and increase the energy overload threshold by **75.**',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'JETT REBIBE ME',
+    id: 3,
+    img: '/game/relics/revive.png',
+    description:
+      "Jett finally learned how to rebibe. When taking fatal damage, Jett will rebibe you and you'll return to the mortal plane with **25%** of your max HP. This relic will be destroyed on rebibe.",
+    unlocked: false,
+    broken: false
+  },
+  {
+    type: 'Relic',
+    name: 'Medkit',
+    id: 4,
+    img: '/game/relics/medkit.png',
+    description: 'You carry arround an medkit wherever you go because you get hurt so often. At the end of every battle, heal back to full HP.',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Blizzard',
+    id: 5,
+    img: '/game/relics/snowglobe.svg',
+    description:
+      'Recent weather reports suggest that **dust storms** have gone subzero. **Dust storms** turn into **Blizzards** if there is at least **1** ice tile on the board, which have a **5%** chance to damage the enemy for **1** life.',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Ice Cold',
+    id: 6,
+    img: '/game/relics/icecube.svg',
+    description: 'They call you the ice man, because you have ice in your veins. **Explosions** deal **15** less damage to you. You should definitely see a doctor about your ice though.',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Minor Oil Spill',
+    id: 7,
+    img: '/game/relics/oil.svg',
+    description: 'You accidentally spilled 134 million tons of oil on yourself... whoops! **Explosions** deal **10** more damage to you, but also damage the enemy for **1** life.',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'This is Fine',
+    id: 8,
+    img: '/game/relics/thisIsFine.png',
+    description: "Everything is on fire, but it's definitely all under control. **Arson** sets **2** tiles on **fire** when it would normally only set **1**.",
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Skydiving Waiver',
+    id: 9,
+    img: '/game/relics/waiver.svg',
+    description: 'You just signed away all of your important legal rights and first-born child. However, your chances of **yeeting** adjacent tiles are doubled. Worth!',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Silent but Deadly',
+    id: 10,
+    img: '/game/relics/fart.svg',
+    description: "When you **yeet** more than **7** tiles, one of the tiles releases the fart they've been holding in for hours, damaging the enemy for **1** life.",
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'White Sticky Substance',
+    id: 11,
+    img: '/game/relics/glue.svg',
+    description: 'New harder, better, faster, and stronger glue holds tiles in place more effectively. **Grounded** tiles do not change at all.',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Anger Issues',
+    id: 12,
+    img: '/game/relics/anger.svg',
+    description: 'You failed your therapy sessions for anger management. Your therapist is dissapointed. When attacked, **grounded** tiles have double the chance to trigger an **earthquake.**',
+    unlocked: false
+  }
+];
+
+export const powerups: Powerup[] = [
+  {
+    type: 'Powerup',
+    name: 'BAND-AID®',
+    id: 0,
+    img: '/game/relics/bandaid.svg',
+    description: 'Heal back to full HP.',
+    count: 0
+  },
+  {
+    type: 'Powerup',
+    name: 'Blue Cow (not Red Bull)',
+    id: 1,
+    img: '/game/relics/bluecow.png',
+    description: 'Replenish your energy back to full.',
+    count: 0
+  },
+  {
+    type: 'Powerup',
+    name: 'Shield',
+    id: 2,
+    img: '/game/relics/shield.svg',
+    description: 'Block the next enemy attack.',
+    count: 0
+  },
+  {
+    type: 'Powerup',
+    name: 'Fast Forward',
+    id: 3,
+    img: '/game/relics/skip.svg',
+    description: 'Deal **1** life of damage to the enemy.',
+    count: 0
+  }
+];
+
 export const ice: Element = {
+  type: 'Element',
   name: 'ice',
   img: '/game/elements/ice.svg',
   currentLevel: 0,
@@ -78,6 +261,7 @@ export const ice: Element = {
 };
 
 export const fire: Element = {
+  type: 'Element',
   name: 'fire',
   img: '/game/elements/fire.svg',
   currentLevel: 0,
@@ -109,6 +293,7 @@ export const fire: Element = {
 };
 
 export const air: Element = {
+  type: 'Element',
   name: 'air',
   img: '/game/elements/air.svg',
   currentLevel: 0,
@@ -139,6 +324,7 @@ export const air: Element = {
 };
 
 export const earth: Element = {
+  type: 'Element',
   name: 'earth',
   img: '/game/elements/earth.svg',
   currentLevel: 0,
@@ -151,18 +337,19 @@ export const earth: Element = {
     {
       level: 2,
       name: "Peeker's Advantage",
-      description: 'Each **grounded** tile grants +1 **defense** to incoming damage. **Defense** decreases incoming damage by 1, but you will still take a minimum of 1 damage from damage sources.'
+      description:
+        'Each **grounded** tile grants +1 **defense** to incoming damage. **Defense** decreases incoming damage by 1, but you will still take a minimum of 1 damage from damage sources. When attacked, **grounded** tiles will return to a **normal** state.'
     },
     {
       level: 3,
-      name: 'tbd',
-      description: '**Grounded** tiles create a dust storm. Enemies have a chance to miss their attacks, scaling with how many **grounded** tiles there are.'
+      name: 'I rack',
+      description: '**Grounded** tiles will create a dust storm. Enemies have up to a 50% chance to miss their attacks, scaling with how many **grounded** tiles there are.'
     },
     {
       level: 4,
       name: 'Ur mom',
       description:
-        'When attacked, there is a chance to trigger an earthquake. This will empty the action bars of all enemies and stun them. Earthquake chance and stun duration scale with how many **grounded** tiles there are. Half of all **grounded** tiles will be freed afterwards.'
+        'When attacked, there is up to a 25% chance to trigger an **earthquake**. **Earthquakes** will stun the enemy for up to 5 turns. **Earthquake** chance and stun duration scale with how many **grounded** tiles there are.'
     }
   ]
 };

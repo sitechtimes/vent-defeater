@@ -24,7 +24,7 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/stores/game';
-import { fire, ice, type Element } from '@/utils/elements';
+import { fire, ice, relics, type Element } from '@/utils/elements';
 import { delay, getRandomInt } from '@/utils/functions';
 import { onBeforeMount, onMounted, ref, toRef, watch } from 'vue';
 
@@ -39,6 +39,7 @@ type Emits = {
   damaged: [damage: number];
   regen: [health: number, energy: number];
   onReroll: [board: number[][]];
+  oilSpill: [void];
 };
 
 const store = useGameStore();
@@ -115,11 +116,21 @@ function reroll() {
   }
   if (explode) {
     elementGrid.value = elementGrid.value.map((row) => row.map((elem) => (elem == 2 ? 0 : elem)));
-    emit('damaged', 25);
+    emit('damaged', getExplosionDamage());
   }
   generalWinter();
   arson();
   emit('onReroll', displayedGrid.value);
+
+  function getExplosionDamage() {
+    let initial = 25;
+    if (relics[6].unlocked) initial -= 15;
+    if (relics[7].unlocked) {
+      initial += 10;
+      emit('oilSpill');
+    }
+    return initial;
+  }
 
   function getNewNumber(replace: number) {
     let random = getRandomInt(0, 9);
@@ -191,21 +202,26 @@ function reroll() {
     }
   }
 
-  function arson() {
+  async function arson() {
     if (fire.currentLevel == 4) {
       if (arsonCooldown.value < 2) arsonCooldown.value++;
       else {
-        let row = getRandomInt(0, props.rows - 1);
-        let column = getRandomInt(0, props.columns - 1);
-        let tries = 0;
-        while (elementGrid.value[row][column] != 0 && tries < props.rows * props.columns) {
-          row = getRandomInt(0, props.rows - 1);
-          column = getRandomInt(0, props.columns - 1);
-          tries++;
-        }
-        if (tries <= props.rows * props.columns) elementGrid.value[row][column] = 2;
+        await spreadFire();
+        if (relics[8].unlocked) spreadFire();
         arsonCooldown.value = 0;
       }
+    }
+
+    async function spreadFire() {
+      let row = getRandomInt(0, props.rows - 1);
+      let column = getRandomInt(0, props.columns - 1);
+      let tries = 0;
+      while (elementGrid.value[row][column] != 0 && tries < props.rows * props.columns) {
+        row = getRandomInt(0, props.rows - 1);
+        column = getRandomInt(0, props.columns - 1);
+        tries++;
+      }
+      if (tries <= props.rows * props.columns) elementGrid.value[row][column] = 2;
     }
   }
 }
@@ -228,7 +244,7 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
     if (element.currentLevel >= 1) {
       // basic attack
       elementGrid.value[rowIndex][numIndex] = 1;
-      store.energy -= 5;
+      emit('regen', 0, -(relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5));
     }
   }
 
@@ -238,7 +254,7 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
     if (element.currentLevel >= 1) {
       // basic attack
       elementGrid.value[rowIndex][numIndex] = 2;
-      store.energy -= 5;
+      emit('regen', 0, -(relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5));
     }
   }
 

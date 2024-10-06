@@ -1,6 +1,5 @@
 <template>
   <div class="background w-screen h-screen flex items-center justify-around overflow-hidden" :style="{ backgroundImage: `url(${level.levelImg})` }">
-    \
     <Transition name="opacity">
       <div class="winOverlay w-screen h-screen fixed left-0 top-0 transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
     </Transition>
@@ -25,8 +24,11 @@
             :reroll="reroll"
             @on-reroll="(board) => handleReroll(board, 'enemy')"
             @damaged="(damage) => emit('damaged', damage)"
+            @regen="(hp, energy) => emit('regen', hp, energy)"
+            @fart="emit('win')"
           />
-          <Amogus color="#ff0000" />
+          <Amogus :color="amogusColor" v-if="level.id != 10" />
+          <Vent v-else />
         </div>
       </div>
       <div class="w-2/3 h-[45%] flex items-center justify-start">
@@ -39,6 +41,7 @@
             @on-reroll="(board) => handleReroll(board, 'player')"
             @damaged="(damage) => emit('damaged', damage)"
             @regen="(hp, energy) => emit('regen', hp, energy)"
+            @oil-spill="damageEnemy"
           />
           <button
             @click="roll"
@@ -51,45 +54,58 @@
         </div>
       </div>
     </div>
-    <Shop v-if="level.type == 'shop'" />
+    <Shop v-if="level.type == 'shop'" @select="(reward) => (selectedReward = reward)" @next="next" />
+    <Relic v-if="level.type == 'relic'" @select="(reward) => (selectedReward = reward)" @next="next" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref } from 'vue';
+import { onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Enemy from './Enemy.vue';
 import Player from './Player.vue';
-import { delay } from '@/utils/functions';
+import { delay, getRandomItemFromArray } from '@/utils/functions';
 import { useGameStore } from '@/stores/game';
 import Amogus from './Amogus.vue';
-import type { Element, Level } from '@/utils/elements';
+import type { Element, Level, Powerup, Relic as RelicType } from '@/utils/elements';
 import Reward from './Reward.vue';
 import Shop from './Shop.vue';
-import { RefSymbol } from '@vue/reactivity';
+import Vent from './Vent.vue';
+import Relic from './Relic.vue';
 
 type Emits = {
-  reward: [reward: Element];
+  reward: [reward: Element | RelicType | Powerup | { type: 'Bypass' }];
   win: [void];
   damaged: [damage: number];
   regen: [health: number, energy: number];
+  winGame: [void];
 };
 
 type Props = {
   level: Level;
   playerRows: number;
   playerColumns: number;
+  fastForward: boolean;
 };
 
 const store = useGameStore();
 
+const amogusColor = ref(getRandomItemFromArray(['#ffa44a', '#fffd8a', '#61ff64', '#3863ff', '#4ce3e0', '#ff8cda', '#7d6243', '#9673ff', '#20754c']));
+
 const props = defineProps<Props>();
+watch(
+  () => props.fastForward,
+  (bool) => {
+    if (bool) damageEnemy();
+  }
+);
+
 const emit = defineEmits<Emits>();
 const reroll = ref(false);
 const matchedBoard = ref<number[][]>();
 
 const showWin = ref(false);
 const showReward = ref(false);
-const selectedReward = ref<Element>();
+const selectedReward = ref<Element | RelicType | Powerup | { type: 'Bypass' }>();
 
 const enemyBoard = ref<number[]>();
 const playerBoard = ref<number[][]>();
@@ -111,9 +127,29 @@ async function winProtection() {
 }
 
 function next() {
+  if (props.level.id == 10) {
+    emit('winGame');
+  }
   if (!selectedReward.value) return;
+  props.level.completed = true;
   emit('win');
   emit('reward', selectedReward.value);
+}
+
+async function damageEnemy() {
+  if (!enemyBoard.value || !playerBoard.value || !props.level.enemy) return;
+
+  props.level.enemy.lives--;
+  showWin.value = true;
+
+  if (props.level.enemy.lives == 0) {
+    if (props.level.id == 10) next();
+    else showReward.value = true;
+  } else {
+    await delay(200);
+    showWin.value = false;
+    matchedBoard.value = undefined;
+  }
 }
 
 async function handleReroll(board: number[] | number[][], from: 'enemy' | 'player') {
@@ -129,18 +165,7 @@ async function handleReroll(board: number[] | number[][], from: 'enemy' | 'playe
     return;
   }
 
-  props.level.enemy.lives--;
-  showWin.value = true;
-  matchedBoard.value = match;
-
-  if (props.level.enemy.lives == 0) {
-    showReward.value = true;
-    props.level.completed = true;
-  } else {
-    await delay(200);
-    showWin.value = false;
-    matchedBoard.value = undefined;
-  }
+  damageEnemy();
 
   function findMatches(player: number[][], enemy: number[]) {
     const rows = player.length;
@@ -161,7 +186,7 @@ async function handleReroll(board: number[] | number[][], from: 'enemy' | 'playe
             path.push(currentCell);
 
             if (enemy[k] == enemy[enemy.length - 1]) return path;
-          } else break;
+          }
         }
       }
     }

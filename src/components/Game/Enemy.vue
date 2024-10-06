@@ -30,7 +30,7 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/stores/game';
-import { type Element } from '@/utils/elements';
+import { relics, type Element, type Level } from '@/utils/elements';
 import { delay, getRandomInt } from '@/utils/functions';
 import { onMounted, ref, watch } from 'vue';
 
@@ -42,7 +42,9 @@ type Props = {
 
 type Emits = {
   damaged: [damage: number];
+  regen: [health: number, energy: number];
   onReroll: [board: number[]];
+  fart: [void];
 };
 
 const store = useGameStore();
@@ -86,7 +88,7 @@ function enemyAttack() {
   attackMeter.value += getRandomInt(5, 10);
   if (attackMeter.value <= 115) return;
 
-  emit('damaged', getRandomInt(10, 20));
+  emit('damaged', getRandomInt(2 * props.slots, 10 * props.slots));
   attackMeter.value = 10;
 }
 
@@ -97,20 +99,20 @@ async function attack(element: Element | undefined, index: number) {
     elementNumbers.value[index] = 3;
     displayedNumbers.value[index] = reroll();
     unyeet(index);
-    store.energy -= 10;
+    emit('regen', 0, -(relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5));
   }
 
   if (element.currentLevel == 2) {
     await delay(150);
-    if (Math.random() < 0.25) cascade(1);
+    if (Math.random() < (relics[9].unlocked ? 0.5 : 0.25)) cascade(1);
   }
 
   if (element.currentLevel == 3) {
-    if (Math.random() < 0.5) {
+    if (Math.random() < (relics[9].unlocked ? 1 : 0.5)) {
       await delay(150);
       cascade(1);
       await delay(150);
-      if (Math.random() < 0.25) cascade(2);
+      if (Math.random() < (relics[9].unlocked ? 0.5 : 0.25)) cascade(2);
     }
   }
 
@@ -119,8 +121,10 @@ async function attack(element: Element | undefined, index: number) {
     cascade(1);
     await delay(150);
     for (let i = 1; i < 10; i++) {
-      if (Math.random() < 0.5 / i) cascade(i + 1);
+      if (Math.random() < (relics[9].unlocked ? 1 : 0.5) / i) cascade(i + 1);
       else break;
+
+      if (i > 3) emit('fart');
       await delay(150);
     }
   }

@@ -1,21 +1,40 @@
 <template>
-  <div class="energyOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl" :style="{ opacity: (energy - 100) / 25 }" v-if="energy > 100"></div>
+  <div
+    class="energyOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl"
+    :style="{ opacity: (energy - (relics[2].unlocked ? 150 : 100)) / (relics[2].unlocked ? 50 : 25) }"
+    v-if="energy > (relics[2].unlocked ? 150 : 100)"
+  ></div>
   <Transition name="opacity">
     <div class="healthOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl" v-if="health < 50 || showHealthOverlay"></div>
   </Transition>
 
-  <img v-if="health <= 0 || energy > 125" class="fixed explode z-[100]" src="/game/explosion.svg" aria-hidden="true" />
-  <div v-if="health <= 0 || energy > 125" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
-    <h2 class="text-4xl font-semibold">You lost 😦</h2>
+  <img v-if="health <= 0 || energy > (relics[2].unlocked ? 200 : 125) || gameWon" class="fixed explode z-[100]" :class="{ 'opacity-0': gameWon }" src="/game/explosion.svg" aria-hidden="true" />
+  <div v-if="health <= 0 || energy > (relics[2].unlocked ? 200 : 125) || gameWon" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
+    <h2 class="text-4xl font-semibold">{{ gameWon ? 'You won!' : 'You lost 😦' }}</h2>
+    <div class="z-10 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl">
+      <p class="timer font-semibold text-4xl">
+        {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
+          {{
+            Math.floor(timer % 1000).toString().length == 1
+              ? '0'
+              : '' +
+                Math.floor(timer % 1000)
+                  .toString()
+                  .slice(0, 2)
+          }}
+        </span>
+      </p>
+    </div>
     <div class="flex items-center justify-center gap-3">
       <button @click="restart" class="flex items-center justify-center gap-2 bg-green-300 py-3 px-10 rounded-full">
-        <img class="w-6 h-6 duration-1000" src="/ui/restart.svg" aria-hidden="true" />Restart
+        <img class="w-6 h-6 duration-1000" src="/ui/restart.svg" aria-hidden="true" />Back to Menu
       </button>
     </div>
   </div>
 
   <button class="z-10 absolute top-4 right-4 border-2 bg-white border-neutral-950" @click="testLevel">(testing) next lvl</button>
   <button class="z-10 absolute top-16 right-4 border-2 bg-white border-neutral-950" @click="handleDamage(100)">die</button>
+  <button class="z-10 absolute top-28 right-4 border-2 bg-white border-neutral-950" @click="enemy1hp">make enemy 1 hp</button>
   <div class="z-10 absolute bottom-4 right-4 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl" v-if="level">
     <p class="timer font-semibold text-4xl">
       {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
@@ -45,9 +64,16 @@
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/elements/electric.svg" aria-hidden="true" />
           <h3 class="text-2xl font-semibold w-16 text-[color:var(--bg-color)]">{{ energy }}</h3>
-          <div class="relative flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]" :class="{ shaky: energy > 115 }">
-            <div class="transition-all duration-500 h-full rounded-full bg-yellow-500 min-w-[10%]" :style="{ width: Math.min(100, energy) + '%' }"></div>
-            <div class="transition-all duration-500 absolute left-0 h-full rounded-full bg-orange-500 max-w-full" v-if="energy > 100" :style="{ width: ((energy - 100) / 25) * 100 + '%' }"></div>
+          <div class="relative flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]" :class="{ shaky: energy > (relics[2].unlocked ? 180 : 115) }">
+            <div
+              class="transition-all duration-500 h-full rounded-full bg-yellow-500 min-w-[10%]"
+              :style="{ width: Math.min(relics[2].unlocked ? 150 : 100, energy) / (relics[2].unlocked ? 1.5 : 1) + '%' }"
+            ></div>
+            <div
+              class="transition-all duration-500 absolute left-0 h-full rounded-full bg-orange-500 max-w-full"
+              v-if="energy > (relics[2].unlocked ? 150 : 100)"
+              :style="{ width: ((energy - (relics[2].unlocked ? 150 : 100)) / (relics[2].unlocked ? 50 : 25)) * 100 + '%' }"
+            ></div>
           </div>
         </div>
 
@@ -105,6 +131,53 @@
             </div>
           </div>
         </Transition>
+
+        <h2 class="text-white text-3xl font-semibold">Relics</h2>
+        <div class="flex flex-wrap items-center justify-center w-full gap-4">
+          <div
+            class="relic duration-200 relative w-16 h-16 flex items-center justify-center rounded-lg bg-white"
+            v-for="relic in currentRelics"
+            :class="{ 'brightness-50': !relic, 'brightness-0': relic && relic.broken }"
+          >
+            <img v-if="relic" class="w-14 h-14" :src="relic.img" aria-hidden="true" />
+            <div
+              v-if="relic"
+              class="description shadow-[color:var(--text-color)] shadow-sm pointer-events-none hidden absolute top-0 left-20 w-96 rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap bg-white"
+            >
+              <h4 class="text-xl font-semibold">{{ relic.name }}</h4>
+              <p class="text-wrap w-3/4 text-center transition-none">
+                <span :class="{ 'font-bold': part.bold }" v-for="part in formatDescription(relic.description)">{{ part.text }}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <h2 class="text-white text-3xl font-semibold">Powerups</h2>
+        <div class="flex flex-wrap items-center justify-center w-full gap-4">
+          <div v-for="powerup in currentPowerups">
+            <button
+              @click="usePowerup(powerup)"
+              class="relic duration-200 relative w-24 h-16 flex items-center justify-center rounded-lg bg-white"
+              v-if="powerup"
+              :disabled="disablePowerup(powerup)"
+              :class="{ 'brightness-50': !powerup, 'cursor-not-allowed': disablePowerup(powerup) }"
+            >
+              <img class="w-14 h-14" :src="powerup.img" aria-hidden="true" />
+              <p class="absolute bottom-0 right-1">x{{ powerup.count }}</p>
+              <div
+                class="description shadow-[color:var(--text-color)] shadow-sm pointer-events-none hidden absolute top-0 left-28 w-[17rem] rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap bg-white"
+              >
+                <h4 class="text-xl font-semibold">{{ powerup.name }}</h4>
+                <p class="text-wrap w-3/4 text-center transition-none">
+                  <span :class="{ 'font-bold': part.bold }" v-for="part in formatDescription(powerup.description)">{{ part.text }}</span>
+                </p>
+              </div>
+            </button>
+            <div v-else class="relic duration-200 relative w-24 h-16 flex items-center justify-center rounded-lg bg-white brightness-50"></div>
+          </div>
+        </div>
+
+        <Amogus color="#ff0000" class="absolute bottom-[-3rem] left-[-3rem] scale-50 cursor-pointer" title="Click me for help!" />
       </div>
     </Transition>
 
@@ -121,7 +194,9 @@
         :level="level"
         :player-rows="rows"
         :player-columns="columns"
+        :fast-forward="fastForward"
         @win="handleWin"
+        @win-game="gameWon = true"
         @reward="(reward) => handleReward(reward)"
         @damaged="(damage) => handleDamage(damage)"
         @regen="(hp, energy) => handleRegen(hp, energy)"
@@ -135,14 +210,16 @@
 </template>
 
 <script setup lang="ts">
+import Amogus from '@/components/Game/Amogus.vue';
 import Intro from '@/components/Game/Intro.vue';
 import Level from '@/components/Game/Level.vue';
 import Map from '@/components/Game/Map.vue';
 import ThemeToggle from '@/components/ThemeToggle.vue';
 import { useGameStore } from '@/stores/game';
-import { air, earth, fire, ice, formatDescription } from '@/utils/elements';
+import { air, earth, fire, ice, formatDescription, type Relic, type Powerup, relics, powerups } from '@/utils/elements';
 import type { Element, Level as LevelType } from '@/utils/elements';
 import { delay, getRandomInt, getRandomItemFromArray } from '@/utils/functions';
+import { storeToRefs } from 'pinia';
 import { onBeforeMount, onMounted, ref, toRef, watch } from 'vue';
 
 const store = useGameStore();
@@ -153,17 +230,19 @@ const timer = ref(0);
 watch(
   () => startTime.value,
   async () => {
-    while (startTime.value) {
+    while (startTime.value && !gameWon.value) {
       timer.value = new Date().getTime() - startTime.value;
       await delay(20);
     }
   }
 );
 
+const gameWon = ref(false);
+
 const previousLevel = ref<LevelType>();
 const level = ref<'map' | LevelType>();
 const health = ref(100);
-const energy = toRef(store.energy);
+const energy = storeToRefs(store).energy;
 const elementGrid = toRef(store.elementGrid);
 watch(
   () => store.energy,
@@ -175,6 +254,10 @@ const columns = ref(2);
 
 const elements = ref<Record<string, Element>>({ ice, fire, air, earth });
 const selectedElement = ref<Element>();
+const currentRelics = ref<Relic[]>(new Array(12).fill(undefined));
+const currentPowerups = ref<Powerup[]>(new Array(4).fill(undefined));
+const shielded = ref(false);
+const fastForward = ref(false);
 
 watch(
   () => selectedElement.value,
@@ -186,7 +269,11 @@ onBeforeMount(() => {
 });
 
 function testLevel() {
-  level.value = store.levels.find((lvl) => lvl.id == 0);
+  level.value = store.levels.find((lvl) => lvl.id == 4);
+}
+
+function enemy1hp() {
+  if (store.levels[10].enemy) store.levels[10].enemy.lives = 1;
 }
 
 function generateNewMap() {
@@ -217,22 +304,22 @@ function generateNewMap() {
   levels.push(generateNewLevel(5, 997, 215, 'cafeteria4', 2, 'harderFight', [6]));
   levels.push(generateNewLevel(6, 1400, 215, 'gen1', 2, 'fight', [7]));
   levels.push(generateNewLevel(7, 1462, 300, 'gen2', 2, 'mystery', [8]));
-  levels.push(generateNewLevel(8, 1622, 540, 'reactor1', 3, 'fight', [9]));
+  levels.push(generateNewLevel(8, 1622, 540, 'reactor1', 3, 'shop', [9]));
   levels.push(generateNewLevel(9, 1675, 382, 'reactor2', 3, 'harderFight', [10]));
   levels.push(generateNewLevel(10, 1307, 400, 'cams', 3, 'boss', null));
-  levels.push(generateNewLevel(11, 810, 215, 'emergency', 3, 'shop', [5]));
+  levels.push(generateNewLevel(11, 810, 215, 'emergency', 2, 'shop', [5]));
   levels.push(generateNewLevel(12, 805, 410, 'cafeteria2', 2, 'mystery', [13, 19]));
-  levels.push(generateNewLevel(13, 675, 655, 'admin1', 2, 'fight', [14]));
-  levels.push(generateNewLevel(14, 517, 550, 'admin2', 2, 'mystery', [19]));
+  levels.push(generateNewLevel(13, 675, 655, 'admin1', 2, 'mystery', [14]));
+  levels.push(generateNewLevel(14, 517, 550, 'admin2', 1, 'boss', [19]));
   levels.push(generateNewLevel(15, 390, 525, 'route1vent1', 1, 'fight', [16]));
   levels.push(generateNewLevel(16, 395, 755, 'route1vent2', 1, 'fight', [17, 18, 19]));
   levels.push(generateNewLevel(17, 567, 890, 'comms', 2, 'mystery', [18, 19]));
   levels.push(generateNewLevel(18, 767, 903, 'chute', 2, 'mystery', [20, 23]));
-  levels.push(generateNewLevel(19, 910, 690, 'shop', 3, 'shop', [20, 23]));
+  levels.push(generateNewLevel(19, 910, 690, 'shop', 2, 'shop', [20, 23]));
   levels.push(generateNewLevel(20, 1160, 720, 'electrical1', 2, 'mystery', [21]));
   levels.push(generateNewLevel(21, 1175, 585, 'electrical2', 2, 'fight', [22]));
   levels.push(generateNewLevel(22, 1205, 420, 'medbay', 2, 'harderFight', [6]));
-  levels.push(generateNewLevel(23, 1395, 735, 'gen1', 2, 'fight', [24]));
+  levels.push(generateNewLevel(23, 1395, 735, 'gen1', 2, 'harderFight', [24]));
   levels.push(generateNewLevel(24, 1462, 660, 'gen2', 3, 'mystery', [8]));
 
   return levels;
@@ -288,14 +375,15 @@ function generateNewMap() {
     function getLives(difficulty: 1 | 2 | 3, type: 'fight' | 'harderFight' | 'boss') {
       if (type == 'fight') return getRandomInt(1 * difficulty, 2 * difficulty);
       if (type == 'harderFight') return getRandomInt(2 * difficulty, 3 * difficulty);
-      return 50;
+      return difficulty == 1 ? 5 : 50;
     }
   }
 }
 
 function handleWin() {
   if (!level.value || typeof level.value == 'string') return;
-  energy.value = 100;
+  energy.value = relics[2].unlocked ? 150 : 100;
+  if (relics[4].unlocked) health.value = 100;
 
   previousLevel.value = level.value;
   level.value = 'map';
@@ -306,16 +394,26 @@ function handleWin() {
   }
 }
 
-function handleReward(reward: Element) {
-  if (reward.name == 'ice') elements.value.ice.currentLevel++;
-  if (reward.name == 'fire') elements.value.fire.currentLevel++;
-  if (reward.name == 'air') elements.value.air.currentLevel++;
-  if (reward.name == 'earth') elements.value.earth.currentLevel++;
-
-  selectedElement.value = Object.values(elements.value).find((el) => el.currentLevel != 0);
+function handleReward(reward: Element | Relic | Powerup | { type: 'Bypass' }) {
+  if (reward.type == 'Element') {
+    elements.value[reward.name].currentLevel++;
+    selectedElement.value = Object.values(elements.value).find((el) => el.currentLevel != 0);
+  } else if (reward.type == 'Relic') {
+    reward.unlocked = true;
+    currentRelics.value[currentRelics.value.findIndex((relic) => !relic)] = reward;
+  } else if (reward.type == 'Powerup') {
+    reward.count += 3;
+    if (currentPowerups.value.find((powerup) => powerup && powerup.name == reward.name) != undefined) return;
+    currentPowerups.value[currentPowerups.value.findIndex((powerup) => !powerup)] = reward;
+  }
 }
 
 async function handleDamage(damage: number) {
+  if (shielded.value) {
+    shielded.value = false;
+    return;
+  }
+
   let defense = 0;
   elementGrid.value.forEach((arr) => {
     arr.forEach((el) => {
@@ -324,8 +422,15 @@ async function handleDamage(damage: number) {
   });
   console.log(defense);
   const ouch = Math.max(1, damage - defense);
-  health.value -= ouch;
-  showOverlay();
+  const damageFinal = (health.value -= ouch);
+  if (relics[3].unlocked && !relics[3].broken && damageFinal <= 0) {
+    health.value = 25;
+    energy.value = relics[2].unlocked ? 150 : 100;
+    relics[3].broken = true;
+  } else {
+    health.value = damageFinal;
+    showOverlay();
+  }
 
   async function showOverlay() {
     showHealthOverlay.value = true;
@@ -337,7 +442,6 @@ async function handleDamage(damage: number) {
 function handleRegen(hp: number, nrg: number) {
   health.value = Math.min(100, health.value + hp);
   if (selectedElement.value) energy.value += nrg;
-  store.energy = energy.value;
 }
 
 function restart() {
@@ -354,6 +458,29 @@ function getBarColor(element: Element, bar: number) {
   if (element.currentLevel < bar) return 'bg-[color:var(--faded-bg-color)]';
   if (element.currentLevel == bar) return element.name;
   return element.name + 'Secondary';
+}
+
+function disablePowerup(powerup: Powerup) {
+  if (powerup.id == 0 && health.value == 100) return true;
+  else if (powerup.id == 1 && energy.value >= (relics[2].unlocked ? 150 : 100)) return true;
+  else if (powerup.id == 2 && shielded.value) return true;
+  else if (powerup.id == 3 && fastForward.value) return true;
+
+  return false;
+}
+
+async function usePowerup(powerup: Powerup) {
+  if (powerup.count <= 0) return;
+
+  powerup.count--;
+  if (powerup.id == 0) health.value = 100;
+  if (powerup.id == 1) energy.value = relics[2].unlocked ? 150 : 100;
+  if (powerup.id == 2) shielded.value = true;
+  if (powerup.id == 3) {
+    fastForward.value = true;
+    await delay(50);
+    fastForward.value = false;
+  }
 }
 </script>
 
@@ -560,6 +687,12 @@ function getBarColor(element: Element, bar: number) {
       img {
         transform: rotate(360deg);
       }
+    }
+  }
+
+  .relic:hover {
+    .description {
+      display: flex;
     }
   }
 
