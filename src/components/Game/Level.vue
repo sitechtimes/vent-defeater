@@ -54,7 +54,7 @@
         </div>
       </div>
     </div>
-    <Shop v-if="level.type == 'shop'" @select="(reward) => (selectedReward = reward)" @next="next" />
+    <Shop v-if="level.type == 'shop'" @regen="(hp, energy) => emit('regen', hp, energy)" @select="(reward) => (selectedReward = reward)" @next="next" />
     <Relic v-if="level.type == 'relic'" @select="(reward) => (selectedReward = reward)" @next="next" />
   </div>
 </template>

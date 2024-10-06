@@ -76,6 +76,10 @@ body {
   transition-duration: 500ms;
 }
 
+.comic-sans {
+  font-family: 'Comic Sans MS', sans-serif;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;

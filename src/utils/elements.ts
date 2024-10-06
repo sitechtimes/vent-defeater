@@ -233,7 +233,7 @@ export const ice: Element = {
   type: 'Element',
   name: 'ice',
   img: '/game/elements/ice.svg',
-  currentLevel: 0,
+  currentLevel: 1,
   levels: [
     {
       level: 1,

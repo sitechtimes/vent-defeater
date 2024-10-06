@@ -8,7 +8,7 @@
       <p class="text-lg text-[color:var(--faded-text-color)]">It's on the screen in front of you</p>
     </div>
 
-    <div class="box flex gap-3 relative" v-show="!showRPG">
+    <div class="box flex gap-3 relative">
       <div
         class="w-14 h-14 text-center text-2xl rounded-md border-2 border-[color:var(--faded-bg-color)] bg-[color:var(--faded-bg-color-light)] flex items-center justify-center transition-none"
         :class="{ current: index == displayedDigits.findIndex((digit) => digit == ''), filled: digit != '', 'ml-3': index == 3 }"
@@ -19,9 +19,8 @@
       </div>
       <input ref="inputRef" class="absolute top-0 left-0 w-full h-full text-2xl opacity-0 bg-none border-none outline-none" v-model="code" type="number" @click="selectEverything" />
     </div>
-    <JoinPageRpg v-show="showRPG" @join="(code) => join(code)" @die="startTime = new Date().getTime()" />
 
-    <div class="flex items-center justify-center gap-4" v-if="!showRPG">
+    <div class="flex items-center justify-center gap-4">
       <RouterLink to="/" class="back transition px-10 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-transparent text-[color:var(--text-color)] text-lg font-semibold mt-6"
         >Back</RouterLink
       >
@@ -35,68 +34,24 @@
         Join
       </button>
     </div>
-
-    <div class="absolute top-20 left-4 flex items-center justify-center flex-col bg-[color:var(--bg-color-contrast)] py-2 px-10 w-48 rounded-xl" v-show="showRPG">
-      <p class="timer font-semibold text-4xl" :class="{ worse: pb && timer >= pb }">
-        {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span
-          class="timer text-2xl"
-          :class="{ worse: pb && timer > pb }"
-        >
-          {{
-            Math.floor(timer % 1000).toString().length == 1
-              ? '0'
-              : '' +
-                Math.floor(timer % 1000)
-                  .toString()
-                  .slice(0, 2)
-          }}
-        </span>
-      </p>
-      <div class="flex items-center justify-between w-full">
-        <p class="font-semibold text-xl text-[color:var(--gray)]">PB:</p>
-        <p class="font-semibold text-xl text-[color:var(--gray)]" v-if="pb">
-          {{ Math.floor(pb / 1000 / 60) }}:{{ (Math.floor((pb / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((pb / 1000) % 60) }}.{{
-            Math.floor(pb % 1000).toString().length == 1
-              ? '0'
-              : '' +
-                Math.floor(pb % 1000)
-                  .toString()
-                  .slice(0, 2)
-          }}
-        </p>
-      </div>
-    </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import JoinPageRpg from '@/components/JoinPageRpg.vue';
 import NavBar from '@/components/NavBar.vue';
 import { delay } from '@/utils/functions';
 import { onMounted, ref, watch } from 'vue';
+import { useRouter } from 'vue-router';
 
-const showRPG = ref(false);
-const startTime = ref(new Date().getTime());
-watch(
-  () => showRPG.value,
-  async () => {
-    while (showRPG.value) {
-      timer.value = new Date().getTime() - startTime.value;
-      await delay(20);
-    }
-  }
-);
+const router = useRouter();
+
 const counter = ref(0);
 watch(
   () => counter.value,
   (value) => {
-    showRPG.value = value % 5 == 0;
-    if (value % 5 == 0) startTime.value = new Date().getTime();
+    if (value % 5 == 0) router.push('/game');
   }
 );
-/** Milliseconds */
-const timer = ref(0);
-const pb = ref<number>();
 
 const showBanner = ref(JSON.parse(sessionStorage.getItem('previousIsHome') ?? 'false') as boolean);
 
@@ -119,12 +74,6 @@ watch(
 
 onMounted(() => {
   showBanner.value = false;
-  showRPG.value = Math.floor(Math.random() * 1001) == 420;
-  const localPB = localStorage.getItem('codePB');
-  if (localPB) {
-    const { time, date } = JSON.parse(localPB) as { time: number; date: number };
-    pb.value = time;
-  }
 });
 
 function selectEverything() {
@@ -133,18 +82,7 @@ function selectEverything() {
 }
 
 function join(code: string) {
-  if (showRPG.value) storePB();
-
   console.log('join');
-}
-
-function storePB() {
-  const localPB = localStorage.getItem('codePB');
-  if (localPB) {
-    const { time, date } = JSON.parse(localPB) as { time: number; date: number };
-    if (time < timer.value) return;
-  }
-  localStorage.setItem('codePB', JSON.stringify({ time: timer.value, date: new Date().getTime() }));
 }
 </script>
 

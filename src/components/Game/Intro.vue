@@ -1,54 +1,90 @@
 <template>
-  <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 py-10 overflow-hidden">
-    <Transition name="cutscene">
-      <div class="absolute top-0 left-0 w-screen h-screen flex items-center justify-center z-10 overflow-hidden" v-if="delayedShowAnimation">
-        <div class="portal-norotate absolute w-screen h-screen no-underline border-[color:#5900ff] border-4"></div>
+  <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 overflow-hidden background">
+    <header class="w-full h-24 flex items-center justify-center bg-[rgb(23,29,37)]" :class="{ 'brightness-50': showOpening }">
+      <div class="w-[60%] h-full flex items-center justify-around">
+        <div class="flex items-center justify-center gap-2">
+          <img class="h-20" src="/logo/steal.svg" aria-hidden="true" />
+          <div class="flex items-center justify-center flex-col">
+            <h3 class="flex items-center justify-center gap-[2px]">
+              <span class="text-[#c5c3c0] font-bold text-3xl comic-sans">S</span><span class="text-[#c5c3c0] font-bold text-3xl comic-sans">T</span
+              ><span class="text-[#c5c3c0] font-bold text-3xl comic-sans">E</span><span class="text-[#c5c3c0] font-bold text-3xl comic-sans">A</span
+              ><span class="text-[#c5c3c0] font-bold text-3xl comic-sans">L</span>
+            </h3>
+            <p class="text-[#c5c3c0] text-xs">(not steam)</p>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-4">
+          <button class="underline text-[rgb(26,159,255)] text-xl font-bold">PLAY</button>
+          <button class="text-[#c5c3c0] text-xl font-semibold cursor-not-allowed">VENT</button>
+          <button class="text-[#c5c3c0] text-xl font-semibold cursor-not-allowed">DEFEATER</button>
+          <button class="text-[#c5c3c0] text-xl font-semibold cursor-not-allowed">NOW</button>
+          <button class="text-[#c5c3c0] text-md font-semibold cursor-not-allowed">or else...</button>
+        </div>
+
+        <div class="h-full flex items-start justify-center gap-4 py-2">
+          <button @click="start" class="play flex items-center justify-center gap-1 bg-[rgb(39,45,55)] p-2 rounded-sm">
+            <img class="w-4 h-4" src="/game/play.svg" aria-hidden="true" />
+            <p class="text-white text-xs">Play Vent Defeater</p>
+          </button>
+        </div>
       </div>
-    </Transition>
-    <Transition name="up">
-      <div class="flex flex-col items-center justify-center gap-4" v-show="onmountTransitions[0]">
-        <img class="logo" src="/logo/logoTheGame.svg" aria-hidden="true" />
-        <h1 class="text-3xl font-medium">Built upon the pillars of creativity and originality.</h1>
-      </div>
-    </Transition>
+    </header>
 
-    <Transition name="up">
-      <button class="start flex items-center justify-center" :class="{ 'cursor-none': delayedShowAnimation }" @click="start" v-show="onmountTransitions[1]">
-        <div class="button border-[color:#5900ff] duration-250 border-4 text-3xl font-bold rounded-l-full py-6 pl-12 pr-8" :class="{ move: showAnimation }">Start</div>
-        <div class="portal right-[1.5rem] w-32 h-32 no-underline rounded-full border-[color:#5900ff] border-4"></div>
-      </button>
-    </Transition>
+    <div class="w-[50%] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
+      <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > Strategy Games > Rougelites > Vent Defeater</div>
+      <div class="w-full flex items-center justify-start text-white text-3xl">Vent Defeater: The Game</div>
+      <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
+        <div class="flex items-center justify-center flex-col gap-2 w-[62.5%]">
+          <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted controls @ended="selectedShowcase = showcases[1]"></video>
+          <img v-else :src="selectedShowcase.src" />
+          <div class="flex items-center justify-between gap-1">
+            <button @click="selectedShowcase = showcase" :class="{ relative: showcase.type == 'video' }" v-for="showcase in showcases" class="showcase w-[20%] flex items-center justify-center">
+              <video :class="{ 'brightness-50': showcase.src != selectedShowcase.src }" v-if="showcase.type == 'video'" :src="showcase.src" muted></video>
+              <img class="absolute w-10 h-10" v-if="showcase.type == 'video'" src="/game/play.svg" aria-hidden="true" />
+              <img :class="{ 'brightness-50': showcase.src != selectedShowcase.src }" v-else :src="showcase.src" aria-hidden="true" />
+            </button>
+          </div>
+        </div>
 
-    <Transition name="up">
-      <div class="flex flex-col items-center justify-center gap-3" v-show="onmountTransitions[2]">
-        <h2 class="text-2xl font-bold">How to play</h2>
+        <div class="flex items-center justify-start flex-col w-[37.5%] h-full gap-4">
+          <img class="bg-lime-200 p-3" src="/logo/logoTheGame.svg" aria-hidden="true" />
+          <p class="text-white text-sm">The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?</p>
 
-        <div class="flex items-center justify-center">
-          <div class="flex items-center justify-center flex-col gap-4 border-2 border-[color:var(--text-color)] rounded-lg py-4 px-2">
-            <img class="w-72" src="/logo/logoTheGame.svg" aria-hidden="true" />
-            <p>Replace img with img from gameplay</p>
+          <div class="w-full flex flex-col items-start justify-center">
+            <p>
+              <span class="text-gray-400 text-xs">RECENT REVIEWS:</span> <span class="text-blue-400 text-md font-bold">Overwhelmingly Sussy</span> <span class="text-gray-400 text-xs">(6,900)</span>
+            </p>
+            <p>
+              <span class="text-gray-400 text-xs">ALL REVIEWS:</span> <span class="text-blue-400 text-md font-bold">Overwhelmingly Sussy</span> <span class="text-gray-400 text-xs">(420,000)</span>
+            </p>
           </div>
 
-          <div class="w-16 h-16 overflow-hidden">
-            <img class="arrow w-16 h-16 dark:invert" src="/ui/rightArrow.svg" aria-hidden="true" />
-          </div>
+          <p class="text-left w-full">
+            <span class="text-gray-400 text-xs">RELEASE DATE: </span>
+            <span class="text-gray-300 text-md">{{ translateMonth(new Date().getMonth()) }} {{ new Date().getDate() }}, {{ new Date().getFullYear() }}</span>
+          </p>
 
-          <div class="flex items-center justify-center flex-col gap-4 border-2 border-[color:var(--text-color)] rounded-lg py-4 px-2">
-            <img class="w-72" src="/logo/logoTheGame.svg" aria-hidden="true" />
-            <p>Replace img with img from gameplay</p>
-          </div>
-
-          <div class="w-16 h-16 overflow-hidden">
-            <img class="arrow w-16 h-16 dark:invert" src="/ui/rightArrow.svg" aria-hidden="true" />
-          </div>
-
-          <div class="flex items-center justify-center flex-col gap-4 border-2 border-[color:var(--text-color)] rounded-lg py-4 px-2">
-            <img class="w-72" src="/logo/logoTheGame.svg" aria-hidden="true" />
-            <p>Replace img with img from gameplay</p>
+          <div class="w-full flex flex-col items-start justify-center">
+            <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Guy 2 & Guy 1.5</span></p>
+            <p><span class="text-gray-400 text-xs">PUBLISHER:</span> <span class="text-blue-400 text-md font-bold">Bogdan Sussyomin, Robber of Barons</span></p>
           </div>
         </div>
       </div>
-    </Transition>
+
+      <button :disabled="showOpening" @click="start" class="w-1/2 py-4 bg-lime-300 border-8 border-lime-500 text-black text-5xl font-extrabold mt-20 rounded-2xl playButton">Play Now</button>
+    </div>
+
+    <div
+      class="absolute bg-[rgb(37,40,46)] w-[40rem] h-[20rem] top-[30%] pointer-events-none flex items-center justify-center shaodw-lg shadow-black border-t-4 border-blue-400 p-7 gap-7"
+      :class="{ 'opacity-0': !showOpening }"
+    >
+      <img class="bg-lime-200 h-full w-1/4" src="/logo/logo.svg" aria-hidden="true" />
+      <div class="h-full w-3/4 flex flex-col items-start justify-center">
+        <p class="text-gray-400 text-lg">Starting game</p>
+        <h3 class="text-white text-4xl">Vent Defeater: The Game</h3>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -56,137 +92,113 @@
 import { delay } from '@/utils/functions';
 import { onMounted, ref, watch } from 'vue';
 
+type Showcase = {
+  type: 'image' | 'video';
+  src: string;
+};
+
 type Emits = {
   next: [void];
 };
 const emit = defineEmits<Emits>();
 
-const showAnimation = ref(false);
-watch(
-  () => showAnimation.value,
-  async () => {
-    await delay(1500);
-    delayedShowAnimation.value = true;
-    await delay(3000);
-    emit('next');
-  }
-);
-const delayedShowAnimation = ref(false);
-const onmountTransitions = ref([false, false, false]);
+const showOpening = ref(false);
 
-onMounted(async () => {
-  await delay(200);
-  for (let i = 0; i < onmountTransitions.value.length; i++) {
-    onmountTransitions.value[i] = true;
-    await delay(700);
-  }
-});
-
-function start() {
-  showAnimation.value = true;
+async function start() {
   const page = document.documentElement;
   page.requestFullscreen({ navigationUI: 'hide' });
+  showOpening.value = true;
+  await delay(2000);
+  emit('next');
+}
+
+const showcases = ref<Showcase[]>([
+  {
+    type: 'video',
+    src: '/game/showcase/gameAd.mp4'
+  },
+  {
+    type: 'image',
+    src: '/game/showcase/showcase4.png'
+  },
+  {
+    type: 'image',
+    src: '/game/showcase/showcase2.png'
+  },
+  {
+    type: 'image',
+    src: '/game/showcase/showcase1.png'
+  },
+  {
+    type: 'image',
+    src: '/game/showcase/showcase3.png'
+  }
+]);
+const selectedShowcase = ref<Showcase>(showcases.value[0]);
+watch(
+  () => selectedShowcase.value,
+  () => {
+    showcaseCooldown.value = 0;
+  }
+);
+const showcaseCooldown = ref(0);
+watch(
+  () => showcaseCooldown.value,
+  (num) => {
+    if (selectedShowcase.value.type == 'image' && num > 6) {
+      const index = showcases.value.findIndex((showcase) => showcase.src == selectedShowcase.value.src);
+
+      if (index < showcases.value.length - 1) selectedShowcase.value = showcases.value[index + 1];
+      else selectedShowcase.value = showcases.value[0];
+    }
+  }
+);
+
+onMounted(() => {
+  incrementCooldown();
+});
+
+async function incrementCooldown() {
+  while (true) {
+    await delay(1000);
+    showcaseCooldown.value++;
+  }
+}
+
+function translateMonth(month: number) {
+  if (month == 0) return 'Jan';
+  else if (month == 1) return 'Feb';
+  else if (month == 2) return 'Mar';
+  else if (month == 3) return 'Apr';
+  else if (month == 4) return 'May';
+  else if (month == 5) return 'Jun';
+  else if (month == 6) return 'Jul';
+  else if (month == 7) return 'Aug';
+  else if (month == 8) return 'Sep';
+  else if (month == 9) return 'Oct';
+  else if (month == 10) return 'Nov';
+  else return 'Dec';
 }
 </script>
 
 <style lang="scss" scoped>
-@keyframes move-right {
-  0% {
-    transform: translate(-4rem);
-  }
-
-  100% {
-    transform: translate(4rem);
-  }
-}
-
-@keyframes growGradient {
-  0% {
-    transform: rotate(0deg);
-    background-size: 3% 3%;
-  }
-  70% {
-    transform: rotate(720deg);
-    background-size: 125% 125%;
-  }
-  100% {
-    background-size: 500% 500%;
-  }
-}
-
-@keyframes growGradientNoRotate {
-  0% {
-    background-size: 1% 1%;
-  }
-  5% {
-    background-size: 1% 1%;
-  }
-  50% {
-    background-size: 50% 50%;
-  }
-  100% {
-    background-size: 1% 1%;
-  }
-}
-
-.logo {
-  width: 40rem;
-}
-
-.portal {
-  position: relative;
-  background-image: repeating-radial-gradient(circle, #5900ff 0, #5900ff 10%, #d15cff 20%, #d15cff 30%); /* Initial radial gradient */
-  background-size: cover;
-  transition: none;
-  animation: growGradient 3s infinite linear; /* Apply the infinite animation */
-  background-position: center;
-}
-
-.portal-norotate {
-  position: relative;
-  background-image: repeating-radial-gradient(circle, #5900ff 0, #5900ff 10%, #d15cff 20%, #d15cff 30%); /* Initial radial gradient */
-  background-size: cover;
-  transition: none;
-  animation: growGradientNoRotate 3s; /* Apply the infinite animation */
-  background-position: center;
-}
-
-.arrow {
-  animation: move-right 0.9s ease-in-out infinite;
-}
-
-.move {
-  transform: scale(0) translate(20rem);
-  transition: all 1.5s;
-  padding: 0;
-  color: transparent;
-}
-
-.cutscene-enter-active,
-.cutscene-leave-active {
-  transition: all 0.5s;
-}
-
-.cutscene-enter-from,
-.cutscene-leave-to {
-  opacity: 0;
-}
-
-.up-enter-active,
-.up-leave-active {
-  transition: all 1.25s ease;
-}
-
-.up-enter-from,
-.up-leave-to {
-  opacity: 0;
-  transform: translateY(50vh);
+.background {
+  background: radial-gradient(circle at 50% 0%, rgb(30, 67, 86), rgb(27, 40, 56) 60%);
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .start:hover {
-    .button {
-      background-color: #d15cff;
+  .play:hover {
+    background-color: rgb(80, 80, 80);
+  }
+
+  .playButton:hover {
+    background-color: greenyellow;
+  }
+
+  .showcase:hover {
+    img,
+    video {
+      filter: brightness(1);
     }
   }
 }

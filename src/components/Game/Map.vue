@@ -41,7 +41,6 @@ const store = useGameStore();
 const levels = ref<Level[]>([]);
 
 onBeforeMount(() => {
-  console.log(props.currentLevel);
   if (!props.currentLevel || !props.currentLevel.nextLevels) return;
   for (let id of props.currentLevel.nextLevels) {
     levels.value.push(store.levels.find((level) => level.id == id) as Level);

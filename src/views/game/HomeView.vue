@@ -1,4 +1,29 @@
 <template>
+  <div class="z-[200] bg-[rgba(0,0,0,0.2)] w-screen h-screen absolute top-0 left-0 flex items-center justify-center" v-if="showTutorial">
+    <div
+      class="absolute bg-white shadow-lg shadow-black flex flex-col items-center justify-center gap-2 w-[30rem] p-5 rounded-lg"
+      v-if="currentTutorialPhase >= 0"
+      :style="{ top: tutorialPhases[currentTutorialPhase].top + 'px', left: tutorialPhases[currentTutorialPhase].left + 'px' }"
+    >
+      <div class="flex items-center justify-center gap-4">
+        <button class="font-extrabold text-2xl" @click="currentTutorialPhase = Math.max(0, currentTutorialPhase - 1)"><</button>
+        <button class="font-extrabold text-2xl" @click="currentTutorialPhase = Math.min(tutorialPhases.length - 1, currentTutorialPhase + 1)">></button>
+      </div>
+      <p class="text-lg font-medium text-center">{{ tutorialPhases[currentTutorialPhase].text }}</p>
+      <button v-show="currentTutorialPhase == tutorialPhases.length - 1" @click="showTutorial = false" class="w-1/2 py-3 mt-4 bg-green-400 brightness-75 rounded-lg tutorialButton text-2xl font-bold">
+        Let's go
+      </button>
+    </div>
+
+    <div class="bg-white shadow-lg shadow-black p-10 rounded-2xl flex flex-col items-center justify-center gap-6" v-if="currentTutorialPhase == -1">
+      <p class="text-3xl font-bold">Would you like a tutorial?</p>
+      <div class="w-full flex items-center justify-center gap-2">
+        <button @click="currentTutorialPhase = 0" class="w-1/2 py-3 bg-green-400 brightness-75 rounded-lg tutorialButton">Yes</button>
+        <button @click="showTutorial = false" class="w-1/2 py-3 bg-red-400 brightness-75 rounded-lg tutorialButton">Get out of my face</button>
+      </div>
+    </div>
+  </div>
+
   <div
     class="energyOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl"
     :style="{ opacity: (energy - (relics[2].unlocked ? 150 : 100)) / (relics[2].unlocked ? 50 : 25) }"
@@ -33,9 +58,9 @@
   </div>
 
   <button class="z-10 absolute top-4 right-4 border-2 bg-white border-neutral-950" @click="testLevel">(testing) next lvl</button>
-  <button class="z-10 absolute top-16 right-4 border-2 bg-white border-neutral-950" @click="handleDamage(100)">die</button>
+  <button class="z-10 absolute top-16 right-4 border-2 bg-white border-neutral-950" @click="handleDamage(51)">die</button>
   <button class="z-10 absolute top-28 right-4 border-2 bg-white border-neutral-950" @click="enemy1hp">make enemy 1 hp</button>
-  <div class="z-10 absolute bottom-4 right-4 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl" v-if="level">
+  <div class="z-10 absolute bottom-4 right-4 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl" v-if="level" ref="tutorial8">
     <p class="timer font-semibold text-4xl">
       {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
         {{
@@ -177,7 +202,7 @@
           </div>
         </div>
 
-        <Amogus color="#ff0000" class="absolute bottom-[-3rem] left-[-3rem] scale-50 cursor-pointer" title="Click me for help!" />
+        <Amogus color="#ff0000" class="absolute bottom-[-3rem] left-[-3rem] scale-50 cursor-pointer" />
       </div>
     </Transition>
 
@@ -185,7 +210,7 @@
       v-if="!level"
       @next="
         level = store.levels[0];
-        startTime = new Date().getTime();
+        showTutorial = true;
       "
     />
     <Transition name="page">
@@ -214,13 +239,12 @@ import Amogus from '@/components/Game/Amogus.vue';
 import Intro from '@/components/Game/Intro.vue';
 import Level from '@/components/Game/Level.vue';
 import Map from '@/components/Game/Map.vue';
-import ThemeToggle from '@/components/ThemeToggle.vue';
 import { useGameStore } from '@/stores/game';
 import { air, earth, fire, ice, formatDescription, type Relic, type Powerup, relics, powerups } from '@/utils/elements';
 import type { Element, Level as LevelType } from '@/utils/elements';
 import { delay, getRandomInt, getRandomItemFromArray } from '@/utils/functions';
 import { storeToRefs } from 'pinia';
-import { onBeforeMount, onMounted, ref, toRef, watch } from 'vue';
+import { onBeforeMount, ref, toRef, watch } from 'vue';
 
 const store = useGameStore();
 
@@ -238,6 +262,13 @@ watch(
 );
 
 const gameWon = ref(false);
+const showTutorial = ref(false);
+watch(
+  () => showTutorial.value,
+  (val) => {
+    if (!val) startTime.value = new Date().getTime();
+  }
+);
 
 const previousLevel = ref<LevelType>();
 const level = ref<'map' | LevelType>();
@@ -259,6 +290,55 @@ const currentPowerups = ref<Powerup[]>(new Array(4).fill(undefined));
 const shielded = ref(false);
 const fastForward = ref(false);
 
+const tutorialPhases = ref([
+  {
+    top: 0,
+    left: 500,
+    text: "This is your health. Don't let it go below 0 or else your glycemic index will drop into the negatives"
+  },
+  {
+    top: 40,
+    left: 500,
+    text: "This is your energy. Don't let it go above 100 or you'll get electrocuted and die"
+  },
+  {
+    top: 170,
+    left: 600,
+    text: 'These are your elements, relics, and powerups. Click to select. You can hover over them to see what they do'
+  },
+  {
+    top: 700,
+    left: 975,
+    text: 'This is your board. You can use your elements here by clicking on a tile'
+  },
+  {
+    top: 115,
+    left: 1000,
+    text: "This is your enemy. He burns down orphanages. Let's kill him and steal his stuff"
+  },
+  {
+    top: 190,
+    left: 1000,
+    text: 'Your enemy will attack you if this bar fills up. They may also have extra lives so be careful'
+  },
+  {
+    top: 800,
+    left: 1000,
+    text: 'This is the great almighty reroll button. Click it to reroll your board'
+  },
+  {
+    top: 925,
+    left: 1200,
+    text: "This is your speedrun timer. It'll start once you exit this tutorial"
+  },
+  {
+    top: 700,
+    left: 975,
+    text: "Your goal is to match numbers on your board to the numbers above the enemy. Good luck and don't die"
+  }
+]);
+const currentTutorialPhase = ref(-1);
+
 watch(
   () => selectedElement.value,
   (stat) => (store.currentElement = stat)
@@ -269,7 +349,8 @@ onBeforeMount(() => {
 });
 
 function testLevel() {
-  level.value = store.levels.find((lvl) => lvl.id == 4);
+  level.value = store.levels.find((lvl) => lvl.id == 0);
+  showTutorial.value = true;
 }
 
 function enemy1hp() {
@@ -678,6 +759,10 @@ async function usePowerup(powerup: Powerup) {
   }
   .disabled:hover {
     background-color: var(--faded-bg-color);
+  }
+
+  .tutorialButton:hover {
+    filter: brightness(1);
   }
 
   .lost {
