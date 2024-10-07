@@ -226,7 +226,7 @@ const reviews = [
     name: 'Bogdan Selyomin',
     recommended: true,
     hours: '-∞.0',
-    review: "I 0 this game, so it's the best game ever! (he did not)",
+    review: "I made this game, so it's the best game ever! (he did not)",
     helpful: 96
   },
   {
