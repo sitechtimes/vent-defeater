@@ -251,7 +251,7 @@ const timer = ref(0);
 watch(
   () => startTime.value,
   async () => {
-    while (startTime.value && !gameWon.value) {
+    while (startTime.value && !gameWon.value && health.value > 0 && energy.value < (relics[2].unlocked ? 200 : 125)) {
       timer.value = new Date().getTime() - startTime.value;
       await delay(20);
     }
