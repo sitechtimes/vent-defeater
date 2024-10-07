@@ -69,6 +69,14 @@ const router = createRouter({
       meta: {
         requiresAuth: false
       }
+    },
+    {
+      path: '/game',
+      name: 'game',
+      component: () => import('../views/game/HomeView.vue'),
+      meta: {
+        requiresAuth: false
+      }
     }
   ]
 });
