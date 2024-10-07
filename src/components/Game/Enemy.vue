@@ -92,7 +92,7 @@ function generateNewArray() {
 
 function enemyAttack() {
   if (stunDuration.value > 0) return;
-  attackMeter.value += getRandomInt(5, 10);
+  attackMeter.value += getRandomInt(10, 15);
   if (attackMeter.value <= 115) return;
 
   let earthTiles = 0;

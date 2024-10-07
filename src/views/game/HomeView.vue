@@ -36,6 +36,8 @@
   <img v-if="store.isDead || gameWon" class="fixed explode z-[100]" :class="{ 'opacity-0': gameWon }" src="/game/explosion.svg" aria-hidden="true" />
   <div v-if="store.isDead || gameWon" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
     <h2 class="text-4xl font-semibold">{{ gameWon ? 'You won!' : 'You lost 😦' }}</h2>
+    <p class="text-2xl font-medium" v-if="!gameWon && health <= 0">You died from wounds</p>
+    <p class="text-2xl font-medium" v-if="!gameWon && energy >= (relics[2].unlocked ? 200 : 125)">Your energy meter spontaneously combusted</p>
     <div class="z-10 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl">
       <p class="timer font-semibold text-4xl">
         {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
