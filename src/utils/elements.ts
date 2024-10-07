@@ -215,6 +215,22 @@ export const relics: Relic[] = [
     img: '/game/relics/dizzy.svg',
     description: 'Every time you damage an enemy, empty their attack meter.',
     unlocked: false
+  },
+  {
+    type: "Relic",
+    name: "Double or Nothing",
+    id: 16,
+    img: "/game/mystery.svg",
+    description: "Receive a random effect",
+    unlocked: false
+  },
+  {
+    type: "Relic",
+    name: "Brainrot",
+    id: 17,
+    img: "/game/relics/brain.svg",
+    description: "Unlock the skibidi aura of ohio and become the most sigma betamaxxer in the world",
+    unlocked: false
   }
 ];
 

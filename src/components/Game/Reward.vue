@@ -53,6 +53,7 @@
 </template>
 
 <script setup lang="ts">
+import { useGameStore } from '@/stores/game';
 import { air, earth, fire, formatDescription, ice, powerups, relics, type Element, type Level, type Powerup, type Relic } from '@/utils/elements';
 import { getRandomItemFromArray } from '@/utils/functions';
 import { onBeforeMount, onBeforeUnmount, ref } from 'vue';

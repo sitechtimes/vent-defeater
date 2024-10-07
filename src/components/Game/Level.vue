@@ -1,7 +1,7 @@
 <template>
   <div class="background w-screen h-screen flex items-center justify-around overflow-hidden" :style="{ backgroundImage: `url(${level.levelImg})` }">
     <Transition name="opacity">
-      <div class="winOverlay w-screen h-screen fixed left-0 top-0 transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
+      <div class="winOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
     </Transition>
 
     <Transition name="left">
@@ -131,6 +131,8 @@ function next() {
     emit('winGame');
   }
   if (!selectedReward.value) return;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 16) store.relicOfDeath = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 17) store.showBrainrot = true;
   props.level.completed = true;
   emit('reward', selectedReward.value);
   emit('win');
