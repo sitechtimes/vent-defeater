@@ -62,7 +62,7 @@
 
           <p class="text-left w-full">
             <span class="text-gray-400 text-xs">RELEASE DATE: </span>
-            <span class="text-gray-300 text-md">{{ translateMonth(new Date().getMonth()) }} {{ new Date().getDate() }}, {{ new Date().getFullYear() }}</span>
+            <span class="text-gray-300 text-md">{{ translateMonth(new Date().getMonth()) }} {{ new Date().getDate() + 1 }}, {{ new Date().getFullYear() }}</span>
           </p>
 
           <div class="w-full flex flex-col items-start justify-center">
