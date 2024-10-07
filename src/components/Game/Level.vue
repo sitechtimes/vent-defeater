@@ -47,7 +47,7 @@
           <button
             @click="roll"
             class="reroll back transition w-48 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6"
-            :disabled="matchedBoard != undefined"
+            :disabled="matchedBoard != undefined || store.isDead"
             :class="{ 'cursor-not-allowed': matchedBoard }"
           >
             Reroll 🎲
@@ -89,6 +89,7 @@ type Props = {
 };
 
 const amogusColor = ref(getRandomItemFromArray(['#ffa44a', '#fffd8a', '#61ff64', '#3863ff', '#4ce3e0', '#ff8cda', '#7d6243', '#9673ff', '#20754c']));
+const store = useGameStore();
 
 const props = defineProps<Props>();
 watch(

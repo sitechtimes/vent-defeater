@@ -33,8 +33,8 @@
     <div class="healthOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl" v-if="health < 50 || showHealthOverlay"></div>
   </Transition>
 
-  <img v-if="health <= 0 || energy > (relics[2].unlocked ? 200 : 125) || gameWon" class="fixed explode z-[100]" :class="{ 'opacity-0': gameWon }" src="/game/explosion.svg" aria-hidden="true" />
-  <div v-if="health <= 0 || energy > (relics[2].unlocked ? 200 : 125) || gameWon" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
+  <img v-if="store.isDead || gameWon" class="fixed explode z-[100]" :class="{ 'opacity-0': gameWon }" src="/game/explosion.svg" aria-hidden="true" />
+  <div v-if="store.isDead || gameWon" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
     <h2 class="text-4xl font-semibold">{{ gameWon ? 'You won!' : 'You lost 😦' }}</h2>
     <div class="z-10 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl">
       <p class="timer font-semibold text-4xl">
@@ -270,7 +270,13 @@ watch(
 const previousLevel = ref<LevelType>();
 const level = ref<'map' | LevelType>();
 const health = ref(100);
+watch(() => health.value, () => {
+  if (health.value <= 0) store.isDead = true;
+})
 const { energy, elementGrid } = storeToRefs(store);
+watch(() => energy.value, () => {
+  if (energy.value >= (relics[2].unlocked ? 200 : 125)) store.isDead = true;
+})
 
 const rows = ref(2);
 const columns = ref(2);
