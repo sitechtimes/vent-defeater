@@ -1,12 +1,13 @@
 <template>
   <div class="w-[100vw] h-[100vh] overflow-hidden">
-    <div ref="joe" class="hidden"></div>
+    <marquee class="screen"><img src="https://media1.tenor.com/m/Spmi9HLHEz0AAAAd/despite-all-my-rage.gif" class="h-[100vh]" /></marquee>
+    <div ref="joe" class="w-screen h-screen absolute hidden"></div>
     <div ref="skibidi" class="screen z-10" @click="addRandom" @mousemove="getMousePos">
       <span
         v-for="(data, word) in words"
         @mouseenter="cursor(1)"
         @mouseleave="cursor(0)"
-        class="word absolute select-none origin-center"
+        class="word absolute select-none origin-center border-black hover:border-2 p-2"
         :key="word"
         :id="String(word)"
         @click="big(word as string)"
@@ -14,7 +15,7 @@
         >{{ word }}</span
       >
     </div>
-    <marquee class="screen"><img src="https://media1.tenor.com/m/Spmi9HLHEz0AAAAd/despite-all-my-rage.gif" class="h-[100vh]" /></marquee>
+
     <div ref="pointer" id="pointer"></div>
   </div>
 </template>
@@ -87,6 +88,9 @@ const cursor = (yes: number) => pointer.value && Object.assign(pointer.value.sty
 const engine = Engine.create();
 
 engine.gravity.scale = 0;
+engine.constraintIterations = 0; // from 2
+engine.positionIterations = 7; // from 6
+engine.velocityIterations = 5; // from 4
 
 function init() {
   if (!skibidi.value) return;
@@ -129,13 +133,13 @@ onMounted(() => {
       const wordData = words.value[word];
       if (!wordData.shape) return;
       const center = [wordData.shape.position.x, wordData.shape.position.y];
-      el.style.left = center[0] + 'px';
-      el.style.top = center[1] + 'px';
-      el.style.transform = `rotate(${wordData.shape.angle}rad)`;
+      el.style.left = center[0] - wordData.width / 2 + 'px';
+      el.style.top = center[1] - wordData.height / 2 + 'px';
+      el.style.rotate = `${wordData.shape.angle}rad`;
       // let bHole = Matter.Vector.create(window.innerWidth / 2 - center[0], window.innerHeight / 2 - center[1]);
       let bHole = Matter.Vector.create(mouseX - (center[0] + wordData.width / 2), mouseY - (center[1] + wordData.height / 2));
       bHole = Matter.Vector.normalise(bHole);
-      bHole = Matter.Vector.mult(bHole, wordData.area * 0.00001);
+      bHole = Matter.Vector.mult(bHole, wordData.area * 0.000001);
 
       Matter.Body.applyForce(wordData.shape, wordData.shape.position, bHole);
     });
@@ -186,7 +190,7 @@ async function big(word: string) {
 }
 
 Events.on(engine.world, 'afterRemove', () => {
-  console.log(toAdd);
+  // console.log(toAdd);
   for (const word in toAdd) {
     if (Object.prototype.hasOwnProperty.call(toAdd, word)) {
       words.value[word].shape = toAdd[word];
@@ -234,7 +238,9 @@ function add(word: string) {
 
 .word {
   font-family: 'Comic Sans MS', 'Comic Sans', 'SUSE', sans-serif;
-  max-width: 30vw;
+  /* max-width: 30vw; */
+  width: max-content;
+  box-sizing: content-box;
 }
 
 #pointer {
