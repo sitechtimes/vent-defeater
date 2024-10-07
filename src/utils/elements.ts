@@ -133,7 +133,7 @@ export const relics: Relic[] = [
     id: 5,
     img: '/game/relics/snowglobe.svg',
     description:
-      'Recent weather reports suggest that **dust storms** have gone subzero. **Dust storms** turn into **Blizzards** if there is at least **1** ice tile on the board, which have a **5%** chance to damage the enemy for **1** life.',
+      'Recent weather reports suggest that **dust storms** have gone subzero. **Dust storms** turn into **Blizzards** if there is at least **1** ice tile on the board, which have a **5%** chance to damage the enemy for **1** life, if the **dust storm* successfully prevents an attack.',
     unlocked: false
   },
   {
@@ -191,6 +191,30 @@ export const relics: Relic[] = [
     img: '/game/relics/anger.svg',
     description: 'You failed your therapy sessions for anger management. Your therapist is dissapointed. When attacked, **grounded** tiles have double the chance to trigger an **earthquake.**',
     unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Blood Thirsty',
+    id: 13,
+    img: '/game/relics/bat.svg',
+    description: 'Every time you damage an enemy, heal **10** HP.',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'The Sun is a Deadly Lazer',
+    id: 14,
+    img: '/game/relics/sun.svg',
+    description: "Don't let his cute looks decieve you, he'll fry you at the first chance he gets. Rerolling regenerates **20% more energy**.",
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Concussion',
+    id: 15,
+    img: '/game/relics/dizzy.svg',
+    description: 'Every time you damage an enemy, empty their attack meter.',
+    unlocked: false
   }
 ];
 
@@ -208,7 +232,7 @@ export const powerups: Powerup[] = [
     name: 'Blue Cow (not Red Bull)',
     id: 1,
     img: '/game/relics/bluecow.png',
-    description: 'Replenish your energy back to full.',
+    description: 'Regenerater back to full energy.',
     count: 0
   },
   {
@@ -332,13 +356,12 @@ export const earth: Element = {
     {
       level: 1,
       name: 'My Valorant RR',
-      description: '**Ground** a tile. **Grounded** tiles can only change by at most ±1 each reroll.'
+      description: '**Ground** a tile. **Grounded** tiles can only change by at most ±1 each reroll. **Grounded** tiles will shatter at the end of each turn and return to a **normal** state.'
     },
     {
       level: 2,
       name: "Peeker's Advantage",
-      description:
-        'Each **grounded** tile grants +1 **defense** to incoming damage. **Defense** decreases incoming damage by 1, but you will still take a minimum of 1 damage from damage sources. When attacked, **grounded** tiles will return to a **normal** state.'
+      description: 'Each **grounded** tile grants +1 **defense** to incoming damage. **Defense** decreases incoming damage by 1, but you will still take a minimum of 1 damage from damage sources.'
     },
     {
       level: 3,

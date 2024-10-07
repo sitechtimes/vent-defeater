@@ -107,7 +107,9 @@ function reroll() {
       if (!explode && elementGrid.value[i][j] == 2 && fireExplode(i, j)) explode = true;
       if (elementGrid.value[i][j] == 2) emit('regen', fire.currentLevel == 4 ? 0.05 : 0.1 / fire.currentLevel, 0);
       if (elementGrid.value[i][j] == 4) {
+        if (relics[11].unlocked) continue;
         displayedGrid.value[i][j] = Math.max(0, Math.min(9, displayedGrid.value[i][j] + getRandomInt(-1, 1)));
+        elementGrid.value[i][j] = 0;
         continue;
       }
       if (iceThaw(i, j)) continue;

@@ -25,7 +25,8 @@
             @on-reroll="(board) => handleReroll(board, 'enemy')"
             @damaged="(damage) => emit('damaged', damage)"
             @regen="(hp, energy) => emit('regen', hp, energy)"
-            @fart="emit('win')"
+            @fart="damageEnemy"
+            @blizzard="damageEnemy"
           />
           <Amogus :color="amogusColor" v-if="level.id != 10" />
           <Vent v-else />
@@ -66,7 +67,7 @@ import Player from './Player.vue';
 import { delay, getRandomItemFromArray } from '@/utils/functions';
 import { useGameStore } from '@/stores/game';
 import Amogus from './Amogus.vue';
-import type { Element, Level, Powerup, Relic as RelicType } from '@/utils/elements';
+import { relics, type Element, type Level, type Powerup, type Relic as RelicType } from '@/utils/elements';
 import Reward from './Reward.vue';
 import Shop from './Shop.vue';
 import Vent from './Vent.vue';
@@ -132,8 +133,8 @@ function next() {
   }
   if (!selectedReward.value) return;
   props.level.completed = true;
-  emit('win');
   emit('reward', selectedReward.value);
+  emit('win');
 }
 
 async function damageEnemy() {
@@ -146,6 +147,7 @@ async function damageEnemy() {
     if (props.level.id == 10) next();
     else showReward.value = true;
   } else {
+    if (relics[13].unlocked) emit('regen', 10, 0);
     await delay(200);
     showWin.value = false;
     matchedBoard.value = undefined;
@@ -218,7 +220,7 @@ async function handleReroll(board: number[] | number[][], from: 'enemy' | 'playe
 
 async function roll() {
   reroll.value = true;
-  if (!winCooldown.value) emit('regen', 0, 5);
+  if (!winCooldown.value) emit('regen', 0, relics[14].unlocked ? 6 : 5);
   await delay(50);
   reroll.value = false;
 }

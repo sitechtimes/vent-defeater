@@ -29,8 +29,8 @@
   --fire-secondary: rgb(253, 156, 149);
   --air: rgb(125, 111, 248);
   --air-secondary: rgb(156, 149, 253);
-  --earth: rgb(223, 222, 236);
-  --earth-secondary: hsl(244, 7%, 62%);
+  --earth: hsl(244, 7%, 62%);
+  --earth-secondary: rgb(223, 222, 236);
 }
 
 .dark {

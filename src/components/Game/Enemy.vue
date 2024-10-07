@@ -30,8 +30,9 @@
 
 <script setup lang="ts">
 import { useGameStore } from '@/stores/game';
-import { relics, type Element, type Level } from '@/utils/elements';
+import { earth, relics, type Element, type Level } from '@/utils/elements';
 import { delay, getRandomInt } from '@/utils/functions';
+import { storeToRefs } from 'pinia';
 import { onMounted, ref, watch } from 'vue';
 
 type Props = {
@@ -45,6 +46,7 @@ type Emits = {
   regen: [health: number, energy: number];
   onReroll: [board: number[]];
   fart: [void];
+  blizzard: [void];
 };
 
 const store = useGameStore();
@@ -53,22 +55,26 @@ const emit = defineEmits<Emits>();
 watch(
   () => props.reroll,
   (active) => {
-    console.log(active);
-    if (active) enemyAttack();
+    if (active) {
+      enemyAttack();
+      stunDuration.value = Math.max(0, stunDuration.value - 1);
+    }
   }
 );
 watch(
   () => props.lives,
   () => {
-    attackMeter.value = 10;
+    if (relics[15].unlocked) attackMeter.value = 10;
     displayedNumbers.value = generateNewArray();
   }
 );
 
 const attackMeter = ref(10);
 
+const { elementGrid } = storeToRefs(store);
 const displayedNumbers = ref<number[]>([]);
 const elementNumbers = ref<number[]>([]);
+const stunDuration = ref(0);
 
 onMounted(() => {
   displayedNumbers.value = generateNewArray();
@@ -85,8 +91,32 @@ function generateNewArray() {
 }
 
 function enemyAttack() {
+  if (stunDuration.value > 0) return;
   attackMeter.value += getRandomInt(5, 10);
   if (attackMeter.value <= 115) return;
+
+  let earthTiles = 0;
+  if (earth.currentLevel >= 3) {
+    let iceTiles = 0;
+    for (let row of elementGrid.value) {
+      for (let cell of row) {
+        if (cell == 1) iceTiles++;
+        if (cell == 4) earthTiles++;
+      }
+    }
+
+    const chance = (earthTiles / elementGrid.value.length ** 2) * 0.5;
+    if (Math.random() < chance) {
+      if (relics[5].unlocked && iceTiles >= 1 && Math.random() < 0.05) emit('blizzard');
+      return;
+    }
+  }
+
+  if (earth.currentLevel == 4) {
+    if (Math.random() < (earthTiles / elementGrid.value.length ** 2) * (relics[12].unlocked ? 0.5 : 0.25)) {
+      stunDuration.value = Math.ceil((earthTiles / elementGrid.value.length ** 2) * 5);
+    }
+  }
 
   emit('damaged', getRandomInt(2 * props.slots, 10 * props.slots));
   attackMeter.value = 10;

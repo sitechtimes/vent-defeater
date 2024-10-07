@@ -229,7 +229,7 @@
     </Transition>
 
     <Transition name="pageOther">
-      <Map :current-level="previousLevel" @select="(lvl) => (level = lvl)" v-if="level == 'map'" />
+      <Map :current-level="previousLevel" @select="(lvl) => (level = lvl)" v-if="level == 'map'"></Map>
     </Transition>
   </div>
 </template>
@@ -273,12 +273,7 @@ watch(
 const previousLevel = ref<LevelType>();
 const level = ref<'map' | LevelType>();
 const health = ref(100);
-const energy = storeToRefs(store).energy;
-const elementGrid = toRef(store.elementGrid);
-watch(
-  () => store.energy,
-  async (value) => (energy.value = value)
-);
+const { energy, elementGrid } = storeToRefs(store);
 
 const rows = ref(2);
 const columns = ref(2);
@@ -346,6 +341,7 @@ watch(
 
 onBeforeMount(() => {
   store.levels = generateNewMap();
+  selectedElement.value = elements.value.ice;
 });
 
 function testLevel() {
@@ -454,9 +450,9 @@ function generateNewMap() {
     };
 
     function getLives(difficulty: 1 | 2 | 3, type: 'fight' | 'harderFight' | 'boss') {
-      if (type == 'fight') return getRandomInt(1 * difficulty, 2 * difficulty);
-      if (type == 'harderFight') return getRandomInt(2 * difficulty, 3 * difficulty);
-      return difficulty == 1 ? 5 : 50;
+      if (type == 'fight') return getRandomInt(1.5 * difficulty, 2.5 * difficulty);
+      if (type == 'harderFight') return getRandomInt(3 * difficulty, 4.5 * difficulty);
+      return difficulty == 1 ? 15 : 70;
     }
   }
 }
@@ -496,14 +492,14 @@ async function handleDamage(damage: number) {
   }
 
   let defense = 0;
-  elementGrid.value.forEach((arr) => {
-    arr.forEach((el) => {
-      if (el === 4) defense++;
-    });
-  });
-  console.log(defense);
+  for (let row of elementGrid.value) {
+    for (let cell of row) {
+      if (cell == 4) defense++;
+    }
+  }
   const ouch = Math.max(1, damage - defense);
-  const damageFinal = (health.value -= ouch);
+  const damageFinal = health.value - ouch;
+
   if (relics[3].unlocked && !relics[3].broken && damageFinal <= 0) {
     health.value = 25;
     energy.value = relics[2].unlocked ? 150 : 100;
@@ -530,12 +526,6 @@ function restart() {
 }
 
 function getBarColor(element: Element, bar: number) {
-  /* yes this is necessary
-  fuck tailwind
-  dont trump me
-  dont do it
-  i swear to god i will remove the 2 from tf2 */
-
   if (element.currentLevel < bar) return 'bg-[color:var(--faded-bg-color)]';
   if (element.currentLevel == bar) return element.name;
   return element.name + 'Secondary';
