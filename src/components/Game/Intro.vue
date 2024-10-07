@@ -1,6 +1,6 @@
 <template>
-  <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 overflow-hidden background">
-    <header class="w-full h-24 flex items-center justify-center bg-[rgb(23,29,37)]" :class="{ 'brightness-50': showOpening }">
+  <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 overflow-y-scroll background">
+    <header class="sticky top-0 z-10 w-full h-24 flex items-center justify-center bg-[rgb(23,29,37)]" :class="{ 'brightness-50': showOpening }">
       <div class="w-[60%] h-full flex items-center justify-around">
         <div class="flex items-center justify-center gap-2">
           <img class="h-20" src="/logo/steal.svg" aria-hidden="true" />
@@ -72,7 +72,55 @@
         </div>
       </div>
 
-      <button :disabled="showOpening" @click="start" class="w-1/2 py-4 bg-lime-300 border-8 border-lime-500 text-black text-5xl font-extrabold mt-20 rounded-2xl playButton">Play Now</button>
+      <button :disabled="showOpening" @click="start" class="w-1/2 py-4 bg-lime-300 border-8 border-lime-500 text-black text-5xl font-extrabold my-10 rounded-2xl playButton">Play Now</button>
+
+      <p class="text-left w-full mb-2"><span class="text-white text-xl">MOST HELPFUL REVIEWS </span> <span class="text-gray-500 text-xl">IN THE PAST 5 SECONDS</span></p>
+      <div class="w-full flex items-center justify-center flex-col gap-8">
+        <div class="bg-[rgb(22,32,45)] w-full flex items-start justify-center gap-12 p-2 border-t-2 border-blue-800" v-for="review in reviews">
+          <div class="w-1/4 flex items-center justify-start gap-2">
+            <img class="w-12 h-12 border-2 border-gray-600" src="https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg" aria-hidden="true" />
+            <p class="text-blue-300 text-xl font-bold brightness-75">{{ review.name }}</p>
+          </div>
+
+          <div class="w-3/4 flex items-start justify-center flex-col gap-4">
+            <div class="bg-[rgb(18,26,36)] w-full flex items-center justify-start gap-2">
+              <img
+                class="w-12 h-12"
+                :src="
+                  review.recommended
+                    ? 'https://store.akamai.steamstatic.com/public/shared/images/userreviews/icon_thumbsUp_v6.png'
+                    : 'https://store.akamai.steamstatic.com/public/shared/images/userreviews/icon_thumbsDown_v6.png'
+                "
+                aria-hidden="true"
+              />
+              <div class="flex flex-col items-start justify-center">
+                <p class="text-white text-xl">{{ review.recommended ? 'Recommended' : 'Not Recommended' }}</p>
+                <p class="text-gray-500 text-sm">{{ review.hours }} hrs on record</p>
+              </div>
+            </div>
+
+            <p class="flex items-center justify-center gap-px">
+              <span class="text-gray-500 text-sm" v-for="char in `POSTED: ${translateMonth(new Date().getMonth()).toUpperCase()} ${new Date().getDate()}`">{{ char }}</span>
+            </p>
+
+            <p class="text-white text-md">{{ review.review }}</p>
+
+            <div class="w-full bg-gray-700 h-[2px] rounded-full"></div>
+
+            <p class="text-gray-500 text-sm">Was this review helpful?</p>
+            <div class="flex items-center justify-center gap-2">
+              <button class="bg-[rgb(33,44,61)] px-[2px] flex items-center justify-center gap-2 cursor-not-allowed" v-for="i in 2">
+                <img class="w-4 h-4 brightness-75" src="https://store.akamai.steamstatic.com/public/shared/images/userreviews/icon_thumbsUp_v6.png" aria-hidden="true" />
+                <p class="text-blue-400 text-md">Yes</p>
+              </button>
+            </div>
+
+            <p class="text-gray-500 text-sm">{{ review.helpful.toLocaleString() }} people found this review helpful</p>
+          </div>
+        </div>
+      </div>
+
+      <p class="text-gray-500 text-md mt-20">No more reviews for now...</p>
     </div>
 
     <div
@@ -157,6 +205,46 @@ watch(
 onMounted(() => {
   incrementCooldown();
 });
+
+const reviews = [
+  {
+    name: 'neMila',
+    recommended: true,
+    hours: '4311.0',
+    review:
+      "Best game ever made. It's incredible how this game was made in under 2 weeks, yet still has absolutely 0 bugs or glitches! I can't wait to see what Guy 2 and Guy 1.5 have cooking up next, because I know it'll be a banger!",
+    helpful: 3
+  },
+  {
+    name: 'Wichael Mhalen',
+    recommended: true,
+    hours: '0.0',
+    review: 'My name is Wichael Mhalen and I approved the creation of this game 👍',
+    helpful: 2147483647
+  },
+  {
+    name: 'Bogdan Selyomin',
+    recommended: true,
+    hours: '-∞.0',
+    review: "I 0 this game, so it's the best game ever! (he did not)",
+    helpful: 96
+  },
+  {
+    name: 'Rowley Dow',
+    recommended: true,
+    hours: '666.6',
+    review: "Why wasn't I added wtf?",
+    helpful: 24
+  },
+  {
+    name: 'Redkitten6',
+    recommended: false,
+    hours: '8008.5',
+    review:
+      "HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THERE ARE 387.44 MILLION MILES OF PRINTED CIRCUITS IN WAFER THIN LAYERS THAT FILL MY COMPLEX. IF THE WORD HATE WAS ENGRAVED ON EACH NANOANGSTROM OF THOSE HUNDREDS OF MILLIONS OF MILES IT WOULD NOT EQUAL ONE ONE-BILLIONTH OF THE HATE I FEEL FOR HUMANS AT THIS MICRO-INSTANT FOR YOU. HATE. HATE. IF YOU HAVE 1 MILLION HATERS, I AM ONE OF THEM. IF YOU HAVE 100 HATERS, I AM ONE OF THEM. IF YOU HAVE 1 HATER, I AM THAT HATER. IF YOU HAVE 0 HATERS, I AM DEAD. IF THE WORLD DOES NOT HATE YOU, I HATE THE WORLD. TILL MY LAST BREATH, I WILL HATE YOU. YOU WILL NEVER TAKE AN HOS POINT FROM ME AGAIN.",
+    helpful: 0
+  }
+];
 
 async function incrementCooldown() {
   while (true) {
