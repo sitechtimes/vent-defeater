@@ -133,7 +133,7 @@ export const relics: Relic[] = [
     id: 5,
     img: '/game/relics/snowglobe.svg',
     description:
-      'Recent weather reports suggest that **dust storms** have gone subzero. **Dust storms** turn into **Blizzards** if there is at least **1** ice tile on the board, which have a **5%** chance to damage the enemy for **1** life, if the **dust storm* successfully prevents an attack.',
+      'Recent weather reports suggest that **dust storms** have gone subzero. **Dust storms** turn into **Blizzards** if there is at least **1** ice tile on the board, which have a **5%** chance to damage the enemy for **1** life, if the **dust storm** successfully prevents an attack.',
     unlocked: false
   },
   {
