@@ -25,8 +25,8 @@
 <script setup lang="ts">
 import { useGameStore } from '@/stores/game';
 import { fire, ice, relics, type Element } from '@/utils/elements';
-import { delay, getRandomInt } from '@/utils/functions';
-import { onBeforeMount, onMounted, ref, toRef, watch } from 'vue';
+import { getRandomInt } from '@/utils/functions';
+import { onBeforeMount, ref, toRef, watch } from 'vue';
 
 type Props = {
   rows: number;
@@ -75,12 +75,6 @@ onBeforeMount(() => {
   loaded.value = true;
   emit('onReroll', displayedGrid.value);
 });
-
-function highlightMatch(match: number[][]) {
-  for (let coord of match) {
-    elementGrid.value[coord[0]][coord[1]] = 99;
-  }
-}
 
 function getAdjacentTiles(i: number, j: number) {
   let left: number | undefined, right: number | undefined, up: number | undefined, down: number | undefined;
@@ -173,14 +167,10 @@ function reroll() {
       // check for explosions
       const directions = getAdjacentTiles(i, j);
       let adjacentFire = 0;
-      console.log(elementGrid.value);
-      console.log(i, j, displayedGrid.value[i][j], directions);
       for (let direction of directions) {
-        console.log(direction);
         if (direction == 2) adjacentFire++;
       }
 
-      console.log(adjacentFire);
       if (adjacentFire >= (level == 1 ? 2 : 4)) return true;
     }
     return false;

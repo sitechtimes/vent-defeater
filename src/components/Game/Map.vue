@@ -24,7 +24,7 @@
 <script setup lang="ts">
 import { useGameStore } from '@/stores/game';
 import type { Level } from '@/utils/elements';
-import { onBeforeMount, onMounted, ref } from 'vue';
+import { onBeforeMount, ref } from 'vue';
 
 type Props = {
   currentLevel: Level | undefined;

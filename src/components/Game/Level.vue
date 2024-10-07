@@ -61,7 +61,7 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import Enemy from './Enemy.vue';
 import Player from './Player.vue';
 import { delay, getRandomItemFromArray } from '@/utils/functions';
@@ -87,8 +87,6 @@ type Props = {
   playerColumns: number;
   fastForward: boolean;
 };
-
-const store = useGameStore();
 
 const amogusColor = ref(getRandomItemFromArray(['#ffa44a', '#fffd8a', '#61ff64', '#3863ff', '#4ce3e0', '#ff8cda', '#7d6243', '#9673ff', '#20754c']));
 

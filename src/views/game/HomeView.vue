@@ -57,9 +57,6 @@
     </div>
   </div>
 
-  <button class="z-10 absolute top-4 right-4 border-2 bg-white border-neutral-950" @click="testLevel">(testing) next lvl</button>
-  <button class="z-10 absolute top-16 right-4 border-2 bg-white border-neutral-950" @click="handleDamage(51)">die</button>
-  <button class="z-10 absolute top-28 right-4 border-2 bg-white border-neutral-950" @click="enemy1hp">make enemy 1 hp</button>
   <div class="z-10 absolute bottom-4 right-4 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl" v-if="level" ref="tutorial8">
     <p class="timer font-semibold text-4xl">
       {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
@@ -244,7 +241,7 @@ import { air, earth, fire, ice, formatDescription, type Relic, type Powerup, rel
 import type { Element, Level as LevelType } from '@/utils/elements';
 import { delay, getRandomInt, getRandomItemFromArray } from '@/utils/functions';
 import { storeToRefs } from 'pinia';
-import { onBeforeMount, ref, toRef, watch } from 'vue';
+import { onBeforeMount, ref, watch } from 'vue';
 
 const store = useGameStore();
 
@@ -343,15 +340,6 @@ onBeforeMount(() => {
   store.levels = generateNewMap();
   selectedElement.value = elements.value.ice;
 });
-
-function testLevel() {
-  level.value = store.levels.find((lvl) => lvl.id == 0);
-  showTutorial.value = true;
-}
-
-function enemy1hp() {
-  if (store.levels[10].enemy) store.levels[10].enemy.lives = 1;
-}
 
 function generateNewMap() {
   const levels: LevelType[] = [];
