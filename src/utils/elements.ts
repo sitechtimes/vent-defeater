@@ -133,7 +133,7 @@ export const relics: Relic[] = [
     id: 5,
     img: '/game/relics/snowglobe.svg',
     description:
-      'Recent weather reports suggest that **dust storms** have gone subzero. **Dust storms** turn into **Blizzards** if there is at least **1** ice tile on the board, which have a **5%** chance to damage the enemy for **1** life, if the **dust storm* successfully prevents an attack.',
+      'Recent weather reports suggest that **dust storms** have gone subzero. **Dust storms** turn into **Blizzards** if there is at least **1** ice tile on the board, which have a **5%** chance to damage the enemy for **1** life, if the **dust storm** successfully prevents an attack.',
     unlocked: false
   },
   {
@@ -214,6 +214,38 @@ export const relics: Relic[] = [
     id: 15,
     img: '/game/relics/dizzy.svg',
     description: 'Every time you damage an enemy, empty their attack meter.',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Double or Nothing',
+    id: 16,
+    img: '/game/mystery.svg',
+    description: 'Receive a random effect',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Brainrot',
+    id: 17,
+    img: '/game/relics/brain.svg',
+    description: 'Unlock the skibidi aura of ohio and become the most sigma betamaxxer in the world',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Path of Most Resistance',
+    id: 18,
+    img: '/game/relics/circuit.svg',
+    description: 'Your energy meter no longer spontaneously combusts',
+    unlocked: false
+  },
+  {
+    type: 'Relic',
+    name: 'Heart Attack',
+    id: 19,
+    img: '/game/relics/heartbreak.svg',
+    description: 'Enemies start with half of their lives',
     unlocked: false
   }
 ];

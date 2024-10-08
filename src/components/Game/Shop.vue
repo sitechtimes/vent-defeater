@@ -72,6 +72,7 @@ import Amogus from './Amogus.vue';
 import { onBeforeMount, ref, watch } from 'vue';
 import Reward from './Reward.vue';
 import type { Element, Powerup, Relic } from '@/utils/elements';
+import { useGameStore } from '@/stores/game';
 
 type Emits = {
   next: [void];
@@ -79,6 +80,7 @@ type Emits = {
   select: [reward: Element | Relic | Powerup | { type: 'Bypass' }];
 };
 
+const store = useGameStore();
 const emit = defineEmits<Emits>();
 const direction = ref(getRandomItemFromArray(['North', 'East', 'South', 'West']));
 
@@ -98,6 +100,10 @@ onBeforeMount(() => {
 
 function next() {
   if (!selectedReward.value) return;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 16) store.relicOfDeath = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 17) store.showBrainrot = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 18) store.noCombust = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 19) store.heartAttack = true;
   emit('select', selectedReward.value);
   emit('next');
 }

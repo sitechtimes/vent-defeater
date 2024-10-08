@@ -1,7 +1,7 @@
 <template>
   <div class="background w-screen h-screen flex items-center justify-around overflow-hidden" :style="{ backgroundImage: `url(${level.levelImg})` }">
     <Transition name="opacity">
-      <div class="winOverlay w-screen h-screen fixed left-0 top-0 transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
+      <div class="winOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
     </Transition>
 
     <Transition name="left">
@@ -47,7 +47,7 @@
           <button
             @click="roll"
             class="reroll back transition w-48 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6"
-            :disabled="matchedBoard != undefined"
+            :disabled="matchedBoard != undefined || store.isDead"
             :class="{ 'cursor-not-allowed': matchedBoard }"
           >
             Reroll 🎲
@@ -89,8 +89,15 @@ type Props = {
 };
 
 const amogusColor = ref(getRandomItemFromArray(['#ffa44a', '#fffd8a', '#61ff64', '#3863ff', '#4ce3e0', '#ff8cda', '#7d6243', '#9673ff', '#20754c']));
+const store = useGameStore();
 
 const props = defineProps<Props>();
+watch(
+  () => props.level,
+  (level) => {
+    if (store.heartAttack && level.enemy) level.enemy.lives = Math.ceil(level.enemy.lives / 2);
+  }
+);
 watch(
   () => props.fastForward,
   (bool) => {
@@ -130,6 +137,10 @@ function next() {
     emit('winGame');
   }
   if (!selectedReward.value) return;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 16) store.relicOfDeath = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 17) store.showBrainrot = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 18) store.noCombust = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 19) store.heartAttack = true;
   props.level.completed = true;
   emit('reward', selectedReward.value);
   emit('win');
