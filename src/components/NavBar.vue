@@ -1,36 +1,76 @@
 <template>
-  <header>
-    <RouterLink class="logo" to="/">
-      <img src="/vent.svg" alt="Vent Defeater logo" />
-      <h1 class="nerko">Vent Defeater</h1>
-    </RouterLink>
-    <nav>
-      <div class="outerNavButton" v-for="button in navButtons" :key="button">
-        <RouterLink :to="button.path" class="navButton">
-          {{ button.name }}
-          <img v-if="button.dropdown" src="/dropdownArrow.svg" aria-hidden="true" />
+  <div class="mb-24 flex flex-col items-center justify-center sticky top-0">
+    <header class="transition duration-500 bg-[color:var(--bg-color)] h-16 w-screen">
+      <div class="w-screen flex items-center justify-evenly border-b-2 border-solid border-[color:var(--faded-bg-color)] bg-[color:var(--bg-color)] relative z-20">
+        <RouterLink class="flex items-center justify-center gap- no-underline text-[color:var(--text-color)]" to="/">
+          <img class="h-16" src="/logo/logoWithWords.svg" alt="Vent Defeater logo" />
         </RouterLink>
-        <div class="hoverDropdown" v-if="button.dropdown">
-          <RouterLink
-            class="dropdownButton"
-            v-for="option in button.dropdown"
-            :to="option.path"
-            :key="option"
+        <nav class="flex items-center justify-center gap-3">
+          <div class="outerNavButton" v-for="button in navButtons" :key="button.name">
+            <RouterLink :to="button.path" class="navButton relative no-underline text-[color:var(--text-color)] font-bold flex items-center justify-center">
+              {{ button.name }}
+              <img src="/ui/dropdownArrow.svg" class="transition duration-500 h-4 w-4 dark:invert" v-if="button.dropdown" />
+            </RouterLink>
+            <div
+              class="hoverDropdown absolute flex pointer-events-none opacity-0 flex-col items-start justify-center gap-1 bg-[color:var(--bg-color)] shadow-2xl shadow-[color:var(--bg-color-contrast-translucent)] p-4 rounded-sm transition"
+              v-if="button.dropdown"
+            >
+              <RouterLink class="no-underline text-[color:var(--text-color)]" v-for="option in button.dropdown" :to="option.path" :key="option.name">
+                <h4 class="font-medium m-1">{{ option.name }}</h4></RouterLink
+              >
+            </div>
+          </div>
+        </nav>
+        <div class="logins flex items-center justify-center gap-3">
+          <ThemeToggle />
+          <RouterLink class="no-underline" to="/login" v-if="!userStore.isAuth"><h3 class="font-bold m-0">Log in</h3></RouterLink>
+          <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/login?signup=1" v-if="!userStore.isAuth"
+            ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Sign up</h3></RouterLink
           >
-            <h4>{{ option.name }}</h4></RouterLink
+          <RouterLink class="signup no-underline bg-[color:var(--primary)] px-5 py-2 transition rounded-full" to="/app" v-if="userStore.isAuth"
+            ><h3 class="font-bold m-0 text-[color:var(--text-color-contrast)] dark:text-white">Go to dashboard</h3></RouterLink
           >
         </div>
       </div>
-    </nav>
-    <div class="logins">
-      <RouterLink class="loginButton" to="/"><h3>Log in</h3></RouterLink>
-      <RouterLink class="loginButton signup" to="/"><h3>Sign up</h3></RouterLink>
-    </div>
-  </header>
+
+      <Transition name="goToJoin">
+        <div class="w-screen flex items-center justify-center gap-3 bg-[color:var(--primary-light)] rounded-b-3xl py-3 relative bottom-0 z-10" v-show="showJoinBanner">
+          <p class="text-lg font-medium">Trying to join a live Vent?</p>
+          <RouterLink to="/join" class="flex items-center justify-center gap-1 rounded-full bg-[color:var(--bg-color)] text-[color:var(--text-color)] font-semibold px-4 py-2"
+            >Join <img class="w-5 h-5 dark:invert" src="/ui/rightArrow.svg" aria-hidden="true"
+          /></RouterLink>
+          <button class="close absolute right-12 rounded-full w-8 h-8 flex items-center justify-center" @click="emit('toggleBanner')">
+            <img class="w-5 h-5 dark:invert" src="/ui/x.svg" aria-hidden="true" />
+          </button>
+        </div>
+      </Transition>
+    </header>
+  </div>
 </template>
 
-<script setup>
-const navButtons = [
+<script setup lang="ts">
+import { useUserStore } from '@/stores/user';
+import ThemeToggle from './ThemeToggle.vue';
+
+type NavButtons = {
+  name: string;
+  path: string;
+  dropdown?: { name: string; path: string }[];
+};
+
+type Props = {
+  showJoinBanner?: boolean;
+};
+
+type Emits = {
+  toggleBanner: [void];
+};
+
+const props = defineProps<Props>();
+const emit = defineEmits<Emits>();
+const userStore = useUserStore();
+
+const navButtons: NavButtons[] = [
   {
     name: 'Work',
     path: '/',
@@ -199,112 +239,19 @@ const navButtons = [
     name: 'Talk to Sales',
     path: '/'
   }
-]
+];
 </script>
 
 <style scoped lang="scss">
-header {
-  position: fixed;
-  top: 0;
-  height: 4em;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-evenly;
-  border: 0.125em solid rgb(230, 230, 230);
-  border-top: 0;
-  border-left: 0;
-  border-right: 0;
+.goToJoin-enter-active,
+.goToJoin-leave-active {
+  transition: all 0.5s ease;
 }
 
-.logo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5em;
-  text-decoration: none;
-  color: black;
-
-  img {
-    height: 4em;
-  }
-
-  h1 {
-    margin: 0;
-  }
-}
-
-nav {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75em;
-}
-
-.navButton {
-  position: relative;
-  text-decoration: none;
-  color: black;
-  font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  img {
-    transition: all 0.5s;
-    height: 1em;
-  }
-}
-
-.hoverDropdown {
-  position: absolute;
-  display: flex;
-  pointer-events: none;
+.goToJoin-enter-from,
+.goToJoin-leave-to {
   opacity: 0;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0.25em;
-  background-color: white;
-  box-shadow: 0 0 0.5em rgba(0, 0, 0, 0.2);
-  padding: 1em;
-  border-radius: 0.25em;
-  transition: all 0.5s;
-
-  .dropdownButton {
-    text-decoration: none;
-    color: black;
-
-    h4 {
-      font-weight: 500;
-      margin: 0.25em;
-    }
-  }
-}
-
-.logins {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75em;
-
-  .loginButton {
-    text-decoration: none;
-    color: black;
-    h3 {
-      font-weight: bold;
-      margin: 0;
-    }
-  }
-
-  .signup {
-    color: white;
-    background-color: rgb(25, 108, 255);
-    padding: 0.5em 1.25em;
-    border-radius: 5em;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 0.3s;
-  }
+  transform: translateY(-10vh);
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -321,9 +268,13 @@ nav {
     }
   }
 
+  .close:hover {
+    background-color: var(--primary-shade-translucent);
+  }
+
   .logins {
     .signup:hover {
-      background-color: rgb(22, 93, 219);
+      background-color: var(--primary-shade);
     }
   }
 }
