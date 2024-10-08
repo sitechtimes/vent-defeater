@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center gap-4">
-    <div class="flex items-stretch justify-center gap-7">
+    <div class="flex items-stretch justify-center" :class="{ 'gap-10': !store.smallScreen, 'gap-3': store.smallScreen }">
       <div v-for="reward in rewards">
         <button
           @click="select(reward)"
@@ -68,6 +68,7 @@ type Emits = {
   select: [reward: Element | Relic | Powerup];
 };
 
+const store = useGameStore();
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 const rewards = ref<(Element | Relic | Powerup)[]>([]);
@@ -143,8 +144,8 @@ function getNewReward(type: "element" | "other") {
 
 @media (max-width: 1200px) {
   .reward {
-    width: 16rem;
-    height: 24rem;
+    width: 15rem;
+    height: 23rem;
 
     img {
       width: 2rem;

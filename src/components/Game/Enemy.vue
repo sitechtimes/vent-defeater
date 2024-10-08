@@ -1,6 +1,6 @@
 <template>
   <div class="flex flex-col items-center justify-center gap-3 py-2 px-5">
-    <div class="flex gap-3">
+    <div class="flex gap-3 content-center justify-center" :class="{ 'max-w-[40vw]': store.smallScreen, 'flex-wrap': store.smallScreen }">
       <span
         v-for="(num, index) in displayedNumbers"
         :key="index"
@@ -16,7 +16,7 @@
         >{{ num }}</span
       >
     </div>
-    <div class="w-[133%] flex items-center justify-center gap-4">
+    <div class="flex items-center justify-center gap-4" :class="{ 'w-[133%]': !store.smallScreen, 'w-full': store.smallScreen }">
       <div class="w-full h-4 bg-white rounded-full flex items-center justify-start" :class="{ shaky: attackMeter >= 100 }">
         <div class="transition-all duration-500 h-4 rounded-full bg-[color:var(--enemy)] min-w-[10%]" :style="{ width: attackMeter + '%' }"></div>
       </div>

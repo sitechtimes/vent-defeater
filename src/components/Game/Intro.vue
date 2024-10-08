@@ -31,13 +31,15 @@
       </div>
     </header>
 
-    <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
-      <div class="disclaimer border-8 border-orange-600 bg-orange-400 p-4 rounded-lg w-full mb-5 flex flex-col items-start justify-center gap-1">
-        <h3 class="text-3xl font-extrabold">Disclaimer!</h3>
-        <p class="text-2xl">This game works best on a 1920x1080 screen.</p>
-        <p class="text-lg font-semibold">Some aspects of the game may not work as intended, or at all, on smaller devices.</p>
-      </div>
+    <div class="fixed top-0 left-0 w-screen h-screen disclaimer z-[300] border-8 border-orange-600 bg-orange-400 p-4 rounded-lg flex-col items-center justify-center gap-1">
+      <h3 class="text-4xl font-bold text-center">Slow down!</h3>
+      <p class="text-2xl text-center">Vent Defeater hasn't developed the technology to make it work on smaller devices as of now.</p>
+      <p class="text-2xl font-semibold text-center">Try using a tablet, laptop, or computer.</p>
+      <p class="text-5xl font-extrabold text-center mt-5">Sorry!</p>
+      <RouterLink to="/" class="bg-green-400 rounded-full p-2 text-3xl font-medium mt-5">Go back</RouterLink>
+    </div>
 
+    <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
       <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > Strategy Games > Rougelites > Vent Defeater</div>
       <div class="w-full flex items-center justify-start text-white text-3xl">Vent Defeater: The Game</div>
       <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
@@ -340,9 +342,9 @@ function translateMonth(month: number) {
   background: radial-gradient(circle at 50% 0%, rgb(30, 67, 86), rgb(27, 40, 56) 60%);
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 975px) {
   .disclaimer {
-    display: block;
+    display: flex;
   }
 }
 

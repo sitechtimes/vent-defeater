@@ -1,6 +1,6 @@
 <template>
   <div class="w-full h-full gap-8 py-10 flex flex-col items-center justify-center">
-    <div class="relative w-[85%] h-3/4 flex items-center justify-start flex-col z-10 p-4 rounded-2xl bg-[rgba(0,0,0,0.6)]">
+    <div class="relative w-[85%] h-[80%] flex items-center justify-start flex-col z-10 p-4 rounded-2xl bg-[rgba(0,0,0,0.6)]">
       <Amogus color="#ff0000" class="absolute bottom-[-8.75rem] left-[-1.5rem] z-[1] scale-y-[-1]" />
       <h1 class="text-white text-5xl text-center title">The Sussiest Shop in the {{ direction }}</h1>
       <p v-if="!choice" class="text-white text-xl mt-1">Pick one:</p>

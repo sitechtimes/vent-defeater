@@ -10,7 +10,15 @@
         v-for="level in levels"
       >
         <img class="w-8 h-8" :src="level.mapImg" aria-hidden="true" />
-        <div v-if="!store.levels.filter((lvl) => lvl.completed).map((lvl) => lvl.id).includes(level.id)" class="description shadow-black shadow-sm pointer-events-none hidden absolute top-0 left-12 bg-white rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap">
+        <div
+          v-if="
+            !store.levels
+              .filter((lvl) => lvl.completed)
+              .map((lvl) => lvl.id)
+              .includes(level.id)
+          "
+          class="description shadow-black shadow-sm pointer-events-none hidden absolute top-0 left-12 bg-white rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap"
+        >
           <h4 class="text-xl font-semibold">{{ level.mystery ? "Unknown" : (level.type[0].toUpperCase() + level.type.slice(1)).replace("Harder", "Elite ") }}</h4>
         </div>
       </button>
@@ -72,14 +80,6 @@ function selectLevel(level: Level) {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
-}
-
-@media (hover: none) and (pointer: coarse) {
-  .mapLevel {
-    .description {
-      display: flex;
-    }
-  }
 }
 
 @media (hover: hover) and (pointer: fine) {

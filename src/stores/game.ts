@@ -10,6 +10,7 @@ export const useGameStore = defineStore("gameStore", () => {
   const elementGrid = ref<number[][]>([]);
   const levels = ref<Level[]>([]);
   const isDead = ref(false);
+
   const relicOfDeath = ref(false);
   const showBrainrot = ref(false);
   const noCombust = ref(false);
