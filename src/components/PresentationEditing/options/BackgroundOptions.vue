@@ -17,7 +17,7 @@
 </template>
 
 <script setup lang="ts">
-import type { Background } from "@/utils/types";
+import type { Background } from '@/utils/types';
 
 type Props = {
   options: Background;

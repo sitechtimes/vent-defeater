@@ -70,9 +70,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Element, Slide } from "@/utils/types";
-import TextField from "./elements/TextField.vue";
-import { onMounted, watch } from "vue";
+import type { Element, Slide } from '@/utils/types';
+import TextField from './elements/TextField.vue';
+import { onMounted, watch } from 'vue';
 
 type Props = {
   selectedElement: Slide | Element | undefined;
@@ -81,7 +81,7 @@ type Props = {
 };
 type Emits = {
   select: [event: MouseEvent];
-  scale: [event: MouseEvent, width: "left" | "center" | "right", height: "top" | "center" | "bottom"];
+  scale: [event: MouseEvent, width: 'left' | 'center' | 'right', height: 'top' | 'center' | 'bottom'];
 };
 const props = defineProps<Props>();
 const emit = defineEmits<Emits>();

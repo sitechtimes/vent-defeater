@@ -14,8 +14,8 @@
 </template>
 
 <script setup lang="ts">
-import { delay } from "@/utils/functions";
-import { onMounted, ref, watch } from "vue";
+import { delay } from '@/utils/functions';
+import { onMounted, ref, watch } from 'vue';
 
 type Props = {
   /** When to show the transition.
@@ -30,18 +30,18 @@ type Props = {
 };
 
 const props = defineProps<Props>();
-const emit = defineEmits(["done"]);
+const emit = defineEmits(['done']);
 
 const showTransition = ref(false);
 const barPercent = ref(10);
-const loadingMessage = ref("Searching vents...");
+const loadingMessage = ref('Searching vents...');
 watch(
   () => barPercent.value,
   (value) => {
-    if (value >= 100) loadingMessage.value = "Done!";
-    else if (value >= 80) loadingMessage.value = "Calling emergency meeting...";
-    else if (value >= 50) loadingMessage.value = "Finding impostors...";
-    else if (value >= 30) loadingMessage.value = "Doing tasks...";
+    if (value >= 100) loadingMessage.value = 'Done!';
+    else if (value >= 80) loadingMessage.value = 'Calling emergency meeting...';
+    else if (value >= 50) loadingMessage.value = 'Finding impostors...';
+    else if (value >= 30) loadingMessage.value = 'Doing tasks...';
   }
 );
 watch(
@@ -50,12 +50,12 @@ watch(
     if (!value) return;
 
     if (value >= 100) {
-      loadingMessage.value = "Done!";
+      loadingMessage.value = 'Done!';
       await delay(400);
-      emit("done");
-    } else if (value >= 80) loadingMessage.value = "Calling emergency meeting...";
-    else if (value >= 50) loadingMessage.value = "Finding impostors...";
-    else if (value >= 30) loadingMessage.value = "Doing tasks...";
+      emit('done');
+    } else if (value >= 80) loadingMessage.value = 'Calling emergency meeting...';
+    else if (value >= 50) loadingMessage.value = 'Finding impostors...';
+    else if (value >= 30) loadingMessage.value = 'Doing tasks...';
   }
 );
 
@@ -71,7 +71,7 @@ onMounted(async () => {
 
   await delay(400);
   showTransition.value = false;
-  emit("done");
+  emit('done');
 });
 </script>
 

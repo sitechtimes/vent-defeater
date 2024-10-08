@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import PhysicsCloud from "@/components/PhysicsCloud.vue";
+import PhysicsCloud from '@/components/PhysicsCloud.vue';
 </script>
 
 <style scoped></style>

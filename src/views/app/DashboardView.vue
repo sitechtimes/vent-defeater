@@ -62,19 +62,14 @@
 </template>
 
 <script setup lang="ts">
-import DashboardHeader from "@/components/DashboardHeader.vue";
-import LoadingTransition from "@/components/LoadingTransition.vue";
-import SideMenu from "@/components/SideMenu.vue";
-import { getPreviousRoute } from "@/router";
-import { useUserStore } from "@/stores/user";
-import type { Template } from "@/utils/types";
-import { onMounted, ref } from "vue";
-import { useMeta } from "vue-meta";
-import { useRouter } from "vue-router";
-
-useMeta({
-  title: "Dashboard - Vent Defeater"
-});
+import DashboardHeader from '@/components/DashboardHeader.vue';
+import LoadingTransition from '@/components/LoadingTransition.vue';
+import SideMenu from '@/components/SideMenu.vue';
+import { getPreviousRoute } from '@/router';
+import { useUserStore } from '@/stores/user';
+import type { Template } from '@/utils/types';
+import { onMounted, ref } from 'vue';
+import { useRouter } from 'vue-router';
 
 const userStore = useUserStore();
 const router = useRouter();
@@ -83,34 +78,34 @@ const loaded = ref(false);
 
 const popularFeatures = [
   {
-    name: "Word cloud",
-    img: "/ui/home.svg"
+    name: 'Word cloud',
+    img: '/ui/home.svg'
   },
   {
-    name: "Poll",
-    img: "/ui/x.svg"
+    name: 'Poll',
+    img: '/ui/x.svg'
   },
   {
-    name: "Open ended",
-    img: "/ui/search.svg"
+    name: 'Open ended',
+    img: '/ui/search.svg'
   },
   {
-    name: "Scales",
-    img: "/ui/star.svg"
+    name: 'Scales',
+    img: '/ui/star.svg'
   },
   {
-    name: "Ranking",
-    img: "/ui/sun.svg"
+    name: 'Ranking',
+    img: '/ui/sun.svg'
   },
   {
-    name: "Pin it",
-    img: "/ui/user.svg"
+    name: 'Pin it',
+    img: '/ui/user.svg'
   }
 ];
 
 onMounted(async () => {
   const previousRoute = getPreviousRoute();
-  if (previousRoute && !["/", "/login"].includes(previousRoute.path)) {
+  if (previousRoute && !['/', '/login'].includes(previousRoute.path)) {
     loaded.value = true;
     return;
   }
@@ -121,18 +116,18 @@ onMounted(async () => {
 async function createPresentation(preset?: Template) {
   // load sample presentation into pinia
   userStore.currentPres = {
-    id: "sdbhugu89wdgh89weghwn9g",
-    name: "its joever bidone",
-    type: "Presentation",
+    id: 'sdbhugu89wdgh89weghwn9g',
+    name: 'its joever bidone',
+    type: 'Presentation',
     lastOpened: new Date().getTime() / 1000,
     slides: [
       {
-        id: "nweui9gh9wqehg80",
-        type: "Slide",
+        id: 'nweui9gh9wqehg80',
+        type: 'Slide',
         elements: [
           {
-            type: "Text Field",
-            id: "ahgauioghioag",
+            type: 'Text Field',
+            id: 'ahgauioghioag',
             position: {
               top: 50,
               left: 100,
@@ -140,27 +135,27 @@ async function createPresentation(preset?: Template) {
               right: 100
             },
             background: {
-              color: "#ffff00",
+              color: '#ffff00',
               image: null
             },
             text: {
-              font: "Arial",
-              color: "#000000",
+              font: 'Arial',
+              color: '#000000',
               size: 37.5,
               styles: {
                 bold: false,
                 italics: false,
                 underline: false,
                 strikethrough: false,
-                align: "center",
+                align: 'center',
                 wrap: true
               }
             },
             content: "it's joever bidone",
             flex: {
-              items: "center",
-              justify: "center",
-              align: "center",
+              items: 'center',
+              justify: 'center',
+              align: 'center',
               wrap: false
             },
             zIndex: 0
@@ -172,7 +167,7 @@ async function createPresentation(preset?: Template) {
           height: 360
         },
         background: {
-          color: "#ffffff",
+          color: '#ffffff',
           image: null
         },
         settings: {
@@ -182,7 +177,7 @@ async function createPresentation(preset?: Template) {
       }
     ]
   };
-  router.push("/app/presentation?prs=sdbhugu89wdgh89weghwn9g&sld=nweui9gh9wqehg80?view=1");
+  router.push('/app/presentation?prs=sdbhugu89wdgh89weghwn9g&sld=nweui9gh9wqehg80?view=1');
 }
 </script>
 

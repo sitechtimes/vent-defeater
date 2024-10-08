@@ -63,8 +63,8 @@
 </template>
 
 <script setup lang="ts">
-import type { Text } from "@/utils/types";
-import { watch } from "vue";
+import type { Text } from '@/utils/types';
+import { watch } from 'vue';
 
 type Props = {
   options: Text;
