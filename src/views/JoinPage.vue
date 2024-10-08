@@ -115,7 +115,7 @@ function join(code: string) {
 
 @media (hover: hover) and (pointer: fine) {
   .logo:hover {
-    filter: contrast(200%);
+    filter: saturate(50%);
   }
 
   .back:hover {
