@@ -24,8 +24,8 @@
 </template>
 
 <script setup lang="ts">
-import type { TextField } from '@/utils/types';
-import { ref } from 'vue';
+import type { TextField } from "@/utils/types";
+import { ref } from "vue";
 
 const textBox = ref<HTMLElement>();
 
@@ -40,13 +40,13 @@ const props = defineProps<Props>();
 const emit = defineEmits<Emits>();
 
 const showPlaceholder = ref(true);
-const text = ref('');
+const text = ref("");
 
 function handleInput() {
   if (!textBox.value) return;
 
   const input = textBox.value.innerText.trim();
-  if (input == '') showPlaceholder.value = true;
+  if (input == "") showPlaceholder.value = true;
   else showPlaceholder.value = false;
 
   text.value = input;

@@ -6,36 +6,36 @@
     </div>
 
     <button @click="next" class="bg-white py-3 px-10 rounded-full text-2xl font-medium">
-      {{ selectedReward.type == 'Bypass' ? 'Skip' : 'Continue' }}
+      {{ selectedReward.type == "Bypass" ? "Skip" : "Continue" }}
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
-import Reward from './Reward.vue';
-import type { Element, Powerup, Relic } from '@/utils/elements';
-import { useGameStore } from '@/stores/game';
+import { ref } from "vue";
+import Reward from "./Reward.vue";
+import type { Element, Powerup, Relic } from "@/utils/elements";
+import { useGameStore } from "@/stores/game";
 
 type Emits = {
   next: [void];
   regen: [health: number, energy: number];
-  select: [reward: Element | Relic | Powerup | { type: 'Bypass' }];
+  select: [reward: Element | Relic | Powerup | { type: "Bypass" }];
 };
 
 const store = useGameStore();
 const emit = defineEmits<Emits>();
 
-const selectedReward = ref<Element | Relic | Powerup | { type: 'Bypass' }>({ type: 'Bypass' });
+const selectedReward = ref<Element | Relic | Powerup | { type: "Bypass" }>({ type: "Bypass" });
 
 function next() {
   if (!selectedReward.value) return;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 16) store.relicOfDeath = true;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 17) store.showBrainrot = true;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 18) store.noCombust = true;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 19) store.heartAttack = true;
-  emit('select', selectedReward.value);
-  emit('next');
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 16) store.relicOfDeath = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 17) store.showBrainrot = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 18) store.noCombust = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 19) store.heartAttack = true;
+  emit("select", selectedReward.value);
+  emit("next");
 }
 </script>
 

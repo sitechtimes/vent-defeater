@@ -15,8 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user';
-import { ref } from 'vue';
+import { useUserStore } from "@/stores/user";
+import { ref } from "vue";
 
 type Props = {
   big?: boolean;
@@ -25,14 +25,14 @@ type Props = {
 defineProps<Props>();
 
 const userStore = useUserStore();
-const dark = ref(userStore.theme == 'dark');
+const dark = ref(userStore.theme == "dark");
 
 function toggleTheme() {
-  const wasLight = userStore.theme === 'light';
-  userStore.theme = wasLight ? 'dark' : 'light';
+  const wasLight = userStore.theme === "light";
+  userStore.theme = wasLight ? "dark" : "light";
   dark.value = wasLight;
-  document.body.classList[wasLight ? 'add' : 'remove']('dark');
-  localStorage.setItem('theme', userStore.theme);
+  document.body.classList[wasLight ? "add" : "remove"]("dark");
+  localStorage.setItem("theme", userStore.theme);
 }
 </script>
 
