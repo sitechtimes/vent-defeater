@@ -23,10 +23,10 @@
 </template>
 
 <script setup lang="ts">
-import { useGameStore } from '@/stores/game';
-import { fire, ice, relics, type Element } from '@/utils/elements';
-import { getRandomInt } from '@/utils/functions';
-import { onBeforeMount, ref, toRef, watch } from 'vue';
+import { useGameStore } from "@/stores/game";
+import { fire, ice, relics, type Element } from "@/utils/elements";
+import { getRandomInt } from "@/utils/functions";
+import { onBeforeMount, ref, toRef, watch } from "vue";
 
 type Props = {
   rows: number;
@@ -73,7 +73,7 @@ onBeforeMount(() => {
     elementGrid.value.push(elementRow);
   }
   loaded.value = true;
-  emit('onReroll', displayedGrid.value);
+  emit("onReroll", displayedGrid.value);
 });
 
 function getAdjacentTiles(i: number, j: number) {
@@ -99,7 +99,7 @@ function reroll() {
   for (let i = 0; i < props.rows; i++) {
     for (let j = 0; j < props.columns; j++) {
       if (!explode && elementGrid.value[i][j] == 2 && fireExplode(i, j)) explode = true;
-      if (elementGrid.value[i][j] == 2) emit('regen', fire.currentLevel == 4 ? 0.05 : 0.1 / fire.currentLevel, 0);
+      if (elementGrid.value[i][j] == 2) emit("regen", fire.currentLevel == 4 ? 0.05 : 0.1 / fire.currentLevel, 0);
       if (elementGrid.value[i][j] == 4) {
         if (relics[11].unlocked) continue;
         displayedGrid.value[i][j] = Math.max(0, Math.min(9, displayedGrid.value[i][j] + getRandomInt(-1, 1)));
@@ -112,18 +112,18 @@ function reroll() {
   }
   if (explode) {
     elementGrid.value = elementGrid.value.map((row) => row.map((elem) => (elem == 2 ? 0 : elem)));
-    emit('damaged', getExplosionDamage());
+    emit("damaged", getExplosionDamage());
   }
   generalWinter();
   arson();
-  emit('onReroll', displayedGrid.value);
+  emit("onReroll", displayedGrid.value);
 
   function getExplosionDamage() {
     let initial = 25;
     if (relics[6].unlocked) initial -= 15;
     if (relics[7].unlocked) {
       initial += 10;
-      emit('oilSpill');
+      emit("oilSpill");
     }
     return initial;
   }
@@ -219,11 +219,11 @@ function reroll() {
 }
 
 function attack(element: Element | undefined, rowIndex: number, numIndex: number) {
-  if (!element || element.currentLevel == 0 || element.name == 'air') return;
+  if (!element || element.currentLevel == 0 || element.name == "air") return;
 
-  if (element.name == 'ice') ice(element, rowIndex, numIndex);
-  else if (element.name == 'fire') fire(element, rowIndex, numIndex);
-  else if (element.name == 'earth') earth(element, rowIndex, numIndex);
+  if (element.name == "ice") ice(element, rowIndex, numIndex);
+  else if (element.name == "fire") fire(element, rowIndex, numIndex);
+  else if (element.name == "earth") earth(element, rowIndex, numIndex);
 
   function ice(element: Element, rowIndex: number, numIndex: number) {
     if (store.energy < 5 || elementGrid.value[rowIndex][numIndex] > 1) return;
@@ -236,7 +236,7 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
     if (element.currentLevel >= 1) {
       // basic attack
       elementGrid.value[rowIndex][numIndex] = 1;
-      emit('regen', 0, -(relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5));
+      emit("regen", 0, -(relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5));
     }
   }
 
@@ -246,7 +246,7 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
     if (element.currentLevel >= 1) {
       // basic attack
       elementGrid.value[rowIndex][numIndex] = 2;
-      emit('regen', 0, -(relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5));
+      emit("regen", 0, -(relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5));
     }
   }
 

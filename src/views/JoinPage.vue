@@ -38,10 +38,15 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from '@/components/NavBar.vue';
-import { delay } from '@/utils/functions';
-import { onMounted, ref, watch } from 'vue';
-import { useRouter } from 'vue-router';
+import NavBar from "@/components/NavBar.vue";
+import { delay } from "@/utils/functions";
+import { onMounted, ref, watch } from "vue";
+import { useMeta } from "vue-meta";
+import { useRouter } from "vue-router";
+
+useMeta({
+  title: "Enter the Code to Join & Vent on a Presentation - Vent Defeater"
+});
 
 const router = useRouter();
 
@@ -49,15 +54,15 @@ const counter = ref(0);
 watch(
   () => counter.value,
   (value) => {
-    if (value % 5 == 0) router.push('/game');
+    if (value % 5 == 0) router.push("/game");
   }
 );
 
-const showBanner = ref(JSON.parse(sessionStorage.getItem('previousIsHome') ?? 'false') as boolean);
+const showBanner = ref(JSON.parse(sessionStorage.getItem("previousIsHome") ?? "false") as boolean);
 
 const inputRef = ref<HTMLInputElement>();
-const displayedDigits = ref(new Array(6).fill(''));
-const code = ref('');
+const displayedDigits = ref(new Array(6).fill(""));
+const code = ref("");
 watch(
   () => code.value,
   (input) => {
@@ -65,8 +70,8 @@ watch(
       code.value = String(input).slice(0, 6);
       return;
     }
-    code.value = [...String(input)].filter((char) => !isNaN(Number(char))).join('');
-    displayedDigits.value = String(input).split('').concat(new Array(6).fill('')).slice(0, 6);
+    code.value = [...String(input)].filter((char) => !isNaN(Number(char))).join("");
+    displayedDigits.value = String(input).split("").concat(new Array(6).fill("")).slice(0, 6);
 
     if (input.length == 6) join(code.value);
   }
@@ -82,7 +87,7 @@ function selectEverything() {
 }
 
 function join(code: string) {
-  console.log('join');
+  console.log("join");
 }
 </script>
 

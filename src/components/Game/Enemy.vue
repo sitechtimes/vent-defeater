@@ -29,11 +29,11 @@
 </template>
 
 <script setup lang="ts">
-import { useGameStore } from '@/stores/game';
-import { earth, relics, type Element, type Level } from '@/utils/elements';
-import { delay, getRandomInt } from '@/utils/functions';
-import { storeToRefs } from 'pinia';
-import { onMounted, ref, watch } from 'vue';
+import { useGameStore } from "@/stores/game";
+import { earth, relics, type Element, type Level } from "@/utils/elements";
+import { delay, getRandomInt } from "@/utils/functions";
+import { storeToRefs } from "pinia";
+import { onMounted, ref, watch } from "vue";
 
 type Props = {
   lives: number;
@@ -79,7 +79,7 @@ const stunDuration = ref(0);
 onMounted(() => {
   displayedNumbers.value = generateNewArray();
   elementNumbers.value = new Array(props.slots).fill(0);
-  emit('onReroll', displayedNumbers.value);
+  emit("onReroll", displayedNumbers.value);
 });
 
 function generateNewArray() {
@@ -107,7 +107,7 @@ function enemyAttack() {
 
     const chance = (earthTiles / elementGrid.value.length ** 2) * 0.5;
     if (Math.random() < chance) {
-      if (relics[5].unlocked && iceTiles >= 1 && Math.random() < 0.05) emit('blizzard');
+      if (relics[5].unlocked && iceTiles >= 1 && Math.random() < 0.05) emit("blizzard");
       return;
     }
   }
@@ -118,18 +118,18 @@ function enemyAttack() {
     }
   }
 
-  emit('damaged', getRandomInt(2 * props.slots, 10 * props.slots));
+  emit("damaged", getRandomInt(2 * props.slots, 10 * props.slots));
   attackMeter.value = 10;
 }
 
 async function attack(element: Element | undefined, index: number) {
-  if (!element || element.currentLevel == 0 || element.name != 'air' || elementNumbers.value[index] == 3 || store.energy < 10) return;
+  if (!element || element.currentLevel == 0 || element.name != "air" || elementNumbers.value[index] == 3 || store.energy < 10) return;
 
   if (element.currentLevel >= 1) {
     elementNumbers.value[index] = 3;
     displayedNumbers.value[index] = reroll();
     unyeet(index);
-    emit('regen', 0, -(relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5));
+    emit("regen", 0, -(relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5));
   }
 
   if (element.currentLevel == 2) {
@@ -154,12 +154,12 @@ async function attack(element: Element | undefined, index: number) {
       if (Math.random() < (relics[9].unlocked ? 1 : 0.5) / i) cascade(i + 1);
       else break;
 
-      if (i > 3) emit('fart');
+      if (i > 3) emit("fart");
       await delay(150);
     }
   }
 
-  emit('onReroll', displayedNumbers.value);
+  emit("onReroll", displayedNumbers.value);
 
   function reroll() {
     let random = getRandomInt(0, 9);

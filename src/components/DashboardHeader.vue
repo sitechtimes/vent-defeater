@@ -55,15 +55,15 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user';
-import type { Presentation } from '@/utils/types';
-import { onBeforeMount, ref, watch } from 'vue';
-import ThemeToggle from './ThemeToggle.vue';
+import { useUserStore } from "@/stores/user";
+import type { Presentation } from "@/utils/types";
+import { onBeforeMount, ref, watch } from "vue";
+import ThemeToggle from "./ThemeToggle.vue";
 
 const userStore = useUserStore();
 const presentations = ref<Presentation[]>([]);
 
-const searchInput = ref('');
+const searchInput = ref("");
 watch(
   () => searchInput.value,
   (input) => search(input)

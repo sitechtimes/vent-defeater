@@ -37,17 +37,17 @@
 
   <img v-if="store.isDead || gameWon" class="fixed explode z-[100]" :class="{ 'opacity-0': gameWon }" src="/game/explosion.svg" aria-hidden="true" />
   <div v-if="store.isDead || gameWon" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
-    <h2 class="text-4xl font-semibold">{{ gameWon ? 'You won!' : 'You lost 😦' }}</h2>
+    <h2 class="text-4xl font-semibold">{{ gameWon ? "You won!" : "You lost 😦" }}</h2>
     <p class="text-2xl font-medium" v-if="store.relicOfDeath && !gameWon && health <= 0">You lost the double or nothing</p>
     <p class="text-2xl font-medium" v-else-if="!gameWon && health <= 0">You died from wounds</p>
     <p class="text-2xl font-medium" v-else-if="!gameWon && energy >= (relics[2].unlocked ? 200 : 125)">Your energy meter spontaneously combusted</p>
     <div class="z-10 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl">
       <p class="timer font-semibold text-4xl">
-        {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
+        {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? "0" : "") + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
           {{
             Math.floor(timer % 1000).toString().length == 1
-              ? '0'
-              : '' +
+              ? "0"
+              : "" +
                 Math.floor(timer % 1000)
                   .toString()
                   .slice(0, 2)
@@ -64,11 +64,11 @@
 
   <div class="z-10 absolute bottom-4 right-4 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl" v-if="level" ref="tutorial8">
     <p class="timer font-semibold text-4xl">
-      {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? '0' : '') + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
+      {{ Math.floor(timer / 1000 / 60) }}:{{ (Math.floor((timer / 1000) % 60).toString().length == 1 ? "0" : "") + Math.floor((timer / 1000) % 60) }}.<span class="timer text-2xl">
         {{
           Math.floor(timer % 1000).toString().length == 1
-            ? '0'
-            : '' +
+            ? "0"
+            : "" +
               Math.floor(timer % 1000)
                 .toString()
                 .slice(0, 2)
@@ -91,14 +91,17 @@
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/elements/electric.svg" aria-hidden="true" />
           <h3 class="text-2xl font-semibold w-16 text-[color:var(--bg-color)]">{{ energy }}</h3>
-          <div class="relative flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]" :class="{ shaky: energy > (relics[2].unlocked ? 180 : 115) }">
+          <div
+            class="relative flex items-center justify-start w-full h-8 rounded-full bg-[color:var(--bg-color-contrast-translucent)]"
+            :class="{ shaky: !store.noCombust && energy > (relics[2].unlocked ? 180 : 115) }"
+          >
             <div
               class="transition-all duration-500 h-full rounded-full bg-yellow-500 min-w-[10%]"
               :style="{ width: Math.min(relics[2].unlocked ? 150 : 100, energy) / (relics[2].unlocked ? 1.5 : 1) + '%' }"
             ></div>
             <div
               class="transition-all duration-500 absolute left-0 h-full rounded-full bg-orange-500 max-w-full"
-              v-if="energy > (relics[2].unlocked ? 150 : 100)"
+              v-if="!store.noCombust && energy > (relics[2].unlocked ? 150 : 100)"
               :style="{ width: ((energy - (relics[2].unlocked ? 150 : 100)) / (relics[2].unlocked ? 50 : 25)) * 100 + '%' }"
             ></div>
           </div>
@@ -237,18 +240,25 @@
 </template>
 
 <script setup lang="ts">
-import Amogus from '@/components/Game/Amogus.vue';
-import Intro from '@/components/Game/Intro.vue';
-import Level from '@/components/Game/Level.vue';
-import Map from '@/components/Game/Map.vue';
-import { useGameStore } from '@/stores/game';
-import { air, earth, fire, ice, formatDescription, type Relic, type Powerup, relics, powerups } from '@/utils/elements';
-import type { Element, Level as LevelType } from '@/utils/elements';
-import { delay, getRandomInt, getRandomItemFromArray } from '@/utils/functions';
-import { storeToRefs } from 'pinia';
-import { onBeforeMount, ref, watch } from 'vue';
+import Amogus from "@/components/Game/Amogus.vue";
+import Intro from "@/components/Game/Intro.vue";
+import Level from "@/components/Game/Level.vue";
+import Map from "@/components/Game/Map.vue";
+import { useGameStore } from "@/stores/game";
+import { useUserStore } from "@/stores/user";
+import { air, earth, fire, ice, formatDescription, type Relic, type Powerup, relics, powerups } from "@/utils/elements";
+import type { Element, Level as LevelType } from "@/utils/elements";
+import { delay, getRandomInt, getRandomItemFromArray } from "@/utils/functions";
+import { storeToRefs } from "pinia";
+import { onBeforeMount, ref, watch } from "vue";
+import { useMeta } from "vue-meta";
+
+useMeta({
+  title: "Vent Defeater on Steal"
+});
 
 const store = useGameStore();
+const userStore = useUserStore();
 
 const showHealthOverlay = ref(false);
 const startTime = ref<number>();
@@ -273,7 +283,7 @@ watch(
 );
 
 const previousLevel = ref<LevelType>();
-const level = ref<'map' | LevelType>();
+const level = ref<"map" | LevelType>();
 const health = ref(100);
 watch(
   () => health.value,
@@ -321,12 +331,12 @@ const tutorialPhases = ref([
   {
     top: 170,
     left: 600,
-    text: 'These are your elements, relics, and powerups. Click to select. You can hover over them to see what they do'
+    text: "These are your elements, relics, and powerups. Click to select. You can hover over them to see what they do"
   },
   {
     top: 700,
     left: 975,
-    text: 'This is your board. You can use your elements here by clicking on a tile'
+    text: "This is your board. You can use your elements here by clicking on a tile"
   },
   {
     top: 115,
@@ -336,12 +346,12 @@ const tutorialPhases = ref([
   {
     top: 190,
     left: 1000,
-    text: 'Your enemy will attack you if this bar fills up. They may also have extra lives so be careful'
+    text: "Your enemy will attack you if this bar fills up. They may also have extra lives so be careful"
   },
   {
     top: 800,
     left: 1000,
-    text: 'This is the great almighty reroll button. Click it to reroll your board'
+    text: "This is the great almighty reroll button. Click it to reroll your board"
   },
   {
     top: 925,
@@ -362,6 +372,7 @@ watch(
 );
 
 onBeforeMount(() => {
+  userStore.theme = "light";
   store.levels = generateNewMap();
   selectedElement.value = elements.value.ice;
 });
@@ -373,44 +384,44 @@ function generateNewMap() {
     id: 0,
     x: 90,
     y: 450,
-    levelImg: '/game/firstperson/navigation.png',
-    mapImg: '/game/skull1.svg',
-    type: 'fight',
+    levelImg: "/game/firstperson/navigation.png",
+    mapImg: "/game/skull1.svg",
+    type: "fight",
     mystery: false,
     completed: true,
-    color: '#ffff00',
+    color: "#ffff00",
     enemy: {
       lives: 1,
       slots: 2,
-      color: '#ffff00'
+      color: "#ffff00"
     },
     nextLevels: [1, 2, 15]
   });
 
-  levels.push(generateNewLevel(1, 525, 400, 'o2', 1, 'mystery', [2]));
-  levels.push(generateNewLevel(2, 390, 215, 'asteroid', 1, 'fight', [3]));
-  levels.push(generateNewLevel(3, 605, 215, 'cafeteria1', 2, 'fight', [4, 11, 12]));
-  levels.push(generateNewLevel(4, 810, 45, 'cafeteria3', 2, 'mystery', [5]));
-  levels.push(generateNewLevel(5, 997, 215, 'cafeteria4', 2, 'harderFight', [6]));
-  levels.push(generateNewLevel(6, 1400, 215, 'gen1', 2, 'fight', [7]));
-  levels.push(generateNewLevel(7, 1462, 300, 'gen2', 2, 'mystery', [8]));
-  levels.push(generateNewLevel(8, 1622, 540, 'reactor1', 3, 'shop', [9]));
-  levels.push(generateNewLevel(9, 1675, 382, 'reactor2', 3, 'harderFight', [10]));
-  levels.push(generateNewLevel(10, 1307, 400, 'cams', 3, 'boss', null));
-  levels.push(generateNewLevel(11, 810, 215, 'emergency', 2, 'shop', [5]));
-  levels.push(generateNewLevel(12, 805, 410, 'cafeteria2', 2, 'mystery', [13, 19]));
-  levels.push(generateNewLevel(13, 675, 655, 'admin1', 2, 'mystery', [14]));
-  levels.push(generateNewLevel(14, 517, 550, 'admin2', 1, 'boss', [19]));
-  levels.push(generateNewLevel(15, 390, 525, 'route1vent1', 1, 'fight', [16]));
-  levels.push(generateNewLevel(16, 395, 755, 'route1vent2', 1, 'fight', [17, 18, 19]));
-  levels.push(generateNewLevel(17, 567, 890, 'comms', 2, 'mystery', [18, 19]));
-  levels.push(generateNewLevel(18, 767, 903, 'chute', 2, 'mystery', [20, 23]));
-  levels.push(generateNewLevel(19, 910, 690, 'shop', 2, 'shop', [20, 23]));
-  levels.push(generateNewLevel(20, 1160, 720, 'electrical1', 2, 'mystery', [21]));
-  levels.push(generateNewLevel(21, 1175, 585, 'electrical2', 2, 'fight', [22]));
-  levels.push(generateNewLevel(22, 1205, 420, 'medbay', 2, 'harderFight', [6]));
-  levels.push(generateNewLevel(23, 1395, 735, 'gen1', 2, 'harderFight', [24]));
-  levels.push(generateNewLevel(24, 1462, 660, 'gen2', 3, 'mystery', [8]));
+  levels.push(generateNewLevel(1, 525, 400, "o2", 1, "mystery", [2]));
+  levels.push(generateNewLevel(2, 390, 215, "asteroid", 1, "fight", [3]));
+  levels.push(generateNewLevel(3, 605, 215, "cafeteria1", 2, "fight", [4, 11, 12]));
+  levels.push(generateNewLevel(4, 810, 45, "cafeteria3", 2, "mystery", [5]));
+  levels.push(generateNewLevel(5, 997, 215, "cafeteria4", 2, "harderFight", [6]));
+  levels.push(generateNewLevel(6, 1400, 215, "gen1", 2, "fight", [7]));
+  levels.push(generateNewLevel(7, 1462, 300, "gen2", 2, "mystery", [8]));
+  levels.push(generateNewLevel(8, 1622, 540, "reactor1", 3, "shop", [9]));
+  levels.push(generateNewLevel(9, 1675, 382, "reactor2", 3, "harderFight", [10]));
+  levels.push(generateNewLevel(10, 1307, 400, "cams", 3, "boss", null));
+  levels.push(generateNewLevel(11, 810, 215, "emergency", 2, "shop", [5]));
+  levels.push(generateNewLevel(12, 805, 410, "cafeteria2", 2, "mystery", [13, 19]));
+  levels.push(generateNewLevel(13, 675, 655, "admin1", 2, "mystery", [14]));
+  levels.push(generateNewLevel(14, 517, 550, "admin2", 1, "boss", [19]));
+  levels.push(generateNewLevel(15, 390, 525, "route1vent1", 1, "fight", [16]));
+  levels.push(generateNewLevel(16, 395, 755, "route1vent2", 1, "fight", [17, 18, 19]));
+  levels.push(generateNewLevel(17, 567, 890, "comms", 2, "mystery", [18, 19]));
+  levels.push(generateNewLevel(18, 767, 903, "chute", 2, "mystery", [20, 23]));
+  levels.push(generateNewLevel(19, 910, 690, "shop", 2, "shop", [20, 23]));
+  levels.push(generateNewLevel(20, 1160, 720, "electrical1", 2, "mystery", [21]));
+  levels.push(generateNewLevel(21, 1175, 585, "electrical2", 2, "fight", [22]));
+  levels.push(generateNewLevel(22, 1205, 420, "medbay", 2, "harderFight", [6]));
+  levels.push(generateNewLevel(23, 1395, 735, "gen1", 2, "harderFight", [24]));
+  levels.push(generateNewLevel(24, 1462, 660, "gen2", 3, "mystery", [8]));
 
   return levels;
 
@@ -420,63 +431,63 @@ function generateNewMap() {
     y: number,
     levelImg: string,
     difficulty: 1 | 2 | 3,
-    type: 'mystery' | 'fight' | 'harderFight' | 'boss' | 'shop',
+    type: "mystery" | "fight" | "harderFight" | "boss" | "shop",
     nextLevels: number[] | null
   ): LevelType {
-    const determinedType = type == 'mystery' ? getRandomItemFromArray(['fight', 'harderFight', 'relic', 'shop']) : type;
+    const determinedType = type == "mystery" ? getRandomItemFromArray(["fight", "harderFight", "relic", "shop"]) : type;
     return {
       id,
       x,
       y,
-      levelImg: '/game/firstperson/' + levelImg + '.png',
+      levelImg: "/game/firstperson/" + levelImg + ".png",
       mapImg: getMapImg(type),
       type: determinedType,
-      mystery: type == 'mystery',
+      mystery: type == "mystery",
       completed: false,
       color: getColor(type),
-      enemy: determinedType != 'shop' && determinedType != 'relic' ? generateNewEnemy(difficulty, determinedType) : null,
+      enemy: determinedType != "shop" && determinedType != "relic" ? generateNewEnemy(difficulty, determinedType) : null,
       nextLevels
     };
   }
 
-  function getMapImg(type: 'mystery' | 'fight' | 'harderFight' | 'boss' | 'shop') {
-    if (type == 'mystery') return '/game/mystery.svg';
-    if (type == 'fight') return '/game/skull1.svg';
-    if (type == 'harderFight') return '/game/skull2.svg';
-    if (type == 'boss') return '/game/skull3.svg';
-    return '/game/shop.svg';
+  function getMapImg(type: "mystery" | "fight" | "harderFight" | "boss" | "shop") {
+    if (type == "mystery") return "/game/mystery.svg";
+    if (type == "fight") return "/game/skull1.svg";
+    if (type == "harderFight") return "/game/skull2.svg";
+    if (type == "boss") return "/game/skull3.svg";
+    return "/game/shop.svg";
   }
 
-  function getColor(type: 'mystery' | 'fight' | 'harderFight' | 'boss' | 'shop') {
-    if (type == 'mystery') return '#ffffff';
-    if (type == 'fight') return '#ffff00';
-    if (type == 'harderFight') return '#ffa500';
-    if (type == 'boss') return '#ff0000';
-    return '#00ff00';
+  function getColor(type: "mystery" | "fight" | "harderFight" | "boss" | "shop") {
+    if (type == "mystery") return "#ffffff";
+    if (type == "fight") return "#ffff00";
+    if (type == "harderFight") return "#ffa500";
+    if (type == "boss") return "#ff0000";
+    return "#00ff00";
   }
 
-  function generateNewEnemy(difficulty: 1 | 2 | 3, type: 'fight' | 'harderFight' | 'boss') {
+  function generateNewEnemy(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
     return {
       lives: getLives(difficulty, type),
-      slots: type == 'boss' ? 9 : getRandomInt(1.5 * difficulty, 2.75 * difficulty) + (type == 'harderFight' ? 1 : 0),
-      color: getRandomItemFromArray(['#ff0000', '#00ff00', '#56deff', '#ffff00', '#ff00ff', '#00ffff', '#f7f7f7'])
+      slots: type == "boss" ? 9 : getRandomInt(1.5 * difficulty, 2.75 * difficulty) + (type == "harderFight" ? 1 : 0),
+      color: getRandomItemFromArray(["#ff0000", "#00ff00", "#56deff", "#ffff00", "#ff00ff", "#00ffff", "#f7f7f7"])
     };
 
-    function getLives(difficulty: 1 | 2 | 3, type: 'fight' | 'harderFight' | 'boss') {
-      if (type == 'fight') return getRandomInt(1.5 * difficulty, 2.5 * difficulty);
-      if (type == 'harderFight') return getRandomInt(3 * difficulty, 4.5 * difficulty);
+    function getLives(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
+      if (type == "fight") return getRandomInt(1.5 * difficulty, 2.5 * difficulty);
+      if (type == "harderFight") return getRandomInt(3 * difficulty, 4.5 * difficulty);
       return difficulty == 1 ? 15 : 70;
     }
   }
 }
 
 function handleWin() {
-  if (!level.value || typeof level.value == 'string') return;
+  if (!level.value || typeof level.value == "string") return;
   energy.value = relics[2].unlocked ? 150 : 100;
   if (relics[4].unlocked) health.value = 100;
 
   previousLevel.value = level.value;
-  level.value = 'map';
+  level.value = "map";
 
   if (previousLevel.value.id == 0) {
     rows.value++;
@@ -484,14 +495,14 @@ function handleWin() {
   }
 }
 
-function handleReward(reward: Element | Relic | Powerup | { type: 'Bypass' }) {
-  if (reward.type == 'Element') {
+function handleReward(reward: Element | Relic | Powerup | { type: "Bypass" }) {
+  if (reward.type == "Element") {
     elements.value[reward.name].currentLevel++;
     selectedElement.value = Object.values(elements.value).find((el) => el.currentLevel != 0);
-  } else if (reward.type == 'Relic') {
+  } else if (reward.type == "Relic") {
     reward.unlocked = true;
     currentRelics.value[currentRelics.value.findIndex((relic) => !relic)] = reward;
-  } else if (reward.type == 'Powerup') {
+  } else if (reward.type == "Powerup") {
     reward.count += 3;
     if (currentPowerups.value.find((powerup) => powerup && powerup.name == reward.name) != undefined) return;
     currentPowerups.value[currentPowerups.value.findIndex((powerup) => !powerup)] = reward;
@@ -539,9 +550,9 @@ function restart() {
 }
 
 function getBarColor(element: Element, bar: number) {
-  if (element.currentLevel < bar) return 'bg-[color:var(--faded-bg-color)]';
+  if (element.currentLevel < bar) return "bg-[color:var(--faded-bg-color)]";
   if (element.currentLevel == bar) return element.name;
-  return element.name + 'Secondary';
+  return element.name + "Secondary";
 }
 
 function disablePowerup(powerup: Powerup) {

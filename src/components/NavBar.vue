@@ -49,8 +49,8 @@
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user';
-import ThemeToggle from './ThemeToggle.vue';
+import { useUserStore } from "@/stores/user";
+import ThemeToggle from "./ThemeToggle.vue";
 
 type NavButtons = {
   name: string;
@@ -72,172 +72,172 @@ const userStore = useUserStore();
 
 const navButtons: NavButtons[] = [
   {
-    name: 'Work',
-    path: '/',
+    name: "Work",
+    path: "/",
     dropdown: [
       {
-        name: 'Overview',
-        path: '/'
+        name: "Overview",
+        path: "/"
       },
       {
-        name: 'Employee Training',
-        path: '/'
+        name: "Employee Training",
+        path: "/"
       },
       {
-        name: 'Team Meetings',
-        path: '/'
+        name: "Team Meetings",
+        path: "/"
       },
       {
-        name: 'Team Buildng',
-        path: '/'
+        name: "Team Buildng",
+        path: "/"
       },
       {
-        name: 'Workshops',
-        path: '/'
+        name: "Workshops",
+        path: "/"
       },
       {
-        name: 'Events & Conferences',
-        path: '/'
+        name: "Events & Conferences",
+        path: "/"
       },
       {
-        name: 'Evaluations & Retros',
-        path: '/'
+        name: "Evaluations & Retros",
+        path: "/"
       },
       {
-        name: 'Stage Presentations',
-        path: '/'
+        name: "Stage Presentations",
+        path: "/"
       },
       {
-        name: 'All Hands Meeting',
-        path: '/'
+        name: "All Hands Meeting",
+        path: "/"
       },
       {
-        name: 'Hybrid Work',
-        path: '/'
+        name: "Hybrid Work",
+        path: "/"
       },
       {
-        name: 'Brainstorming',
-        path: '/'
+        name: "Brainstorming",
+        path: "/"
       }
     ]
   },
   {
-    name: 'Education',
-    path: '/',
+    name: "Education",
+    path: "/",
     dropdown: [
       {
-        name: 'Overview',
-        path: '/'
+        name: "Overview",
+        path: "/"
       },
       {
-        name: 'Lectures',
-        path: '/'
+        name: "Lectures",
+        path: "/"
       },
       {
-        name: 'Assessments',
-        path: '/'
+        name: "Assessments",
+        path: "/"
       },
       {
-        name: 'Seminars',
-        path: '/'
+        name: "Seminars",
+        path: "/"
       },
       {
-        name: 'Student Events',
-        path: '/'
+        name: "Student Events",
+        path: "/"
       },
       {
-        name: 'Classroom Lessons',
-        path: '/'
+        name: "Classroom Lessons",
+        path: "/"
       },
       {
-        name: 'Hybrid Learning',
-        path: '/'
+        name: "Hybrid Learning",
+        path: "/"
       }
     ]
   },
   {
-    name: 'Features',
-    path: '/',
+    name: "Features",
+    path: "/",
     dropdown: [
       {
-        name: 'Overview',
-        path: '/'
+        name: "Overview",
+        path: "/"
       },
       {
-        name: 'AI Menti Builder',
-        path: '/'
+        name: "AI Menti Builder",
+        path: "/"
       },
       {
-        name: 'Live Polling',
-        path: '/'
+        name: "Live Polling",
+        path: "/"
       },
       {
-        name: 'Word Cloud',
-        path: '/'
+        name: "Word Cloud",
+        path: "/"
       },
       {
-        name: 'Quiz',
-        path: '/'
+        name: "Quiz",
+        path: "/"
       },
       {
-        name: 'Q&A',
-        path: '/'
+        name: "Q&A",
+        path: "/"
       },
       {
-        name: 'Survey',
-        path: '/'
+        name: "Survey",
+        path: "/"
       },
       {
-        name: 'Presentation',
-        path: '/'
+        name: "Presentation",
+        path: "/"
       }
     ]
   },
   {
-    name: 'Resources',
-    path: '/',
+    name: "Resources",
+    path: "/",
     dropdown: [
       {
-        name: 'How To',
-        path: '/'
+        name: "How To",
+        path: "/"
       },
       {
-        name: 'MentiAcademy',
-        path: '/'
+        name: "MentiAcademy",
+        path: "/"
       },
       {
-        name: 'Templates',
-        path: '/'
+        name: "Templates",
+        path: "/"
       },
       {
-        name: 'Webinars',
-        path: '/'
+        name: "Webinars",
+        path: "/"
       },
       {
-        name: 'Blog',
-        path: '/'
+        name: "Blog",
+        path: "/"
       },
       {
-        name: 'Integrations',
-        path: '/'
+        name: "Integrations",
+        path: "/"
       },
       {
-        name: 'Stories',
-        path: '/'
+        name: "Stories",
+        path: "/"
       },
       {
-        name: 'Help Center',
-        path: '/'
+        name: "Help Center",
+        path: "/"
       }
     ]
   },
   {
-    name: 'Pricing',
-    path: '/'
+    name: "Pricing",
+    path: "/"
   },
   {
-    name: 'Talk to Sales',
-    path: '/'
+    name: "Talk to Sales",
+    path: "/"
   }
 ];
 </script>

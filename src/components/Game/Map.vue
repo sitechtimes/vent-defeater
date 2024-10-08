@@ -11,7 +11,7 @@
       >
         <img class="w-8 h-8" :src="level.mapImg" aria-hidden="true" />
         <div class="description shadow-black shadow-sm pointer-events-none hidden absolute top-0 left-12 bg-white rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap">
-          <h4 class="text-xl font-semibold">{{ level.mystery ? 'Unknown' : (level.type[0].toUpperCase() + level.type.slice(1)).replace('Harder', 'Elite ') }}</h4>
+          <h4 class="text-xl font-semibold">{{ level.mystery ? "Unknown" : (level.type[0].toUpperCase() + level.type.slice(1)).replace("Harder", "Elite ") }}</h4>
         </div>
       </button>
     </div>
@@ -22,9 +22,9 @@
 </template>
 
 <script setup lang="ts">
-import { useGameStore } from '@/stores/game';
-import type { Level } from '@/utils/elements';
-import { onBeforeMount, ref } from 'vue';
+import { useGameStore } from "@/stores/game";
+import type { Level } from "@/utils/elements";
+import { onBeforeMount, ref } from "vue";
 
 type Props = {
   currentLevel: Level | undefined;
@@ -51,7 +51,7 @@ onBeforeMount(() => {
 });
 
 function selectLevel(level: Level) {
-  emit('select', level);
+  emit("select", level);
 }
 </script>
 
@@ -68,7 +68,7 @@ function selectLevel(level: Level) {
 }
 
 .map {
-  background-image: url('/game/map/map.png');
+  background-image: url("/game/map/map.png");
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
