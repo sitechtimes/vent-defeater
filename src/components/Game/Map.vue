@@ -6,11 +6,11 @@
         class="mapLevel absolute w-10 h-10 flex items-center justify-center rounded-md"
         @click="selectLevel(level)"
         :class="{ grayscale: level.completed, 'brightness-50': level.completed, 'pointer-events-none': level.completed }"
-        :style="{ left: level.x * 0.8 + 'px', top: level.y * 0.8 + 'px', backgroundColor: level.color }"
+        :style="{ left: store.smallScreen ? level.leftPercent + '%' : level.x * 0.8 + 'px', top: store.smallScreen ? level.topPercent + '%' : level.y * 0.8 + 'px', backgroundColor: level.color }"
         v-for="level in levels"
       >
         <img class="w-8 h-8" :src="level.mapImg" aria-hidden="true" />
-        <div class="description shadow-black shadow-sm pointer-events-none hidden absolute top-0 left-12 bg-white rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap">
+        <div v-if="!store.levels.filter((lvl) => lvl.completed).map((lvl) => lvl.id).includes(level.id)" class="description shadow-black shadow-sm pointer-events-none hidden absolute top-0 left-12 bg-white rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap">
           <h4 class="text-xl font-semibold">{{ level.mystery ? "Unknown" : (level.type[0].toUpperCase() + level.type.slice(1)).replace("Harder", "Elite ") }}</h4>
         </div>
       </button>
@@ -72,6 +72,14 @@ function selectLevel(level: Level) {
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+}
+
+@media (hover: none) and (pointer: coarse) {
+  .mapLevel {
+    .description {
+      display: flex;
+    }
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

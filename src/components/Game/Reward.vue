@@ -1,10 +1,10 @@
 <template>
   <div class="flex flex-col items-center justify-center gap-4">
-    <div class="flex items-stretch justify-center gap-10">
+    <div class="flex items-stretch justify-center gap-7">
       <div v-for="reward in rewards">
         <button
           @click="select(reward)"
-          class="reward relative w-80 h-[28rem] py-4 rounded-2xl flex items-center justify-center flex-col gap-2 border-8 border-transparent"
+          class="reward relative py-4 rounded-2xl flex items-center justify-center flex-col gap-2 border-8 border-transparent"
           :class="{ 'brightness-[.4]': reward.name != selectedReward?.name }"
           :style="{ backgroundColor: 'var(--' + reward.name + '-secondary)', borderColor: reward.name == selectedReward?.name ? 'var(--' + reward.name + ')' : '' }"
           v-if="reward.type == 'Element'"
@@ -22,7 +22,7 @@
 
         <button
           @click="select(reward)"
-          class="reward relative w-80 h-[28rem] py-4 rounded-2xl flex items-center justify-center flex-col gap-2 border-8 border-transparent"
+          class="reward relative py-4 rounded-2xl flex items-center justify-center flex-col gap-2 border-8 border-transparent"
           :class="{ 'brightness-[.4]': reward.name != selectedReward?.name }"
           :style="{
             backgroundColor: reward.type == 'Relic' ? 'rgb(94,234,212)' : 'rgb(249,168,212)',
@@ -113,7 +113,7 @@ function select(reward: Element | Relic | Powerup) {
 function getNewReward(type: "element" | "other") {
   let reward: Element | Relic | Powerup | undefined;
   let tries = 0;
-  while (!reward && tries < 20) {
+  while (!reward && tries < 100) {
     tries++;
     const newReward = type == "element" ? (getRandomItemFromArray([air, earth, fire, ice]) as Element) : (getRandomItemFromArray([relics, powerups].flat()) as Relic | Powerup);
     if (newReward.type == "Element" && newReward.currentLevel == 4) continue;
@@ -136,6 +136,23 @@ function getNewReward(type: "element" | "other") {
 </script>
 
 <style lang="scss" scoped>
+.reward {
+  width: 20rem;
+  height: 28rem;
+}
+
+@media (max-width: 1200px) {
+  .reward {
+    width: 16rem;
+    height: 24rem;
+
+    img {
+      width: 2rem;
+      height: 2rem;
+    }
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .reward:hover {
     filter: brightness(1);

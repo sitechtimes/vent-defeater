@@ -24,6 +24,10 @@ export type Level = {
   x: number;
   /** Y-position of the level on the map, in pixels. */
   y: number;
+  /** Top percentage for placement of the level on the map for smaller screens */
+  topPercent: number;
+  /** Left percentage for placement of the level on the map for smaller screens */
+  leftPercent: number;
   /** Background image of the level during game phase. */
   levelImg: string;
   /** Image of the level marker on the map. */

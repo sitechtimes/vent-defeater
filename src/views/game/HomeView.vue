@@ -1,5 +1,6 @@
 <template>
   <div class="z-[200] bg-[rgba(0,0,0,0.2)] w-screen h-screen absolute top-0 left-0 flex items-center justify-center" v-if="showTutorial">
+
     <div
       class="absolute bg-white shadow-lg shadow-black flex flex-col items-center justify-center gap-2 w-[30rem] p-5 rounded-lg"
       v-if="currentTutorialPhase >= 0"
@@ -79,7 +80,7 @@
 
   <div class="relative flex items-center justify-center w-screen h-screen overflow-hidden select-none" :class="{ 'bg-black': level }">
     <Transition name="left">
-      <div class="absolute left-0 h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-black bg-opacity-65 w-[35rem] z-20" v-show="typeof level != 'string' && level">
+      <div class="inventory absolute left-0 h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-black bg-opacity-65 z-20" v-show="typeof level != 'string' && level">
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/health.svg" aria-hidden="true" />
           <h3 class="text-2xl font-semibold w-16 text-[color:var(--bg-color)]">{{ Math.floor(health) }}</h3>
@@ -206,8 +207,6 @@
             <div v-else class="relic duration-200 relative w-24 h-16 flex items-center justify-center rounded-lg bg-white brightness-50"></div>
           </div>
         </div>
-
-        <Amogus color="#ff0000" class="absolute bottom-[-3rem] left-[-3rem] scale-50 cursor-pointer" />
       </div>
     </Transition>
 
@@ -250,7 +249,7 @@ import { air, earth, fire, ice, formatDescription, type Relic, type Powerup, rel
 import type { Element, Level as LevelType } from "@/utils/elements";
 import { delay, getRandomInt, getRandomItemFromArray } from "@/utils/functions";
 import { storeToRefs } from "pinia";
-import { onBeforeMount, ref, watch } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useMeta } from "vue-meta";
 
 useMeta({
@@ -378,6 +377,13 @@ onBeforeMount(() => {
   selectedElement.value = elements.value.ice;
 });
 
+onMounted(() => {
+  store.smallScreen = window.innerWidth < 1920;
+  window.addEventListener("resize", () => {
+    store.smallScreen = window.innerWidth < 1920;
+  });
+});
+
 function generateNewMap() {
   const levels: LevelType[] = [];
 
@@ -385,6 +391,8 @@ function generateNewMap() {
     id: 0,
     x: 90,
     y: 450,
+    topPercent: 450 / 11,
+    leftPercent: 90 / 20,
     levelImg: "/game/firstperson/navigation.png",
     mapImg: "/game/skull1.svg",
     type: "fight",
@@ -440,6 +448,8 @@ function generateNewMap() {
       id,
       x,
       y,
+      topPercent: y / 11,
+      leftPercent: x / 20,
       levelImg: "/game/firstperson/" + levelImg + ".png",
       mapImg: getMapImg(type),
       type: determinedType,
@@ -768,6 +778,30 @@ async function usePowerup(powerup: Powerup) {
   background-color: var(--earth-secondary);
 }
 
+.relic:hover {
+  .description {
+    display: flex;
+  }
+}
+
+.level:hover {
+  .description {
+    display: flex;
+  }
+}
+
+.inventory {
+  width: 35rem;
+}
+
+@media (max-width: 1200px) {
+  .inventory {
+    width: 40vw;
+    overflow-x: visible;
+    overflow-y: scroll;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .element:hover {
     background-color: var(--faded-bg-color-dark);
@@ -787,18 +821,6 @@ async function usePowerup(powerup: Powerup) {
       img {
         transform: rotate(360deg);
       }
-    }
-  }
-
-  .relic:hover {
-    .description {
-      display: flex;
-    }
-  }
-
-  .level:hover {
-    .description {
-      display: flex;
     }
   }
 }
