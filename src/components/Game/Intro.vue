@@ -1,7 +1,7 @@
 <template>
   <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 overflow-y-scroll background select-text">
     <header class="sticky top-0 z-10 w-full h-24 flex items-center justify-center bg-[rgb(23,29,37)]" :class="{ 'brightness-50': showOpening }">
-      <div class="w-[60%] h-full flex items-center justify-around">
+      <div class="w-[1152px] h-full flex items-center justify-around">
         <div class="flex items-center justify-center gap-2">
           <img class="h-20" src="/logo/steal.svg" aria-hidden="true" />
           <div class="flex items-center justify-center flex-col">
@@ -31,7 +31,13 @@
       </div>
     </header>
 
-    <div class="w-[50%] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
+    <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
+      <div class="disclaimer border-8 border-orange-600 bg-orange-400 p-4 rounded-lg w-full mb-5 flex flex-col items-start justify-center gap-1">
+        <h3 class="text-3xl font-extrabold">Disclaimer!</h3>
+        <p class="text-2xl">This game works best on a 1920x1080 screen.</p>
+        <p class="text-lg font-semibold">Some aspects of the game may not work as intended, or at all, on smaller devices.</p>
+      </div>
+
       <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > Strategy Games > Rougelites > Vent Defeater</div>
       <div class="w-full flex items-center justify-start text-white text-3xl">Vent Defeater: The Game</div>
       <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
@@ -326,8 +332,18 @@ function translateMonth(month: number) {
 </script>
 
 <style lang="scss" scoped>
+.disclaimer {
+  display: none;
+}
+
 .background {
   background: radial-gradient(circle at 50% 0%, rgb(30, 67, 86), rgb(27, 40, 56) 60%);
+}
+
+@media (max-width: 1400px) {
+  .disclaimer {
+    display: block;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {
