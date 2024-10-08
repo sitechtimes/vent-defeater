@@ -44,8 +44,13 @@
       <div class="w-full flex items-center justify-start text-white text-3xl">Vent Defeater: The Game</div>
       <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
         <div class="flex items-center justify-center flex-col gap-2 w-[62.5%]">
-          <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted controls @ended="selectedShowcase = showcases[1]"></video>
-          <img v-else :src="selectedShowcase.src" />
+          <div class="flex flex-col items-center justify-center w-full">
+            <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted @ended="selectedShowcase = showcases[1]"></video>
+            <img v-else :src="selectedShowcase.src" />
+            <div class="w-full bg-gray-900 h-2">
+              <div v-if="showcaseCooldown > 0" class="h-full bg-yellow-300" :style="{ animation: `move-steal-bar ${selectedShowcase.type == 'video' ? 19.5 : 5}s linear infinite` }"></div>
+            </div>
+          </div>
           <div class="flex items-center justify-between gap-1">
             <button @click="selectedShowcase = showcase" :class="{ relative: showcase.type == 'video' }" v-for="showcase in showcases" class="showcase w-[20%] flex items-center justify-center">
               <video :class="{ 'brightness-50': showcase.src != selectedShowcase.src }" v-if="showcase.type == 'video'" :src="showcase.src" muted></video>
@@ -195,6 +200,7 @@ type Emits = {
 const emit = defineEmits<Emits>();
 
 const showOpening = ref(false);
+const startTime = ref(new Date().getTime());
 
 async function start() {
   const page = document.documentElement;
@@ -230,6 +236,7 @@ const selectedShowcase = ref<Showcase>(showcases.value[0]);
 watch(
   () => selectedShowcase.value,
   () => {
+    startTime.value = new Date().getTime();
     showcaseCooldown.value = 0;
   }
 );
@@ -237,7 +244,7 @@ const showcaseCooldown = ref(0);
 watch(
   () => showcaseCooldown.value,
   (num) => {
-    if (selectedShowcase.value.type == "image" && num > 6) {
+    if (selectedShowcase.value.type == "image" && new Date().getTime() >= startTime.value + 5000) {
       const index = showcases.value.findIndex((showcase) => showcase.src == selectedShowcase.value.src);
 
       if (index < showcases.value.length - 1) selectedShowcase.value = showcases.value[index + 1];
@@ -314,7 +321,7 @@ const reviews = ref<Review[]>([
 
 async function incrementCooldown() {
   while (true) {
-    await delay(1000);
+    await delay(20);
     showcaseCooldown.value++;
   }
 }

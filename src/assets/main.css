@@ -66,7 +66,7 @@ body {
 
 * {
   box-sizing: border-box;
-  font-family: 'SUSE', sans-serif;
+  font-family: "SUSE", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
@@ -77,7 +77,7 @@ body {
 }
 
 .comic-sans {
-  font-family: 'Comic Sans MS', sans-serif;
+  font-family: "Comic Sans MS", sans-serif;
 }
 
 input::-webkit-outer-spin-button,
@@ -86,7 +86,7 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
@@ -99,4 +99,13 @@ input[type='number'] {
 ::-webkit-scrollbar-thumb {
   background-color: var(--primary);
   border-radius: 1em;
+}
+
+@keyframes move-steal-bar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
 }
