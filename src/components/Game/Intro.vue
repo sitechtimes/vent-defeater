@@ -55,7 +55,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-start flex-col w-[37.5%] h-full gap-4">
+        <div class="flex items-center justify-start flex-col w-[37.5%] h-full gap-3">
           <img class="bg-lime-200 p-3" src="/logo/logoTheGame.svg" aria-hidden="true" />
           <p class="text-white text-sm">The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?</p>
 
@@ -77,6 +77,8 @@
             <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Guy 2 & Guy 1.5</span></p>
             <p><span class="text-gray-400 text-xs">PUBLISHER:</span> <span class="text-blue-400 text-md font-bold">Bogdan Sussyomin, Robber of Barons</span></p>
           </div>
+
+          <p class="text-left w-full"><span class="text-gray-400 text-xs">PLATFORMS:</span> <span class="text-blue-400 text-md font-bold">PC, Tablet</span></p>
         </div>
       </div>
 
