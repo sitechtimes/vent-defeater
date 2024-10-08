@@ -93,6 +93,12 @@ const store = useGameStore();
 
 const props = defineProps<Props>();
 watch(
+  () => props.level,
+  (level) => {
+    if (store.heartAttack && level.enemy) level.enemy.lives = Math.ceil(level.enemy.lives / 2);
+  }
+);
+watch(
   () => props.fastForward,
   (bool) => {
     if (bool) damageEnemy();
@@ -133,6 +139,8 @@ function next() {
   if (!selectedReward.value) return;
   if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 16) store.relicOfDeath = true;
   if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 17) store.showBrainrot = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 18) store.noCombust = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 19) store.heartAttack = true;
   props.level.completed = true;
   emit('reward', selectedReward.value);
   emit('win');

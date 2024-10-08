@@ -10,6 +10,8 @@ export const useGameStore = defineStore('gameStore', () => {
   const isDead = ref(false);
   const relicOfDeath = ref(false);
   const showBrainrot = ref(false);
+  const noCombust = ref(false);
+  const heartAttack = ref(false);
 
-  return { energy, currentElement, elementGrid, levels, isDead, relicOfDeath, showBrainrot };
+  return { energy, currentElement, elementGrid, levels, isDead, relicOfDeath, showBrainrot, noCombust, heartAttack };
 });

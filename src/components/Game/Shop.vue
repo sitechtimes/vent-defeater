@@ -102,6 +102,8 @@ function next() {
   if (!selectedReward.value) return;
   if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 16) store.relicOfDeath = true;
   if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 17) store.showBrainrot = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 18) store.noCombust = true;
+  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 19) store.heartAttack = true;
   emit('select', selectedReward.value);
   emit('next');
 }

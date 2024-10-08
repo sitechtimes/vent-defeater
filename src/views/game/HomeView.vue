@@ -29,7 +29,7 @@
   <div
     class="energyOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl"
     :style="{ opacity: (energy - (relics[2].unlocked ? 150 : 100)) / (relics[2].unlocked ? 50 : 25) }"
-    v-if="energy > (relics[2].unlocked ? 150 : 100)"
+    v-if="energy > (relics[2].unlocked ? 150 : 100) && !store.noCombust"
   ></div>
   <Transition name="opacity">
     <div class="healthOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-xl" v-if="health < 50 || showHealthOverlay"></div>
@@ -275,13 +275,20 @@ watch(
 const previousLevel = ref<LevelType>();
 const level = ref<'map' | LevelType>();
 const health = ref(100);
-watch(() => health.value, () => {
-  if (health.value <= 0) store.isDead = true;
-})
+watch(
+  () => health.value,
+  () => {
+    if (health.value <= 0) store.isDead = true;
+  }
+);
 const { energy, elementGrid } = storeToRefs(store);
-watch(() => energy.value, () => {
-  if (energy.value >= (relics[2].unlocked ? 200 : 125)) store.isDead = true;
-})
+watch(
+  () => energy.value,
+  () => {
+    if (store.noCombust) return;
+    if (energy.value >= (relics[2].unlocked ? 200 : 125)) store.isDead = true;
+  }
+);
 
 const rows = ref(2);
 const columns = ref(2);
@@ -293,9 +300,12 @@ const currentPowerups = ref<Powerup[]>(new Array(4).fill(undefined));
 const shielded = ref(false);
 const fastForward = ref(false);
 
-watch(() => store.relicOfDeath, (val) => {
-  if (val) health.value = 0;
-})
+watch(
+  () => store.relicOfDeath,
+  (val) => {
+    if (val) health.value = 0;
+  }
+);
 
 const tutorialPhases = ref([
   {
@@ -306,7 +316,7 @@ const tutorialPhases = ref([
   {
     top: 40,
     left: 500,
-    text: "This is your energy. Don't let it go above 100 or you'll get electrocuted and die"
+    text: "This is your energy. Don't let it go above 125 or you'll get electrocuted and die"
   },
   {
     top: 170,

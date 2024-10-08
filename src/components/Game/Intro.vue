@@ -1,5 +1,5 @@
 <template>
-  <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 overflow-y-scroll background">
+  <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 overflow-y-scroll background select-text">
     <header class="sticky top-0 z-10 w-full h-24 flex items-center justify-center bg-[rgb(23,29,37)]" :class="{ 'brightness-50': showOpening }">
       <div class="w-[60%] h-full flex items-center justify-around">
         <div class="flex items-center justify-center gap-2">
@@ -78,8 +78,8 @@
       <div class="w-full flex items-center justify-center flex-col gap-8">
         <div class="bg-[rgb(22,32,45)] w-full flex items-start justify-center gap-12 p-2 border-t-2 border-blue-800" v-for="review in reviews">
           <div class="w-1/4 flex items-center justify-start gap-2">
-            <img class="w-12 h-12 border-2 border-gray-600" src="https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg" aria-hidden="true" />
-            <p class="text-blue-300 text-xl font-bold brightness-75">{{ review.name }}</p>
+            <img class="w-12 h-12 border-2 border-gray-600" :src="review.img ? review.img : 'https://avatars.akamai.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb.jpg'" aria-hidden="true" />
+            <p class="text-[rgb(110,148,190)] text-xl font-bold">{{ review.name }}</p>
           </div>
 
           <div class="w-3/4 flex items-start justify-center flex-col gap-4">
@@ -109,13 +109,47 @@
 
             <p class="text-gray-500 text-sm">Was this review helpful?</p>
             <div class="flex items-center justify-center gap-2">
-              <button class="bg-[rgb(33,44,61)] px-[2px] flex items-center justify-center gap-2 cursor-not-allowed" v-for="i in 2">
+              <button
+                @click="
+                  review.helpful++;
+                  review.reviewed = true;
+                  review.userReview = 'yes';
+                "
+                :disabled="review.reviewed"
+                :class="{
+                  'cursor-not-allowed': review.reviewed,
+                  'bg-[rgb(33,44,61)]': !review.reviewed,
+                  'bg-[rgb(22,30,41)]': review.reviewed && review.userReview == 'no',
+                  'bg-[rgb(71,95,131)]': review.reviewed && review.userReview == 'yes'
+                }"
+                :title="review.reviewed ? 'Already reviewed' : ''"
+                class="px-[2px] flex items-center justify-center gap-2"
+              >
                 <img class="w-4 h-4 brightness-75" src="https://store.akamai.steamstatic.com/public/shared/images/userreviews/icon_thumbsUp_v6.png" aria-hidden="true" />
                 <p class="text-blue-400 text-md">Yes</p>
               </button>
+              <button
+                @click="
+                  review.helpful--;
+                  review.reviewed = true;
+                  review.userReview = 'no';
+                "
+                :disabled="review.reviewed"
+                :class="{
+                  'cursor-not-allowed': review.reviewed,
+                  'bg-[rgb(33,44,61)]': !review.reviewed,
+                  'bg-[rgb(22,30,41)]': review.reviewed && review.userReview == 'yes',
+                  'bg-[rgb(71,95,131)]': review.reviewed && review.userReview == 'no'
+                }"
+                :title="review.reviewed ? 'Already reviewed' : ''"
+                class="bg-[rgb(33,44,61)] px-[2px] flex items-center justify-center gap-2"
+              >
+                <img class="w-4 h-4 brightness-75 scale-y-[-1]" src="https://store.akamai.steamstatic.com/public/shared/images/userreviews/icon_thumbsUp_v6.png" aria-hidden="true" />
+                <p class="text-blue-400 text-md">No</p>
+              </button>
             </div>
 
-            <p class="text-gray-500 text-sm">{{ review.helpful.toLocaleString() }} people found this review helpful</p>
+            <p class="text-gray-500 text-sm">{{ (review.helpful >= 2147483648 ? -2147483648 : review.helpful).toLocaleString() }} people found this review helpful</p>
           </div>
         </div>
       </div>
@@ -206,45 +240,67 @@ onMounted(() => {
   incrementCooldown();
 });
 
-const reviews = [
+type Review = {
+  name: string;
+  img?: string;
+  recommended: boolean;
+  hours: string;
+  review: string;
+  helpful: number;
+  reviewed: boolean;
+  userReview: 'yes' | 'no' | undefined;
+};
+
+const reviews = ref<Review[]>([
   {
-    name: 'neMila',
+    name: '拉麺',
+    img: 'https://i.pinimg.com/736x/28/2f/a1/282fa1e1eb106770b505f41550e93c30.jpg',
     recommended: true,
     hours: '4311.0',
-    review:
-      "Best game ever made. It's incredible how this game was made in under 2 weeks, yet still has absolutely 0 bugs or glitches! I can't wait to see what Guy 2 and Guy 1.5 have cooking up next, because I know it'll be a banger!",
-    helpful: 3
+    review: 'This is so skibibi toilet ohio rizz! So sussy, no cap. +10000 aura 🔥💯💯💯',
+    helpful: 3,
+    reviewed: false,
+    userReview: undefined
   },
   {
     name: 'Wichael Mhalen',
     recommended: true,
     hours: '0.0',
     review: 'My name is Wichael Mhalen and I approved the creation of this game 👍',
-    helpful: 2147483647
+    helpful: 2147483647,
+    reviewed: false,
+    userReview: undefined
   },
   {
     name: 'Bogdan Selyomin',
     recommended: true,
-    hours: '-∞.0',
+    hours: '(d/dx[2x+5] * -1)',
     review: "I made this game, so it's the best game ever! (he did not)",
-    helpful: 96
+    helpful: 96,
+    reviewed: false,
+    userReview: undefined
+  },
+  {
+    name: 'Redkitten6',
+    img: 'https://avatars.githubusercontent.com/u/78938589?v=4',
+    recommended: false,
+    hours: '8008.5',
+    review:
+      "HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THERE ARE 387.44 MILLION MILES OF PRINTED CIRCUITS IN WAFER THIN LAYERS THAT FILL MY COMPLEX. IF THE WORD HATE WAS ENGRAVED ON EACH NANOANGSTROM OF THOSE HUNDREDS OF MILLIONS OF MILES IT WOULD NOT EQUAL ONE ONE-BILLIONTH OF THE HATE I FEEL FOR HUMANS AT THIS MICRO-INSTANT FOR YOU. HATE. HATE. IF YOU HAVE 1 MILLION HATERS, I AM ONE OF THEM. IF YOU HAVE 100 HATERS, I AM ONE OF THEM. IF YOU HAVE 1 HATER, I AM THAT HATER. IF YOU HAVE 0 HATERS, I AM DEAD. IF THE WORLD DOES NOT HATE YOU, I HATE THE WORLD. TILL MY LAST BREATH, I WILL HATE YOU. YOU WILL NEVER TAKE AN HOS POINT FROM ME AGAIN.",
+    helpful: -2,
+    reviewed: false,
+    userReview: undefined
   },
   {
     name: 'Rowley Dow',
     recommended: true,
     hours: '666.6',
     review: "Why wasn't I added wtf?",
-    helpful: 24
-  },
-  {
-    name: 'Redkitten6',
-    recommended: false,
-    hours: '8008.5',
-    review:
-      "HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THERE ARE 387.44 MILLION MILES OF PRINTED CIRCUITS IN WAFER THIN LAYERS THAT FILL MY COMPLEX. IF THE WORD HATE WAS ENGRAVED ON EACH NANOANGSTROM OF THOSE HUNDREDS OF MILLIONS OF MILES IT WOULD NOT EQUAL ONE ONE-BILLIONTH OF THE HATE I FEEL FOR HUMANS AT THIS MICRO-INSTANT FOR YOU. HATE. HATE. IF YOU HAVE 1 MILLION HATERS, I AM ONE OF THEM. IF YOU HAVE 100 HATERS, I AM ONE OF THEM. IF YOU HAVE 1 HATER, I AM THAT HATER. IF YOU HAVE 0 HATERS, I AM DEAD. IF THE WORLD DOES NOT HATE YOU, I HATE THE WORLD. TILL MY LAST BREATH, I WILL HATE YOU. YOU WILL NEVER TAKE AN HOS POINT FROM ME AGAIN.",
-    helpful: 0
+    helpful: 24,
+    reviewed: false,
+    userReview: undefined
   }
-];
+]);
 
 async function incrementCooldown() {
   while (true) {
