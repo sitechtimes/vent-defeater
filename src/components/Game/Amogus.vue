@@ -47,8 +47,8 @@
 </template>
 
 <script setup lang="ts">
-import { delay, getRandomInt } from '@/utils/functions';
-import { onMounted, ref } from 'vue';
+import { delay, getRandomInt } from "@/utils/functions";
+import { onMounted, ref } from "vue";
 
 type Props = {
   color: string;

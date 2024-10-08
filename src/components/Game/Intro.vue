@@ -1,7 +1,7 @@
 <template>
   <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 overflow-y-scroll background select-text">
     <header class="sticky top-0 z-10 w-full h-24 flex items-center justify-center bg-[rgb(23,29,37)]" :class="{ 'brightness-50': showOpening }">
-      <div class="w-[60%] h-full flex items-center justify-around">
+      <div class="w-[1152px] h-full flex items-center justify-around">
         <div class="flex items-center justify-center gap-2">
           <img class="h-20" src="/logo/steal.svg" aria-hidden="true" />
           <div class="flex items-center justify-center flex-col">
@@ -31,7 +31,13 @@
       </div>
     </header>
 
-    <div class="w-[50%] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
+    <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
+      <div class="disclaimer border-8 border-orange-600 bg-orange-400 p-4 rounded-lg w-full mb-5 flex flex-col items-start justify-center gap-1">
+        <h3 class="text-3xl font-extrabold">Disclaimer!</h3>
+        <p class="text-2xl">This game works best on a 1920x1080 screen.</p>
+        <p class="text-lg font-semibold">Some aspects of the game may not work as intended, or at all, on smaller devices.</p>
+      </div>
+
       <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > Strategy Games > Rougelites > Vent Defeater</div>
       <div class="w-full flex items-center justify-start text-white text-3xl">Vent Defeater: The Game</div>
       <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
@@ -94,7 +100,7 @@
                 aria-hidden="true"
               />
               <div class="flex flex-col items-start justify-center">
-                <p class="text-white text-xl">{{ review.recommended ? 'Recommended' : 'Not Recommended' }}</p>
+                <p class="text-white text-xl">{{ review.recommended ? "Recommended" : "Not Recommended" }}</p>
                 <p class="text-gray-500 text-sm">{{ review.hours }} hrs on record</p>
               </div>
             </div>
@@ -171,11 +177,11 @@
 </template>
 
 <script setup lang="ts">
-import { delay } from '@/utils/functions';
-import { onMounted, ref, watch } from 'vue';
+import { delay } from "@/utils/functions";
+import { onMounted, ref, watch } from "vue";
 
 type Showcase = {
-  type: 'image' | 'video';
+  type: "image" | "video";
   src: string;
 };
 
@@ -188,32 +194,32 @@ const showOpening = ref(false);
 
 async function start() {
   const page = document.documentElement;
-  page.requestFullscreen({ navigationUI: 'hide' });
+  page.requestFullscreen({ navigationUI: "hide" });
   showOpening.value = true;
   await delay(2000);
-  emit('next');
+  emit("next");
 }
 
 const showcases = ref<Showcase[]>([
   {
-    type: 'video',
-    src: '/game/showcase/gameAd.mp4'
+    type: "video",
+    src: "/game/showcase/gameAd.mp4"
   },
   {
-    type: 'image',
-    src: '/game/showcase/showcase4.png'
+    type: "image",
+    src: "/game/showcase/showcase4.png"
   },
   {
-    type: 'image',
-    src: '/game/showcase/showcase2.png'
+    type: "image",
+    src: "/game/showcase/showcase2.png"
   },
   {
-    type: 'image',
-    src: '/game/showcase/showcase1.png'
+    type: "image",
+    src: "/game/showcase/showcase1.png"
   },
   {
-    type: 'image',
-    src: '/game/showcase/showcase3.png'
+    type: "image",
+    src: "/game/showcase/showcase3.png"
   }
 ]);
 const selectedShowcase = ref<Showcase>(showcases.value[0]);
@@ -227,7 +233,7 @@ const showcaseCooldown = ref(0);
 watch(
   () => showcaseCooldown.value,
   (num) => {
-    if (selectedShowcase.value.type == 'image' && num > 6) {
+    if (selectedShowcase.value.type == "image" && num > 6) {
       const index = showcases.value.findIndex((showcase) => showcase.src == selectedShowcase.value.src);
 
       if (index < showcases.value.length - 1) selectedShowcase.value = showcases.value[index + 1];
@@ -248,43 +254,43 @@ type Review = {
   review: string;
   helpful: number;
   reviewed: boolean;
-  userReview: 'yes' | 'no' | undefined;
+  userReview: "yes" | "no" | undefined;
 };
 
 const reviews = ref<Review[]>([
   {
-    name: '拉麺',
-    img: 'https://i.pinimg.com/736x/28/2f/a1/282fa1e1eb106770b505f41550e93c30.jpg',
+    name: "拉麺",
+    img: "https://i.pinimg.com/736x/28/2f/a1/282fa1e1eb106770b505f41550e93c30.jpg",
     recommended: true,
-    hours: '4311.0',
-    review: 'This is so skibibi toilet ohio rizz! So sussy, no cap. +10000 aura 🔥💯💯💯',
+    hours: "4311.0",
+    review: "This is so skibibi toilet ohio rizz! So sussy, no cap. +10000 aura 🔥💯💯💯",
     helpful: 3,
     reviewed: false,
     userReview: undefined
   },
   {
-    name: 'Wichael Mhalen',
+    name: "Wichael Mhalen",
     recommended: true,
-    hours: '0.0',
-    review: 'My name is Wichael Mhalen and I approved the creation of this game 👍',
+    hours: "0.0",
+    review: "My name is Wichael Mhalen and I approved the creation of this game 👍",
     helpful: 2147483647,
     reviewed: false,
     userReview: undefined
   },
   {
-    name: 'Bogdan Selyomin',
+    name: "Bogdan Selyomin",
     recommended: true,
-    hours: '(d/dx[2x+5] * -1)',
+    hours: "(d/dx[2x+5] * -1)",
     review: "I made this game, so it's the best game ever! (he did not)",
     helpful: 96,
     reviewed: false,
     userReview: undefined
   },
   {
-    name: 'Redkitten6',
-    img: 'https://avatars.githubusercontent.com/u/78938589?v=4',
+    name: "Redkitten6",
+    img: "https://avatars.githubusercontent.com/u/78938589?v=4",
     recommended: false,
-    hours: '8008.5',
+    hours: "8008.5",
     review:
       "HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THERE ARE 387.44 MILLION MILES OF PRINTED CIRCUITS IN WAFER THIN LAYERS THAT FILL MY COMPLEX. IF THE WORD HATE WAS ENGRAVED ON EACH NANOANGSTROM OF THOSE HUNDREDS OF MILLIONS OF MILES IT WOULD NOT EQUAL ONE ONE-BILLIONTH OF THE HATE I FEEL FOR HUMANS AT THIS MICRO-INSTANT FOR YOU. HATE. HATE. IF YOU HAVE 1 MILLION HATERS, I AM ONE OF THEM. IF YOU HAVE 100 HATERS, I AM ONE OF THEM. IF YOU HAVE 1 HATER, I AM THAT HATER. IF YOU HAVE 0 HATERS, I AM DEAD. IF THE WORLD DOES NOT HATE YOU, I HATE THE WORLD. TILL MY LAST BREATH, I WILL HATE YOU. YOU WILL NEVER TAKE AN HOS POINT FROM ME AGAIN.",
     helpful: -2,
@@ -292,9 +298,9 @@ const reviews = ref<Review[]>([
     userReview: undefined
   },
   {
-    name: 'Rowley Dow',
+    name: "Rowley Dow",
     recommended: true,
-    hours: '666.6',
+    hours: "666.6",
     review: "Why wasn't I added wtf?",
     helpful: 24,
     reviewed: false,
@@ -310,24 +316,34 @@ async function incrementCooldown() {
 }
 
 function translateMonth(month: number) {
-  if (month == 0) return 'Jan';
-  else if (month == 1) return 'Feb';
-  else if (month == 2) return 'Mar';
-  else if (month == 3) return 'Apr';
-  else if (month == 4) return 'May';
-  else if (month == 5) return 'Jun';
-  else if (month == 6) return 'Jul';
-  else if (month == 7) return 'Aug';
-  else if (month == 8) return 'Sep';
-  else if (month == 9) return 'Oct';
-  else if (month == 10) return 'Nov';
-  else return 'Dec';
+  if (month == 0) return "Jan";
+  else if (month == 1) return "Feb";
+  else if (month == 2) return "Mar";
+  else if (month == 3) return "Apr";
+  else if (month == 4) return "May";
+  else if (month == 5) return "Jun";
+  else if (month == 6) return "Jul";
+  else if (month == 7) return "Aug";
+  else if (month == 8) return "Sep";
+  else if (month == 9) return "Oct";
+  else if (month == 10) return "Nov";
+  else return "Dec";
 }
 </script>
 
 <style lang="scss" scoped>
+.disclaimer {
+  display: none;
+}
+
 .background {
   background: radial-gradient(circle at 50% 0%, rgb(30, 67, 86), rgb(27, 40, 56) 60%);
+}
+
+@media (max-width: 1400px) {
+  .disclaimer {
+    display: block;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

@@ -61,20 +61,20 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
-import Enemy from './Enemy.vue';
-import Player from './Player.vue';
-import { delay, getRandomItemFromArray } from '@/utils/functions';
-import { useGameStore } from '@/stores/game';
-import Amogus from './Amogus.vue';
-import { relics, type Element, type Level, type Powerup, type Relic as RelicType } from '@/utils/elements';
-import Reward from './Reward.vue';
-import Shop from './Shop.vue';
-import Vent from './Vent.vue';
-import Relic from './Relic.vue';
+import { onBeforeUnmount, onMounted, ref, watch } from "vue";
+import Enemy from "./Enemy.vue";
+import Player from "./Player.vue";
+import { delay, getRandomItemFromArray } from "@/utils/functions";
+import { useGameStore } from "@/stores/game";
+import Amogus from "./Amogus.vue";
+import { relics, type Element, type Level, type Powerup, type Relic as RelicType } from "@/utils/elements";
+import Reward from "./Reward.vue";
+import Shop from "./Shop.vue";
+import Vent from "./Vent.vue";
+import Relic from "./Relic.vue";
 
 type Emits = {
-  reward: [reward: Element | RelicType | Powerup | { type: 'Bypass' }];
+  reward: [reward: Element | RelicType | Powerup | { type: "Bypass" }];
   win: [void];
   damaged: [damage: number];
   regen: [health: number, energy: number];
@@ -88,7 +88,7 @@ type Props = {
   fastForward: boolean;
 };
 
-const amogusColor = ref(getRandomItemFromArray(['#ffa44a', '#fffd8a', '#61ff64', '#3863ff', '#4ce3e0', '#ff8cda', '#7d6243', '#9673ff', '#20754c']));
+const amogusColor = ref(getRandomItemFromArray(["#ffa44a", "#fffd8a", "#61ff64", "#3863ff", "#4ce3e0", "#ff8cda", "#7d6243", "#9673ff", "#20754c"]));
 const store = useGameStore();
 
 const props = defineProps<Props>();
@@ -111,7 +111,7 @@ const matchedBoard = ref<number[][]>();
 
 const showWin = ref(false);
 const showReward = ref(false);
-const selectedReward = ref<Element | RelicType | Powerup | { type: 'Bypass' }>();
+const selectedReward = ref<Element | RelicType | Powerup | { type: "Bypass" }>();
 
 const enemyBoard = ref<number[]>();
 const playerBoard = ref<number[][]>();
@@ -134,16 +134,16 @@ async function winProtection() {
 
 function next() {
   if (props.level.id == 10) {
-    emit('winGame');
+    emit("winGame");
   }
   if (!selectedReward.value) return;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 16) store.relicOfDeath = true;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 17) store.showBrainrot = true;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 18) store.noCombust = true;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 19) store.heartAttack = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 16) store.relicOfDeath = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 17) store.showBrainrot = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 18) store.noCombust = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 19) store.heartAttack = true;
   props.level.completed = true;
-  emit('reward', selectedReward.value);
-  emit('win');
+  emit("reward", selectedReward.value);
+  emit("win");
 }
 
 async function damageEnemy() {
@@ -156,15 +156,15 @@ async function damageEnemy() {
     if (props.level.id == 10) next();
     else showReward.value = true;
   } else {
-    if (relics[13].unlocked) emit('regen', 10, 0);
+    if (relics[13].unlocked) emit("regen", 10, 0);
     await delay(200);
     showWin.value = false;
     matchedBoard.value = undefined;
   }
 }
 
-async function handleReroll(board: number[] | number[][], from: 'enemy' | 'player') {
-  if (from == 'enemy') enemyBoard.value = board as number[];
+async function handleReroll(board: number[] | number[][], from: "enemy" | "player") {
+  if (from == "enemy") enemyBoard.value = board as number[];
   else playerBoard.value = board as number[][];
 
   if (!enemyBoard.value || !playerBoard.value || !props.level.enemy) return;
@@ -229,7 +229,7 @@ async function handleReroll(board: number[] | number[][], from: 'enemy' | 'playe
 
 async function roll() {
   reroll.value = true;
-  if (!winCooldown.value) emit('regen', 0, relics[14].unlocked ? 6 : 5);
+  if (!winCooldown.value) emit("regen", 0, relics[14].unlocked ? 6 : 5);
   await delay(50);
   reroll.value = false;
 }

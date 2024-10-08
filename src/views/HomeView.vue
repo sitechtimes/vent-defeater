@@ -35,12 +35,17 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from '@/components/NavBar.vue';
-import { onMounted, ref } from 'vue';
+import NavBar from "@/components/NavBar.vue";
+import { onMounted, ref } from "vue";
+import { useMeta } from "vue-meta";
+
+useMeta({
+  title: "Interactive presentation venting - Vent Defeater"
+});
 
 const showBanner = ref(false);
 onMounted(() => {
-  sessionStorage.setItem('previousIsHome', 'true');
+  sessionStorage.setItem("previousIsHome", "true");
   showBanner.value = true;
 });
 </script>

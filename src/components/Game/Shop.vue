@@ -52,7 +52,7 @@
       "
       class="bg-white py-3 px-10 rounded-full text-2xl font-medium"
     >
-      {{ choice ? 'Continue' : 'Skip' }}
+      {{ choice ? "Continue" : "Skip" }}
     </button>
     <button
       v-else
@@ -67,30 +67,30 @@
 </template>
 
 <script setup lang="ts">
-import { getRandomInt, getRandomItemFromArray } from '@/utils/functions';
-import Amogus from './Amogus.vue';
-import { onBeforeMount, ref, watch } from 'vue';
-import Reward from './Reward.vue';
-import type { Element, Powerup, Relic } from '@/utils/elements';
-import { useGameStore } from '@/stores/game';
+import { getRandomInt, getRandomItemFromArray } from "@/utils/functions";
+import Amogus from "./Amogus.vue";
+import { onBeforeMount, ref, watch } from "vue";
+import Reward from "./Reward.vue";
+import type { Element, Powerup, Relic } from "@/utils/elements";
+import { useGameStore } from "@/stores/game";
 
 type Emits = {
   next: [void];
   regen: [health: number, energy: number];
-  select: [reward: Element | Relic | Powerup | { type: 'Bypass' }];
+  select: [reward: Element | Relic | Powerup | { type: "Bypass" }];
 };
 
 const store = useGameStore();
 const emit = defineEmits<Emits>();
-const direction = ref(getRandomItemFromArray(['North', 'East', 'South', 'West']));
+const direction = ref(getRandomItemFromArray(["North", "East", "South", "West"]));
 
-const selectedReward = ref<Element | Relic | Powerup | { type: 'Bypass' }>();
+const selectedReward = ref<Element | Relic | Powerup | { type: "Bypass" }>();
 const regenAmount = ref(getRandomInt(20, 50));
-const choice = ref<'element' | 'relic' | 'regen'>();
+const choice = ref<"element" | "relic" | "regen">();
 watch(
   () => choice.value,
   (val) => {
-    if (val == 'regen') emit('regen', regenAmount.value, 0);
+    if (val == "regen") emit("regen", regenAmount.value, 0);
   }
 );
 
@@ -100,12 +100,12 @@ onBeforeMount(() => {
 
 function next() {
   if (!selectedReward.value) return;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 16) store.relicOfDeath = true;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 17) store.showBrainrot = true;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 18) store.noCombust = true;
-  if (selectedReward.value.type == 'Relic' && selectedReward.value.id == 19) store.heartAttack = true;
-  emit('select', selectedReward.value);
-  emit('next');
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 16) store.relicOfDeath = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 17) store.showBrainrot = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 18) store.noCombust = true;
+  if (selectedReward.value.type == "Relic" && selectedReward.value.id == 19) store.heartAttack = true;
+  emit("select", selectedReward.value);
+  emit("next");
 }
 </script>
 
