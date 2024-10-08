@@ -254,7 +254,8 @@ import { onBeforeMount, ref, watch } from "vue";
 import { useMeta } from "vue-meta";
 
 useMeta({
-  title: "Vent Defeater on Steal"
+  title: "Vent Defeater on Steal",
+  description: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?"
 });
 
 const store = useGameStore();

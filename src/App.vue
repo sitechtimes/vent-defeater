@@ -15,7 +15,9 @@ import { useMeta } from "vue-meta";
 const userStore = useUserStore();
 
 useMeta({
-  title: "Vent Defeater"
+  title: "Vent Defeater",
+  description:
+    "Featuring features fraught with a few fixes featured in many of your favorite apps and websites, Vent Defeater enables the imagination of anyone looking to build modern, sleek, and top-quality presentations."
 });
 
 onBeforeMount(() => {
