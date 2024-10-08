@@ -32,12 +32,12 @@
         <p class="m-0 text-[color:var(--text-color)] font-semibold">Upgrade</p>
       </button>
 
-      <div class="button-pop-up relative">
+      <div class="notificationsButton relative">
         <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--faded-bg-color)]">
           <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/bell.svg" aria-hidden="true" />
         </button>
         <div
-          class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center justify-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
+          class="notifications opacity-0 pointer-events-none absolute right-0 flex items-center justify-center flex-col gap-2 w-96 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
         >
           <h1 class="text-lg text-left w-full mt-4">Notifications</h1>
           <div class="flex items-center justify-center flex-col w-80 bg-[color:var(--faded-bg-color)] p-6 rounded-lg">
@@ -47,68 +47,23 @@
         </div>
       </div>
 
-      
-      <div class="button-pop-up relative">
       <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]">
         <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/user.svg" aria-hidden="true" />
       </button>
-      <div 
-           class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center text-center flex-col gap-2 w-48 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
-        >
-          <RouterLink class="path-options block w-48 rounded-lg text-lg"  @click="" v-for="option in options" :to="option.path" :key="option.name">{{ option.name }}</RouterLink>
-        </div>
     </div>
-  </div>
-
   </header>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user';
-import type { Presentation } from '@/utils/types';
-import { onBeforeMount, ref, watch } from 'vue';
-import ThemeToggle from './ThemeToggle.vue';
+import { useUserStore } from "@/stores/user";
+import type { Presentation } from "@/utils/types";
+import { onBeforeMount, ref, watch } from "vue";
+import ThemeToggle from "./ThemeToggle.vue";
 
-type options = {
-  name: string;
-  path: string;
-  dropdown?: { name: string; path: string }[];
-};
-
-const options: options[] = [
-  {
-    name: 'settings',
-    path: '/UserSettings',
-  },
-  {
-    name: 'hamburger',
-    path: '/',
-  },
-  {
-    name: 'hamburger',
-    path: '/',
-  },
-  {
-    name: 'hamburger',
-    path: '/',
-  },
-  {
-    name: 'hamburger',
-    path: '/'
-  },
-  {
-    name: 'hamburger',
-    path: '/'
-  },
-  {
-    name: 'hamburger',
-    path: '/'
-  },
-];
 const userStore = useUserStore();
 const presentations = ref<Presentation[]>([]);
-  const userPopUp = ref(false)
-const searchInput = ref('');
+
+const searchInput = ref("");
 watch(
   () => searchInput.value,
   (input) => search(input)
@@ -146,14 +101,14 @@ function search(input: string) {
   }
 }
 
-.button-pop-up:focus-within {
-  .pop-up-button {
+.notificationsButton:focus-within {
+  .notifications {
     opacity: 1;
     pointer-events: all;
   }
 }
 
-.pop-up-button {
+.notifications {
   box-shadow: 0 0 0 0.05rem var(--bg-color-contrast-translucent);
 }
 
@@ -162,16 +117,16 @@ function search(input: string) {
     outline: 0.125rem solid var(--primary);
   }
 
-  .pop-up-button:hover {
+  .presentation:hover {
     background-color: var(--faded-bg-color);
   }
 
   .upgrade:hover {
     background-color: var(--faded-bg-color);
   }
-  
-  .button-pop-up {
-    path-options:hover {
+
+  .notificationsButton {
+    button:hover {
       background-color: var(--faded-bg-color-light);
     }
   }

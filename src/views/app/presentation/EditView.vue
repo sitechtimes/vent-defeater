@@ -66,13 +66,18 @@
 </template>
 
 <script setup lang="ts">
-import LoadingTransition from '@/components/LoadingTransition.vue';
-import ElementOptions from '@/components/PresentationEditing/ElementOptions.vue';
-import ElementSwitch from '@/components/PresentationEditing/ElementSwitch.vue';
-import ThemeToggle from '@/components/ThemeToggle.vue';
-import { useUserStore } from '@/stores/user';
-import type { Element, Slide } from '@/utils/types';
-import { onMounted, onUnmounted, ref, watch } from 'vue';
+import LoadingTransition from "@/components/LoadingTransition.vue";
+import ElementOptions from "@/components/PresentationEditing/ElementOptions.vue";
+import ElementSwitch from "@/components/PresentationEditing/ElementSwitch.vue";
+import ThemeToggle from "@/components/ThemeToggle.vue";
+import { useUserStore } from "@/stores/user";
+import type { Element, Slide } from "@/utils/types";
+import { onMounted, onUnmounted, ref, watch } from "vue";
+import { useMeta } from "vue-meta";
+
+useMeta({
+  title: "Edit your vent - Vent Defeater"
+});
 
 const slideBackgroundRef = ref<HTMLElement>();
 const slideRef = ref<HTMLElement>();
@@ -92,8 +97,8 @@ const offsetTop = ref(0);
 const offsetRight = ref(0);
 const offsetBottom = ref(0);
 
-const scalePositionWidth = ref<'left' | 'center' | 'right'>();
-const scalePositionHeight = ref<'top' | 'center' | 'bottom'>();
+const scalePositionWidth = ref<"left" | "center" | "right">();
+const scalePositionHeight = ref<"top" | "center" | "bottom">();
 
 // when saving:
 // delete any elements that have top left right bottom all outside bounds of slide
@@ -111,13 +116,13 @@ onMounted(() => {
   }
   currentSlide.value = slide;
 
-  window.addEventListener('resize', getScaleFactors);
+  window.addEventListener("resize", getScaleFactors);
 });
 
 onUnmounted(() => {
-  document.removeEventListener('mousemove', scaleElement);
-  document.removeEventListener('mousemove', moveElement);
-  document.removeEventListener('mouseup', handleMouseUp);
+  document.removeEventListener("mousemove", scaleElement);
+  document.removeEventListener("mousemove", moveElement);
+  document.removeEventListener("mouseup", handleMouseUp);
 });
 
 function getScaleFactors() {
@@ -139,7 +144,7 @@ function getScaleFactors() {
   console.log(scaleFactor.value, reverseScaleFactor.value);
 }
 
-function handleMouseDown(element: Element, event: MouseEvent, width?: 'left' | 'center' | 'right', height?: 'top' | 'center' | 'bottom') {
+function handleMouseDown(element: Element, event: MouseEvent, width?: "left" | "center" | "right", height?: "top" | "center" | "bottom") {
   if (!slideRef.value) return;
 
   selectElement(element, event);
@@ -159,12 +164,12 @@ function handleMouseDown(element: Element, event: MouseEvent, width?: 'left' | '
   offsetRight.value = mouseRight - element.position.right * scaleFactor.value;
   offsetBottom.value = mouseBottom - element.position.bottom * scaleFactor.value;
 
-  document.addEventListener('mousemove', width || height ? scaleElement : moveElement);
-  document.addEventListener('mouseup', handleMouseUp);
+  document.addEventListener("mousemove", width || height ? scaleElement : moveElement);
+  document.addEventListener("mouseup", handleMouseUp);
 }
 
 function scaleElement(event: MouseEvent) {
-  if (!elementMoving.value || !selectedElement.value || !slideRef.value || selectedElement.value.type == 'Slide') return;
+  if (!elementMoving.value || !selectedElement.value || !slideRef.value || selectedElement.value.type == "Slide") return;
 
   const width = scalePositionWidth.value;
   const height = scalePositionHeight.value;
@@ -180,14 +185,14 @@ function scaleElement(event: MouseEvent) {
   const rawRight = mouseRight * reverseScaleFactor.value - offsetRight.value * reverseScaleFactor.value;
   const rawBottom = mouseBottom * reverseScaleFactor.value - offsetBottom.value * reverseScaleFactor.value;
 
-  if (height == 'top') selectedElement.value.position.top = rawTop;
-  if (height == 'bottom') selectedElement.value.position.bottom = rawBottom;
-  if (width == 'left') selectedElement.value.position.left = rawLeft;
-  if (width == 'right') selectedElement.value.position.right = rawRight;
+  if (height == "top") selectedElement.value.position.top = rawTop;
+  if (height == "bottom") selectedElement.value.position.bottom = rawBottom;
+  if (width == "left") selectedElement.value.position.left = rawLeft;
+  if (width == "right") selectedElement.value.position.right = rawRight;
 }
 
 function moveElement(event: MouseEvent) {
-  if (!elementMoving.value || !selectedElement.value || !slideRef.value || selectedElement.value.type == 'Slide') return;
+  if (!elementMoving.value || !selectedElement.value || !slideRef.value || selectedElement.value.type == "Slide") return;
 
   const slideRect = slideRef.value.getBoundingClientRect();
   const mouseLeft = event.clientX - slideRect.left;
@@ -208,9 +213,9 @@ function moveElement(event: MouseEvent) {
 
 function handleMouseUp() {
   elementMoving.value = false;
-  document.removeEventListener('mousemove', scaleElement);
-  document.removeEventListener('mousemove', moveElement);
-  document.removeEventListener('mouseup', handleMouseUp);
+  document.removeEventListener("mousemove", scaleElement);
+  document.removeEventListener("mousemove", moveElement);
+  document.removeEventListener("mouseup", handleMouseUp);
 }
 
 function selectElement(element: Slide | Element, event: Event) {

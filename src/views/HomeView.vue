@@ -1,6 +1,6 @@
 <template>
   <div>
-    <NavBar :show-join-banner="showBanner" />
+    <NavBar :show-join-banner="showBanner" @toggle-banner="showBanner = !showBanner" />
     <main class="flex flex-col items-center text-center gap-20">
       <section class="flex flex-col gap-3 items-center">
         <h1 class="text-6xl">What will you ask your audience?</h1>
@@ -35,12 +35,17 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from '@/components/NavBar.vue';
-import { onMounted, ref } from 'vue';
+import NavBar from "@/components/NavBar.vue";
+import { onMounted, ref } from "vue";
+import { useMeta } from "vue-meta";
+
+useMeta({
+  title: "Interactive presentation venting - Vent Defeater"
+});
 
 const showBanner = ref(false);
 onMounted(() => {
-  sessionStorage.setItem('previousIsHome', 'true');
+  sessionStorage.setItem("previousIsHome", "true");
   showBanner.value = true;
 });
 </script>

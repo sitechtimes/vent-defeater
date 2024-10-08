@@ -1,4 +1,4 @@
-export type Template = 'Multiple Choice' | 'Word Cloud' | 'Open Ended' | 'Scales' | 'Ranking' | 'Q&A' | 'Guess the Number' | '100 Points' | '2x2 Grid' | 'Pin on Image';
+export type Template = "Multiple Choice" | "Word Cloud" | "Open Ended" | "Scales" | "Ranking" | "Q&A" | "Guess the Number" | "100 Points" | "2x2 Grid" | "Pin on Image";
 export type Element = TextField | WordCloud;
 
 /** Settings for element position. */
@@ -49,7 +49,7 @@ export type TextStyles = {
   /** Hyperlink. */
   link?: string;
   /** Text alignment. */
-  align: 'left' | 'center' | 'right';
+  align: "left" | "center" | "right";
   wrap: boolean;
 };
 
@@ -63,7 +63,7 @@ export type Presentation = {
    *
    * Shown in the search bar.
    */
-  type: 'Presentation' | 'Quiz' | 'Survey' | 'Poll';
+  type: "Presentation" | "Quiz" | "Survey" | "Poll";
   /** Time since epoch, in seconds.
    * @see https://www.epochconverter.com/
    */
@@ -77,7 +77,7 @@ export type Slide = {
   /** ID of the slide. */
   id: string;
   /** @readonly */
-  type: 'Slide';
+  type: "Slide";
   /** Array of elements, each representing 1 element. */
   elements: Element[];
   /** Speaker notes. */
@@ -105,7 +105,7 @@ export type TextField = {
   /** ID of the element. */
   id: string;
   /** @readonly */
-  type: 'Text Field';
+  type: "Text Field";
   /** (X,Y) coordinates of the element's corners, in pixels. */
   position: Size;
   /** Information about the element's background. */
@@ -117,11 +117,11 @@ export type TextField = {
   /** Flex properties of the element. */
   flex: {
     /** Flex property for align-items. */
-    items: 'left' | 'center' | 'right';
+    items: "left" | "center" | "right";
     /** Flex property for justify-content. */
-    justify: 'left' | 'center' | 'right';
+    justify: "left" | "center" | "right";
     /** Flex property for align-content. */
-    align: 'left' | 'center' | 'right';
+    align: "left" | "center" | "right";
     /** Flex property for flex-wrap. */
     wrap: boolean;
   };
@@ -139,7 +139,7 @@ export type WordCloud = {
   /** ID of the element. */
   id: string;
   /** @readonly */
-  type: 'Word Cloud';
+  type: "Word Cloud";
   /** (X,Y) coordinates of the element's corners, in pixels. */
   position: Size;
   /** Information about the element's background. */
@@ -156,11 +156,11 @@ export type WordCloud = {
   /** Flex properties of the element. */
   flex: {
     /** Flex property for align-items. */
-    items: 'left' | 'center' | 'right';
+    items: "left" | "center" | "right";
     /** Flex property for justify-content. */
-    justify: 'left' | 'center' | 'right';
+    justify: "left" | "center" | "right";
     /** Flex property for align-content. */
-    align: 'left' | 'center' | 'right';
+    align: "left" | "center" | "right";
     /** Flex property for flex-wrap. */
     wrap: boolean;
   };
