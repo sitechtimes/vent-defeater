@@ -27,6 +27,7 @@
             @regen="(hp, energy) => emit('regen', hp, energy)"
             @fart="damageEnemy"
             @blizzard="damageEnemy"
+            @out-of-energy="showOutOfEnergy = true"
           />
           <Amogus :color="amogusColor" v-if="level.id != 10" />
           <Vent v-else />
@@ -43,6 +44,7 @@
             @damaged="(damage) => emit('damaged', damage)"
             @regen="(hp, energy) => emit('regen', hp, energy)"
             @oil-spill="damageEnemy"
+            @out-of-energy="showOutOfEnergy = true"
           />
           <button
             @click="roll"
@@ -52,6 +54,10 @@
           >
             Reroll 🎲
           </button>
+          <div v-show="showOutOfEnergy" :class="{ 'bottom-20': !store.smallScreen, 'bottom-10': store.smallScreen }" class="absolute flex flex-col items-center justify-center bg-red-700 py-2 px-6 rounded-full">
+            <p class="text-white font-extrabold text-lg">Out of energy!</p>
+            <p class="text-white font-medium text-md">Try rerolling to regenerate some.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -102,6 +108,7 @@ watch(
 const emit = defineEmits<Emits>();
 const reroll = ref(false);
 const matchedBoard = ref<number[][]>();
+const showOutOfEnergy = ref(false);
 
 const showWin = ref(false);
 const showReward = ref(false);
@@ -227,6 +234,7 @@ async function handleReroll(board: number[] | number[][], from: "enemy" | "playe
 async function roll() {
   reroll.value = true;
   if (!winCooldown.value) emit("regen", 0, relics[14].unlocked ? 6 : 5);
+  showOutOfEnergy.value = false;
   await delay(50);
   reroll.value = false;
 }

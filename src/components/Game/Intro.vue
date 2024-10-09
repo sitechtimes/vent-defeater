@@ -45,8 +45,8 @@
       <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
         <div class="flex items-center justify-center flex-col gap-2 w-[62.5%]">
           <div class="flex flex-col items-center justify-center w-full">
-            <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted @ended="selectedShowcase = showcases[1]"></video>
-            <img v-else :src="selectedShowcase.src" />
+            <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted @load="showcaseCooldown = 0" @ended="selectedShowcase = showcases[1]"></video>
+            <img v-else :src="selectedShowcase.src" @load="showcaseCooldown = 0" />
             <div class="w-full bg-gray-900 h-2">
               <div v-if="showcaseCooldown > 0" class="h-full bg-yellow-300" :style="{ animation: `move-steal-bar ${selectedShowcase.type == 'video' ? 19.5 : 5}s linear` }"></div>
             </div>

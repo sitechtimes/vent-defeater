@@ -64,7 +64,7 @@
   <div v-if="store.isDead || gameWon" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
     <h2 class="text-4xl font-semibold">{{ gameWon ? "You won!" : "You lost 😦" }}</h2>
     <p class="text-2xl font-medium" v-if="store.relicOfDeath && !gameWon && health <= 0">You lost the double or nothing</p>
-    <p class="text-2xl font-medium" v-else-if="!gameWon && health <= 0">You died from wounds</p>
+    <p class="text-2xl font-medium" v-else-if="!gameWon && health <= 0">You died from chronic death syndrome</p>
     <p class="text-2xl font-medium" v-else-if="!gameWon && energy >= (relics[2].unlocked ? 200 : 125)">Your energy meter spontaneously combusted</p>
     <div class="z-10 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl">
       <p class="timer font-semibold text-4xl">
@@ -362,15 +362,22 @@ const tutorialPhases = ref([
   {
     top: 170,
     left: 600,
-    text: "These are your elements, relics, and powerups. Click to select. You can hover over them to see what they do",
+    text: "These are your elements, relics, and powerups. You can hover over them to see what they do",
     src: "/game/tutorial/tutorialElements.mp4",
     allowNext: false
   },
   {
     top: 700,
     left: 975,
-    text: "This is your board. You can use your elements here by clicking on a tile",
+    text: "This is your board. You can use your elements here by clicking on a tile. Using an element costs 5 energy",
     src: "/game/tutorial/tutorialBoard.mp4",
+    allowNext: false
+  },
+  {
+    top: 800,
+    left: 1000,
+    text: "This is the great almighty reroll button. Rerolling will regenerate 5 energy",
+    src: "/game/tutorial/tutorialReroll.mp4",
     allowNext: false
   },
   {
@@ -388,10 +395,10 @@ const tutorialPhases = ref([
     allowNext: false
   },
   {
-    top: 800,
-    left: 1000,
-    text: "This is the great almighty reroll button. Click it to reroll your board",
-    src: "/game/tutorial/tutorialReroll.mp4",
+    top: 700,
+    left: 975,
+    text: "Your goal is to match numbers on your board to the numbers above the enemy. Matching is done automatically, you just need to keep rolling!",
+    src: "/game/tutorial/tutorialMatch.mp4",
     allowNext: false
   },
   {
@@ -399,13 +406,6 @@ const tutorialPhases = ref([
     left: 1200,
     text: "This is your speedrun timer. It'll start once you exit this tutorial",
     src: "/game/tutorial/tutorialTimer.mp4",
-    allowNext: false
-  },
-  {
-    top: 700,
-    left: 975,
-    text: "Your goal is to match numbers on your board to the numbers above the enemy. Matching is done automatically, you just need to keep rolling!",
-    src: "/game/tutorial/tutorialMatch.mp4",
     allowNext: false
   }
 ]);
@@ -431,6 +431,8 @@ onBeforeMount(() => {
   userStore.theme = "light";
   store.levels = generateNewMap();
   selectedElement.value = elements.value.ice;
+  currentRelics.value[0] = getRandomItemFromArray([relics[0], relics[3], relics[4], relics[14]]);
+  currentPowerups.value[0] = powerups[1];
 });
 
 onMounted(() => {
