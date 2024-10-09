@@ -1,15 +1,15 @@
 <template>
   <div class="w-full h-full gap-8 py-10 flex flex-col items-center justify-center">
-    <div class="relative w-[80%] h-3/4 flex items-center justify-start flex-col z-10 p-4 rounded-2xl bg-[rgba(0,0,0,0.6)]">
+    <div class="relative w-[85%] h-[80%] flex items-center justify-start flex-col z-10 p-4 rounded-2xl bg-[rgba(0,0,0,0.6)]">
       <Amogus color="#ff0000" class="absolute bottom-[-8.75rem] left-[-1.5rem] z-[1] scale-y-[-1]" />
-      <h1 class="text-white text-5xl">The Sussiest Shop in the {{ direction }}</h1>
+      <h1 class="text-white text-5xl text-center title">The Sussiest Shop in the {{ direction }}</h1>
       <p v-if="!choice" class="text-white text-xl mt-1">Pick one:</p>
-      <div class="relative flex items-center justify-center w-full h-full gap-10 mt-6">
+      <div class="buttonHolder relative flex items-center justify-center w-full h-full mt-6">
         <button
           v-if="!choice || choice == 'element'"
           @click="choice = 'element'"
           :class="{ 'brightness-[.4]': !choice }"
-          class="select w-1/3 h-full bg-red-400 flex items-center justify-center flex-col gap-2 rounded-2xl"
+          class="select bg-red-400 flex items-center justify-center flex-col gap-2 rounded-2xl"
         >
           <p class="text-3xl text-center font-semibold w-[70%]">Bargain with the shopkeeper</p>
           <p class="text-lg text-center font-medium w-[70%]">Use those social skills you totally have</p>
@@ -19,7 +19,7 @@
           v-if="!choice || choice == 'relic'"
           @click="choice = 'relic'"
           :class="{ 'brightness-[.4]': !choice }"
-          class="select w-1/3 h-full bg-green-400 flex items-center justify-center flex-col gap-2 rounded-2xl"
+          class="select bg-green-400 flex items-center justify-center flex-col gap-2 rounded-2xl"
         >
           <p class="text-3xl text-center font-semibold w-[70%]">Talk with the blacksmith</p>
           <p class="text-lg text-center font-medium w-[70%]">Because talking with people is so fun</p>
@@ -29,7 +29,7 @@
           v-if="!choice || choice == 'regen'"
           @click="choice = 'regen'"
           :class="{ 'brightness-[.4]': !choice }"
-          class="select w-1/3 h-full bg-blue-400 flex items-center justify-center flex-col gap-2 rounded-2xl"
+          class="select bg-blue-400 flex items-center justify-center flex-col gap-2 rounded-2xl"
         >
           <p class="text-3xl text-center font-semibold w-[70%]">Find the nearest cardboard box</p>
           <p class="text-lg text-center font-medium w-[70%]">Ain't nobody got money for rent in this economy</p>
@@ -110,6 +110,31 @@ function next() {
 </script>
 
 <style lang="scss" scoped>
+.select {
+  width: 33.3333333%;
+  height: 100%;
+}
+
+.buttonHolder {
+  gap: 2.5rem;
+}
+
+@media (max-width: 1200px) {
+  .title {
+    display: none;
+  }
+
+  .buttonHolder {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .select {
+    width: 100%;
+    height: 33.3333333%;
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .select:hover {
     filter: brightness(1);

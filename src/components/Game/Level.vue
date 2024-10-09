@@ -13,7 +13,7 @@
       </div>
     </Transition>
 
-    <div class="w-[50em]"></div>
+    <div :class="{ 'w-[50em]': !store.smallScreen, 'w-[60vw]': store.smallScreen }"></div>
 
     <div class="w-full h-full gap-8 py-10 flex flex-col items-center justify-around" v-if="level.type != 'shop' && level.type != 'relic'">
       <div class="w-2/3 h-[45%] flex items-center justify-end">
@@ -47,7 +47,7 @@
           <button
             @click="roll"
             class="reroll back transition w-48 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6"
-            :disabled="matchedBoard != undefined || store.isDead"
+            :disabled="matchedBoard != undefined || store.isDead || showReward"
             :class="{ 'cursor-not-allowed': matchedBoard }"
           >
             Reroll 🎲
@@ -93,12 +93,6 @@ const store = useGameStore();
 
 const props = defineProps<Props>();
 watch(
-  () => props.level,
-  (level) => {
-    if (store.heartAttack && level.enemy) level.enemy.lives = Math.ceil(level.enemy.lives / 2);
-  }
-);
-watch(
   () => props.fastForward,
   (bool) => {
     if (bool) damageEnemy();
@@ -111,6 +105,7 @@ const matchedBoard = ref<number[][]>();
 
 const showWin = ref(false);
 const showReward = ref(false);
+
 const selectedReward = ref<Element | RelicType | Powerup | { type: "Bypass" }>();
 
 const enemyBoard = ref<number[]>();
@@ -120,6 +115,7 @@ const winCooldown = ref(true);
 
 onMounted(async () => {
   await winProtection();
+  if (store.heartAttack && props.level.enemy) props.level.enemy.lives = Math.ceil(props.level.enemy.lives / 2);
 });
 
 onBeforeUnmount(() => {
