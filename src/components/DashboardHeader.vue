@@ -47,19 +47,17 @@
         </div>
       </div>
 
-      
       <div class="button-pop-up relative">
-      <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]">
-        <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/user.svg" aria-hidden="true" />
-      </button>
-      <div 
-           class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center text-center flex-col gap-2 w-48 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
+        <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]">
+          <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/user.svg" aria-hidden="true" />
+        </button>
+        <div
+          class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center text-center flex-col gap-2 w-48 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
         >
-          <RouterLink class="path-options block w-48 rounded-lg text-lg"  @click="" v-for="option in options" :to="option.path" :key="option.name">{{ option.name }}</RouterLink>
+          <RouterLink class="path-options block w-48 rounded-lg text-lg" @click="" v-for="option in options" :to="option.path" :key="option.name">{{ option.name }}</RouterLink>
         </div>
+      </div>
     </div>
-  </div>
-
   </header>
 </template>
 
@@ -69,28 +67,16 @@ import type { Presentation } from '@/utils/types';
 import { onBeforeMount, ref, watch } from 'vue';
 import ThemeToggle from './ThemeToggle.vue';
 
-type options = {
+type Options = {
   name: string;
   path: string;
   dropdown?: { name: string; path: string }[];
 };
 
-const options: options[] = [
+const options: Options[] = [
   {
     name: 'settings',
-    path: '/UserSettings',
-  },
-  {
-    name: 'hamburger',
-    path: '/',
-  },
-  {
-    name: 'hamburger',
-    path: '/',
-  },
-  {
-    name: 'hamburger',
-    path: '/',
+    path: '/UserSettings'
   },
   {
     name: 'hamburger',
@@ -104,10 +90,22 @@ const options: options[] = [
     name: 'hamburger',
     path: '/'
   },
+  {
+    name: 'hamburger',
+    path: '/'
+  },
+  {
+    name: 'hamburger',
+    path: '/'
+  },
+  {
+    name: 'hamburger',
+    path: '/'
+  }
 ];
 const userStore = useUserStore();
 const presentations = ref<Presentation[]>([]);
-  const userPopUp = ref(false)
+const userPopUp = ref(false);
 const searchInput = ref('');
 watch(
   () => searchInput.value,
@@ -169,7 +167,7 @@ function search(input: string) {
   .upgrade:hover {
     background-color: var(--faded-bg-color);
   }
-  
+
   .button-pop-up {
     path-options:hover {
       background-color: var(--faded-bg-color-light);
