@@ -499,7 +499,7 @@ function generateNewMap() {
     type: "mystery" | "fight" | "harderFight" | "boss" | "shop" | "random",
     nextLevels: number[] | null
   ): LevelType {
-    const determinedType = type == "mystery" || type == "random" ? getRandomItemFromArray(["fight", "harderFight", "relic", "shop"]) : type;
+    const determinedType = type == "mystery" || type == "random" ? getRandomItemFromArray(["fight", "relic", "shop"]) : type;
     return {
       id,
       x,
@@ -538,13 +538,13 @@ function generateNewMap() {
   function generateNewEnemy(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
     return {
       lives: getLives(difficulty, type),
-      slots: type == "boss" ? 9 : getRandomInt(Math.ceil(1.25 * difficulty), Math.ceil(2.25 * difficulty)) + (type == "harderFight" ? 1 : 0),
+      slots: type == "boss" ? 9 : getRandomInt(Math.ceil(1.25 * difficulty), 2 * difficulty) + (type == "harderFight" ? 1 : 0),
       color: getRandomItemFromArray(["#ff0000", "#00ff00", "#56deff", "#ffff00", "#ff00ff", "#00ffff", "#f7f7f7"])
     };
 
     function getLives(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
-      if (type == "fight") return getRandomInt(Math.ceil(1.5 * difficulty), Math.ceil(2.5 * difficulty));
-      if (type == "harderFight") return getRandomInt(3 * difficulty, Math.ceil(4.5 * difficulty));
+      if (type == "fight") return getRandomInt(Math.ceil(1.25 * difficulty), 2 * difficulty);
+      if (type == "harderFight") return getRandomInt(Math.ceil(2.5 * difficulty), Math.ceil(3.5 * difficulty));
       return difficulty == 1 ? 15 : 68;
     }
   }
