@@ -48,7 +48,7 @@
             <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted @ended="selectedShowcase = showcases[1]"></video>
             <img v-else :src="selectedShowcase.src" />
             <div class="w-full bg-gray-900 h-2">
-              <div v-if="showcaseCooldown > 0" class="h-full bg-yellow-300" :style="{ animation: `move-steal-bar ${selectedShowcase.type == 'video' ? 19.5 : 5}s linear infinite` }"></div>
+              <div v-if="showcaseCooldown > 0" class="h-full bg-yellow-300" :style="{ animation: `move-steal-bar ${selectedShowcase.type == 'video' ? 19.5 : 5}s linear` }"></div>
             </div>
           </div>
           <div class="flex items-center justify-between gap-1">
