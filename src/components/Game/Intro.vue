@@ -48,7 +48,7 @@
             <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted @ended="selectedShowcase = showcases[1]"></video>
             <img v-else :src="selectedShowcase.src" />
             <div class="w-full bg-gray-900 h-2">
-              <div v-if="showcaseCooldown > 0" class="h-full bg-yellow-300" :style="{ animation: `move-steal-bar ${selectedShowcase.type == 'video' ? 19.5 : 5}s linear infinite` }"></div>
+              <div v-if="showcaseCooldown > 0" class="h-full bg-yellow-300" :style="{ animation: `move-steal-bar ${selectedShowcase.type == 'video' ? 19.5 : 5}s linear` }"></div>
             </div>
           </div>
           <div class="flex items-center justify-between gap-1">
@@ -79,7 +79,7 @@
           </p>
 
           <div class="w-full flex flex-col items-start justify-center">
-            <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Guy 2 & Guy 1.5</span></p>
+            <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Kenf & Lorenz</span></p>
             <p><span class="text-gray-400 text-xs">PUBLISHER:</span> <span class="text-blue-400 text-md font-bold">Bogdan Sussyomin, Robber of Barons</span></p>
           </div>
 
@@ -186,6 +186,7 @@
 </template>
 
 <script setup lang="ts">
+import { useGameStore } from "@/stores/game";
 import { delay } from "@/utils/functions";
 import { onMounted, ref, watch } from "vue";
 
@@ -198,13 +199,16 @@ type Emits = {
   next: [void];
 };
 const emit = defineEmits<Emits>();
+const store = useGameStore();
 
 const showOpening = ref(false);
 const startTime = ref(new Date().getTime());
 
 async function start() {
-  const page = document.documentElement;
-  page.requestFullscreen({ navigationUI: "hide" });
+  if (!store.smallScreen) {
+    const page = document.documentElement;
+    page.requestFullscreen({ navigationUI: "hide" });
+  }
   showOpening.value = true;
   await delay(2000);
   emit("next");

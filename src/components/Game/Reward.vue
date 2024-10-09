@@ -33,7 +33,7 @@
           <img class="w-16 h-16 absolute top-2 left-2" :src="reward.img" aria-hidden="true" />
           <img class="w-16 h-16 absolute bottom-2 right-2 scale-[-1]" :src="reward.img" aria-hidden="true" />
 
-          <h3 class="text-sm">{{ reward.type == "Relic" ? "Unlock" : "Get x3" }}</h3>
+          <h3 class="text-sm">{{ reward.type == "Relic" ? "Unlock" : "Get x5" }}</h3>
           <p class="text-2xl">{{ reward.type }}</p>
           <h3 class="text-xl font-bold">{{ reward.name }}</h3>
           <p class="text-wrap w-3/4 text-center transition-none">
