@@ -76,6 +76,10 @@ body {
   transition-duration: 500ms;
 }
 
+button {
+  touch-action: manipulation;
+}
+
 .comic-sans {
   font-family: "Comic Sans MS", sans-serif;
 }

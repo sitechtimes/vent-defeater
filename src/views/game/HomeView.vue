@@ -1,20 +1,19 @@
 <template>
-  <div class="z-[200] bg-[rgba(0,0,0,0.2)] w-screen h-screen absolute top-0 left-0 flex items-center justify-center" v-if="showTutorial">
+  <div class="z-[200] bg-[rgba(0,0,0,0.75)] w-screen h-screen absolute top-0 left-0 flex items-center justify-center" v-if="showTutorial">
     <div class="absolute bg-white shadow-lg shadow-black flex flex-col items-center justify-start gap-2 w-[30rem] min-h-[25rem] p-5 rounded-lg" v-if="currentTutorialPhase >= 0">
-      <div class="flex items-center justify-center gap-4">
-        <button
-          class="font-extrabold text-2xl rounded-full"
-          :class="{ 'bg-gray-400': !tutorialPhases[currentTutorialPhase - 1]?.allowNext }"
-          :disabled="!tutorialPhases[currentTutorialPhase - 1]?.allowNext"
-          @click="currentTutorialPhase = Math.max(0, currentTutorialPhase - 1)"
-        >
+      <p class="absolute top-0 left-2 text-lg">Tutorial {{ currentTutorialPhase + 1 }}/{{ tutorialPhases.length }}</p>
+      <p class="absolute top-0 right-2 text-md text-red-700" v-if="showTutorialYelling">Watch the demo video first</p>
+      <div class="flex items-center justify-center gap-4 w-full">
+        <button class="flex items-center justify-center font-extrabold text-2xl rounded-full w-[30%]" @click="currentTutorialPhase = Math.max(-1, currentTutorialPhase - 1)">
           <img class="w-10 rotate-180 transition-none" src="/ui/rightArrow.svg" aria-hidden="true" />
         </button>
         <button
-          class="font-extrabold text-2xl rounded-full"
-          :class="{ 'bg-gray-400': !tutorialPhases[currentTutorialPhase].allowNext || currentTutorialPhase + 1 >= tutorialPhases.length }"
-          :disabled="!tutorialPhases[currentTutorialPhase].allowNext"
-          @click="currentTutorialPhase = Math.min(tutorialPhases.length - 1, currentTutorialPhase + 1)"
+          class="flex items-center justify-center font-extrabold text-2xl rounded-full w-[30%]"
+          :class="{
+            'bg-gray-400': !tutorialPhases[currentTutorialPhase].allowNext || currentTutorialPhase + 1 >= tutorialPhases.length,
+            blink: tutorialPhases[currentTutorialPhase].allowNext && currentTutorialPhase + 1 < tutorialPhases.length
+          }"
+          @click="nextTutorialPage"
         >
           <img class="w-10" src="/ui/rightArrow.svg" aria-hidden="true" />
         </button>
@@ -344,6 +343,7 @@ watch(
   }
 );
 
+const showTutorialYelling = ref(false);
 const tutorialPhases = ref([
   {
     top: 0,
@@ -410,6 +410,16 @@ const tutorialPhases = ref([
   }
 ]);
 const currentTutorialPhase = ref(-1);
+
+function nextTutorialPage() {
+  if (!tutorialPhases.value[currentTutorialPhase.value].allowNext) {
+    showTutorialYelling.value = true;
+    return;
+  }
+
+  showTutorialYelling.value = false;
+  currentTutorialPhase.value = Math.min(tutorialPhases.value.length - 1, currentTutorialPhase.value + 1);
+}
 
 watch(
   () => selectedElement.value,
@@ -560,7 +570,7 @@ function handleReward(reward: Element | Relic | Powerup | { type: "Bypass" }) {
     reward.unlocked = true;
     currentRelics.value[currentRelics.value.findIndex((relic) => !relic)] = reward;
   } else if (reward.type == "Powerup") {
-    reward.count += 3;
+    reward.count += 5;
     if (currentPowerups.value.find((powerup) => powerup && powerup.name == reward.name) != undefined) return;
     currentPowerups.value[currentPowerups.value.findIndex((powerup) => !powerup)] = reward;
   }
@@ -833,6 +843,24 @@ async function usePowerup(powerup: Powerup) {
 
 .inventory {
   width: 35rem;
+}
+
+@keyframes blink {
+  5% {
+    background-color: transparent;
+  }
+  40% {
+    background-color: rgb(88, 255, 150);
+  }
+  60% {
+    background-color: rgb(88, 255, 150);
+  }
+  95% {
+    background-color: transparent;
+  }
+}
+.blink {
+  animation: blink 1s ease infinite;
 }
 
 @media (max-width: 1200px) {

@@ -66,6 +66,7 @@ watch(
   () => {
     if (relics[15].unlocked) attackMeter.value = 10;
     displayedNumbers.value = generateNewArray();
+    emit("onReroll", displayedNumbers.value);
   }
 );
 

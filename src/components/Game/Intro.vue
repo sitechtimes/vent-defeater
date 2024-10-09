@@ -186,6 +186,7 @@
 </template>
 
 <script setup lang="ts">
+import { useGameStore } from "@/stores/game";
 import { delay } from "@/utils/functions";
 import { onMounted, ref, watch } from "vue";
 
@@ -198,13 +199,16 @@ type Emits = {
   next: [void];
 };
 const emit = defineEmits<Emits>();
+const store = useGameStore();
 
 const showOpening = ref(false);
 const startTime = ref(new Date().getTime());
 
 async function start() {
-  const page = document.documentElement;
-  page.requestFullscreen({ navigationUI: "hide" });
+  if (!store.smallScreen) {
+    const page = document.documentElement;
+    page.requestFullscreen({ navigationUI: "hide" });
+  }
   showOpening.value = true;
   await delay(2000);
   emit("next");

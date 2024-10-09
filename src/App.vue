@@ -3,9 +3,7 @@
     <template v-slot:title="{ content }">{{ content ? content : "" }}</template>
   </metainfo>
   <div>
-    <transition :name="'circle-wipe'" mode="out-in">
-      <RouterView />
-    </transition>
+    <RouterView />
   </div>
 </template>
 
