@@ -84,6 +84,8 @@ function selectLevel(level: Level) {
 
 @media (hover: hover) and (pointer: fine) {
   .mapLevel:hover {
+    transform: scale(1.25);
+  
     .description {
       display: flex;
     }
