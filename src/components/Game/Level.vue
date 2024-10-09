@@ -193,7 +193,7 @@ async function handleReroll(board: number[] | number[][], from: "enemy" | "playe
             path.push(currentCell);
 
             if (enemy[k] == enemy[enemy.length - 1]) return path;
-          }
+          } else break;
         }
       }
     }
@@ -212,7 +212,8 @@ async function handleReroll(board: number[] | number[][], from: "enemy" | "playe
       ];
 
       for (let dir of directions) {
-        if (checkBounds(dir[0], dir[1]) && !previousTiles.includes([dir[0], dir[1]]) && player[dir[0]][dir[1]] == searchFor) return { dir1: dir[0], dir2: dir[1] };
+        if (checkBounds(dir[0], dir[1]) && !previousTiles.some((dirs) => dirs.length == 2 && dirs.every((value, index) => value == [dir[0], dir[1]][index])) && player[dir[0]][dir[1]] == searchFor)
+          return { dir1: dir[0], dir2: dir[1] };
       }
       return null;
     }

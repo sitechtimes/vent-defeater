@@ -119,7 +119,7 @@ function next() {
   gap: 2.5rem;
 }
 
-@media (max-width: 1200px) {
+@media (max-width: 1700px) {
   .title {
     display: none;
   }
