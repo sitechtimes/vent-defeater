@@ -417,6 +417,7 @@ watch(
 );
 
 onBeforeMount(() => {
+  document.body.classList.remove("dark");
   userStore.theme = "light";
   store.levels = generateNewMap();
   selectedElement.value = elements.value.ice;
