@@ -538,7 +538,7 @@ function generateNewMap() {
   function generateNewEnemy(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
     return {
       lives: getLives(difficulty, type),
-      slots: type == "boss" ? 9 : getRandomInt(1 * difficulty, Math.ceil(2.25 * difficulty)) + (type == "harderFight" ? 1 : 0),
+      slots: type == "boss" ? 9 : getRandomInt(Math.ceil(1.25 * difficulty), Math.ceil(2.25 * difficulty)) + (type == "harderFight" ? 1 : 0),
       color: getRandomItemFromArray(["#ff0000", "#00ff00", "#56deff", "#ffff00", "#ff00ff", "#00ffff", "#f7f7f7"])
     };
 
