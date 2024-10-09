@@ -40,6 +40,7 @@ type Emits = {
   regen: [health: number, energy: number];
   onReroll: [board: number[][]];
   oilSpill: [void];
+  outOfEnergy: [void];
 };
 
 const store = useGameStore();
@@ -99,7 +100,7 @@ function reroll() {
   for (let i = 0; i < props.rows; i++) {
     for (let j = 0; j < props.columns; j++) {
       if (!explode && elementGrid.value[i][j] == 2 && fireExplode(i, j)) explode = true;
-      if (elementGrid.value[i][j] == 2) emit("regen", fire.currentLevel == 4 ? 0.05 : 0.1 / fire.currentLevel, 0);
+      if (elementGrid.value[i][j] == 2) emit("regen", getFireRegen(), 0);
       if (elementGrid.value[i][j] == 4) {
         if (relics[11].unlocked) continue;
         displayedGrid.value[i][j] = Math.max(0, Math.min(9, displayedGrid.value[i][j] + getRandomInt(-1, 1)));
@@ -117,6 +118,13 @@ function reroll() {
   generalWinter();
   arson();
   emit("onReroll", displayedGrid.value);
+
+  function getFireRegen() {
+    if (fire.currentLevel == 1) return 5;
+    else if (fire.currentLevel == 2) return 7.5;
+    else if (fire.currentLevel == 3) return 10;
+    else return 15;
+  }
 
   function getExplosionDamage() {
     let initial = 25;
@@ -226,7 +234,8 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
   else if (element.name == "earth") earth(element, rowIndex, numIndex);
 
   function ice(element: Element, rowIndex: number, numIndex: number) {
-    if (store.energy < 5 || elementGrid.value[rowIndex][numIndex] > 1) return;
+    if (store.energy < (relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5)) return emit("outOfEnergy");
+    if (elementGrid.value[rowIndex][numIndex] > 1) return;
 
     if (elementGrid.value[rowIndex][numIndex] == 1 && element.currentLevel >= 3) {
       elementGrid.value[rowIndex][numIndex] = 0;
@@ -241,7 +250,8 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
   }
 
   function fire(element: Element, rowIndex: number, numIndex: number) {
-    if (elementGrid.value[rowIndex][numIndex] != 0 || store.energy < 5) return;
+    if (store.energy < (relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5)) return emit("outOfEnergy");
+    if (elementGrid.value[rowIndex][numIndex] != 0) return;
 
     if (element.currentLevel >= 1) {
       // basic attack
@@ -251,7 +261,8 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
   }
 
   function earth(element: Element, rowIndex: number, numIndex: number) {
-    if (elementGrid.value[rowIndex][numIndex] != 0 || store.energy < 5) return;
+    if (store.energy < (relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5)) return emit("outOfEnergy");
+    if (elementGrid.value[rowIndex][numIndex] != 0) return;
 
     if (element.currentLevel >= 1) {
       // basic attack

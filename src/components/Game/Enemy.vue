@@ -47,6 +47,7 @@ type Emits = {
   onReroll: [board: number[]];
   fart: [void];
   blizzard: [void];
+  outOfEnergy: [void];
 };
 
 const store = useGameStore();
@@ -124,7 +125,8 @@ function enemyAttack() {
 }
 
 async function attack(element: Element | undefined, index: number) {
-  if (!element || element.currentLevel == 0 || element.name != "air" || elementNumbers.value[index] == 3 || store.energy < 10) return;
+  if (store.energy < (relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5)) return emit("outOfEnergy");
+  if (!element || element.currentLevel == 0 || element.name != "air" || elementNumbers.value[index] == 3) return;
 
   if (element.currentLevel >= 1) {
     elementNumbers.value[index] = 3;
