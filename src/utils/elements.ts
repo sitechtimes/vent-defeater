@@ -268,7 +268,7 @@ export const powerups: Powerup[] = [
     name: "Blue Cow (not Red Bull)",
     id: 1,
     img: "/game/relics/bluecow.png",
-    description: "Regenerater back to full energy.",
+    description: "Regenerate back to full energy.",
     count: 0
   },
   {
