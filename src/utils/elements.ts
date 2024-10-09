@@ -269,7 +269,7 @@ export const powerups: Powerup[] = [
     id: 1,
     img: "/game/relics/bluecow.png",
     description: "Regenerate back to full energy.",
-    count: 0
+    count: 3
   },
   {
     type: "Powerup",
@@ -330,24 +330,24 @@ export const fire: Element = {
       level: 1,
       name: "Farenheit 451",
       description:
-        "**Burn** a tile. When rerolling, **burning** tiles will heal **0.1** HP each. If **2** adjacent tiles are **burning**, all **burning** tiles will explode and you will take **25** damage."
+        "**Burn** a tile. When rerolling, **burning** tiles will heal **5** HP each. If **2** adjacent tiles are **burning**, all **burning** tiles will explode and you will take **20** damage."
     },
     {
       level: 2,
       name: "Demolition",
       description:
-        "**Burning** tiles will spread **fire** to adjacent tiles every **3** rerolls, and the threshold for an explosion is increased to **4** adjacent tiles. However, **burning** tiles will only heal **0.05** max HP each."
+        "**Burning** tiles will spread **fire** to adjacent tiles every **3** rerolls, and the threshold for an explosion is increased to **4** adjacent tiles. **burning** tiles will heal **7.5** HP each as well."
     },
     {
       level: 3,
       name: "Workplace Safety",
-      description: "**Burning** tiles will no longer explode, but **burning** tiles will only heal **0.033** max HP each."
+      description: "**Burning** tiles will no longer explode, and **burning** tiles will heal **10** HP each."
     },
     {
       level: 4,
       name: "Arson",
       description:
-        "Your inner arsonist emerges, and you begin to set the world on fire. Every 3 rerolls, a random non-**burning** tiles will be set on **fire**. The max HP healed per **burning** tile is increased back to **0.1** HP, but **burning** a tile will now cost **7.5** energy because fire and electricity don't go well together."
+        "Your inner arsonist emerges, and you begin to set the world on fire. Every 3 rerolls, a random non-**burning** tile will be set on **fire**. The HP healed per **burning** tile is increased to **15** HP."
     }
   ]
 };

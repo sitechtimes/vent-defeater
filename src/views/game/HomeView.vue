@@ -64,7 +64,7 @@
   <div v-if="store.isDead || gameWon" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
     <h2 class="text-4xl font-semibold">{{ gameWon ? "You won!" : "You lost 😦" }}</h2>
     <p class="text-2xl font-medium" v-if="store.relicOfDeath && !gameWon && health <= 0">You lost the double or nothing</p>
-    <p class="text-2xl font-medium" v-else-if="!gameWon && health <= 0">You died from wounds</p>
+    <p class="text-2xl font-medium" v-else-if="!gameWon && health <= 0">You died from chronic death syndrome</p>
     <p class="text-2xl font-medium" v-else-if="!gameWon && energy >= (relics[2].unlocked ? 200 : 125)">Your energy meter spontaneously combusted</p>
     <div class="z-10 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl">
       <p class="timer font-semibold text-4xl">
@@ -362,15 +362,22 @@ const tutorialPhases = ref([
   {
     top: 170,
     left: 600,
-    text: "These are your elements, relics, and powerups. Click to select. You can hover over them to see what they do",
+    text: "These are your elements, relics, and powerups. You can hover over them to see what they do",
     src: "/game/tutorial/tutorialElements.mp4",
     allowNext: false
   },
   {
     top: 700,
     left: 975,
-    text: "This is your board. You can use your elements here by clicking on a tile",
+    text: "This is your board. You can use your elements here by clicking on a tile. Using an element costs 5 energy",
     src: "/game/tutorial/tutorialBoard.mp4",
+    allowNext: false
+  },
+  {
+    top: 800,
+    left: 1000,
+    text: "This is the great almighty reroll button. Rerolling will regenerate 5 energy",
+    src: "/game/tutorial/tutorialReroll.mp4",
     allowNext: false
   },
   {
@@ -388,10 +395,10 @@ const tutorialPhases = ref([
     allowNext: false
   },
   {
-    top: 800,
-    left: 1000,
-    text: "This is the great almighty reroll button. Click it to reroll your board",
-    src: "/game/tutorial/tutorialReroll.mp4",
+    top: 700,
+    left: 975,
+    text: "Your goal is to match numbers on your board to the numbers above the enemy. Matching is done automatically, you just need to keep rolling!",
+    src: "/game/tutorial/tutorialMatch.mp4",
     allowNext: false
   },
   {
@@ -399,13 +406,6 @@ const tutorialPhases = ref([
     left: 1200,
     text: "This is your speedrun timer. It'll start once you exit this tutorial",
     src: "/game/tutorial/tutorialTimer.mp4",
-    allowNext: false
-  },
-  {
-    top: 700,
-    left: 975,
-    text: "Your goal is to match numbers on your board to the numbers above the enemy. Matching is done automatically, you just need to keep rolling!",
-    src: "/game/tutorial/tutorialMatch.mp4",
     allowNext: false
   }
 ]);
@@ -431,6 +431,8 @@ onBeforeMount(() => {
   userStore.theme = "light";
   store.levels = generateNewMap();
   selectedElement.value = elements.value.ice;
+  currentRelics.value[0] = getRandomItemFromArray([relics[0], relics[3], relics[4], relics[14]]);
+  currentPowerups.value[0] = powerups[1];
 });
 
 onMounted(() => {
@@ -467,7 +469,7 @@ function generateNewMap() {
   levels.push(generateNewLevel(2, 390, 215, "asteroid", 1, "fight", [3]));
   levels.push(generateNewLevel(3, 605, 215, "cafeteria1", 2, "random", [4, 11, 12]));
   levels.push(generateNewLevel(4, 810, 45, "cafeteria3", 2, "random", [5]));
-  levels.push(generateNewLevel(5, 997, 215, "cafeteria4", 2, "harderFight", [6]));
+  levels.push(generateNewLevel(5, 997, 215, "cafeteria4", 2, "random", [6]));
   levels.push(generateNewLevel(6, 1400, 215, "gen1", 2, "random", [7]));
   levels.push(generateNewLevel(7, 1462, 300, "gen2", 2, "random", [8]));
   levels.push(generateNewLevel(8, 1622, 540, "reactor1", 3, "shop", [9]));
@@ -484,7 +486,7 @@ function generateNewMap() {
   levels.push(generateNewLevel(19, 910, 690, "shop", 2, "shop", [20, 23]));
   levels.push(generateNewLevel(20, 1160, 720, "electrical1", 2, "mystery", [21]));
   levels.push(generateNewLevel(21, 1175, 585, "electrical2", 2, "random", [22]));
-  levels.push(generateNewLevel(22, 1205, 420, "medbay", 2, "harderFight", [6]));
+  levels.push(generateNewLevel(22, 1205, 420, "medbay", 2, "random", [6]));
   levels.push(generateNewLevel(23, 1395, 735, "gen1", 2, "random", [24]));
   levels.push(generateNewLevel(24, 1462, 660, "gen2", 3, "random", [8]));
 
@@ -499,7 +501,7 @@ function generateNewMap() {
     type: "mystery" | "fight" | "harderFight" | "boss" | "shop" | "random",
     nextLevels: number[] | null
   ): LevelType {
-    const determinedType = type == "mystery" || type == "random" ? getRandomItemFromArray(["fight", "harderFight", "relic", "shop"]) : type;
+    const determinedType = type == "mystery" || type == "random" ? getRandomItemFromArray(["fight", "relic", "shop"]) : type;
     return {
       id,
       x,
@@ -538,13 +540,13 @@ function generateNewMap() {
   function generateNewEnemy(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
     return {
       lives: getLives(difficulty, type),
-      slots: type == "boss" ? 9 : getRandomInt(Math.ceil(1.25 * difficulty), Math.ceil(2.25 * difficulty)) + (type == "harderFight" ? 1 : 0),
+      slots: type == "boss" ? 9 : getRandomInt(Math.ceil(1.25 * difficulty), 2 * difficulty) + (type == "harderFight" ? 1 : 0),
       color: getRandomItemFromArray(["#ff0000", "#00ff00", "#56deff", "#ffff00", "#ff00ff", "#00ffff", "#f7f7f7"])
     };
 
     function getLives(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
-      if (type == "fight") return getRandomInt(Math.ceil(1.5 * difficulty), Math.ceil(2.5 * difficulty));
-      if (type == "harderFight") return getRandomInt(3 * difficulty, Math.ceil(4.5 * difficulty));
+      if (type == "fight") return getRandomInt(Math.ceil(1.25 * difficulty), 2 * difficulty);
+      if (type == "harderFight") return getRandomInt(Math.ceil(2.5 * difficulty), Math.ceil(3.5 * difficulty));
       return difficulty == 1 ? 15 : 68;
     }
   }
