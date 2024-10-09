@@ -465,28 +465,28 @@ function generateNewMap() {
 
   levels.push(generateNewLevel(1, 525, 400, "o2", 1, "mystery", [2]));
   levels.push(generateNewLevel(2, 390, 215, "asteroid", 1, "fight", [3]));
-  levels.push(generateNewLevel(3, 605, 215, "cafeteria1", 2, "fight", [4, 11, 12]));
-  levels.push(generateNewLevel(4, 810, 45, "cafeteria3", 2, "mystery", [5]));
+  levels.push(generateNewLevel(3, 605, 215, "cafeteria1", 2, "random", [4, 11, 12]));
+  levels.push(generateNewLevel(4, 810, 45, "cafeteria3", 2, "random", [5]));
   levels.push(generateNewLevel(5, 997, 215, "cafeteria4", 2, "harderFight", [6]));
-  levels.push(generateNewLevel(6, 1400, 215, "gen1", 2, "fight", [7]));
-  levels.push(generateNewLevel(7, 1462, 300, "gen2", 2, "mystery", [8]));
+  levels.push(generateNewLevel(6, 1400, 215, "gen1", 2, "random", [7]));
+  levels.push(generateNewLevel(7, 1462, 300, "gen2", 2, "random", [8]));
   levels.push(generateNewLevel(8, 1622, 540, "reactor1", 3, "shop", [9]));
   levels.push(generateNewLevel(9, 1675, 382, "reactor2", 3, "harderFight", [10]));
   levels.push(generateNewLevel(10, 1307, 400, "cams", 3, "boss", null));
   levels.push(generateNewLevel(11, 810, 215, "emergency", 2, "shop", [5]));
-  levels.push(generateNewLevel(12, 805, 410, "cafeteria2", 2, "mystery", [13, 19]));
+  levels.push(generateNewLevel(12, 805, 410, "cafeteria2", 2, "random", [13, 19]));
   levels.push(generateNewLevel(13, 675, 655, "admin1", 2, "mystery", [14]));
   levels.push(generateNewLevel(14, 517, 550, "admin2", 1, "boss", [19]));
   levels.push(generateNewLevel(15, 390, 525, "route1vent1", 1, "fight", [16]));
-  levels.push(generateNewLevel(16, 395, 755, "route1vent2", 1, "fight", [17, 18, 19]));
+  levels.push(generateNewLevel(16, 395, 755, "route1vent2", 1, "random", [17, 18, 19]));
   levels.push(generateNewLevel(17, 567, 890, "comms", 2, "mystery", [18, 19]));
-  levels.push(generateNewLevel(18, 767, 903, "chute", 2, "mystery", [20, 23]));
+  levels.push(generateNewLevel(18, 767, 903, "chute", 2, "random", [20, 23]));
   levels.push(generateNewLevel(19, 910, 690, "shop", 2, "shop", [20, 23]));
   levels.push(generateNewLevel(20, 1160, 720, "electrical1", 2, "mystery", [21]));
-  levels.push(generateNewLevel(21, 1175, 585, "electrical2", 2, "fight", [22]));
+  levels.push(generateNewLevel(21, 1175, 585, "electrical2", 2, "random", [22]));
   levels.push(generateNewLevel(22, 1205, 420, "medbay", 2, "harderFight", [6]));
-  levels.push(generateNewLevel(23, 1395, 735, "gen1", 2, "harderFight", [24]));
-  levels.push(generateNewLevel(24, 1462, 660, "gen2", 3, "mystery", [8]));
+  levels.push(generateNewLevel(23, 1395, 735, "gen1", 2, "random", [24]));
+  levels.push(generateNewLevel(24, 1462, 660, "gen2", 3, "random", [8]));
 
   return levels;
 
@@ -496,10 +496,10 @@ function generateNewMap() {
     y: number,
     levelImg: string,
     difficulty: 1 | 2 | 3,
-    type: "mystery" | "fight" | "harderFight" | "boss" | "shop",
+    type: "mystery" | "fight" | "harderFight" | "boss" | "shop" | "random",
     nextLevels: number[] | null
   ): LevelType {
-    const determinedType = type == "mystery" ? getRandomItemFromArray(["fight", "harderFight", "relic", "shop"]) : type;
+    const determinedType = type == "mystery" || type == "random" ? getRandomItemFromArray(["fight", "harderFight", "relic", "shop"]) : type;
     return {
       id,
       x,
@@ -507,43 +507,45 @@ function generateNewMap() {
       topPercent: y / 11,
       leftPercent: x / 20,
       levelImg: "/game/firstperson/" + levelImg + ".png",
-      mapImg: getMapImg(type),
+      mapImg: type == "mystery" ? getMapImg(type) : getMapImg(determinedType),
       type: determinedType,
       mystery: type == "mystery",
       completed: false,
-      color: getColor(type),
+      color: type == "mystery" ? getColor(type) : getColor(determinedType),
       enemy: determinedType != "shop" && determinedType != "relic" ? generateNewEnemy(difficulty, determinedType) : null,
       nextLevels
     };
   }
 
-  function getMapImg(type: "mystery" | "fight" | "harderFight" | "boss" | "shop") {
+  function getMapImg(type: "mystery" | "fight" | "harderFight" | "boss" | "shop" | "relic") {
     if (type == "mystery") return "/game/mystery.svg";
     if (type == "fight") return "/game/skull1.svg";
     if (type == "harderFight") return "/game/skull2.svg";
     if (type == "boss") return "/game/skull3.svg";
-    return "/game/shop.svg";
+    if (type == "shop") return "/game/shop.svg";
+    return "/game/relic.svg";
   }
 
-  function getColor(type: "mystery" | "fight" | "harderFight" | "boss" | "shop") {
+  function getColor(type: "mystery" | "fight" | "harderFight" | "boss" | "shop" | "relic") {
     if (type == "mystery") return "#ffffff";
     if (type == "fight") return "#ffff00";
     if (type == "harderFight") return "#ffa500";
     if (type == "boss") return "#ff0000";
-    return "#00ff00";
+    if (type == "shop") return "#00ff00";
+    return "#03cafc";
   }
 
   function generateNewEnemy(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
     return {
       lives: getLives(difficulty, type),
-      slots: type == "boss" ? 9 : getRandomInt(1.5 * difficulty, 2.75 * difficulty) + (type == "harderFight" ? 1 : 0),
+      slots: type == "boss" ? 9 : getRandomInt(1 * difficulty, Math.ceil(2.25 * difficulty)) + (type == "harderFight" ? 1 : 0),
       color: getRandomItemFromArray(["#ff0000", "#00ff00", "#56deff", "#ffff00", "#ff00ff", "#00ffff", "#f7f7f7"])
     };
 
     function getLives(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
-      if (type == "fight") return getRandomInt(1.5 * difficulty, 2.5 * difficulty);
-      if (type == "harderFight") return getRandomInt(3 * difficulty, 4.5 * difficulty);
-      return difficulty == 1 ? 15 : 70;
+      if (type == "fight") return getRandomInt(Math.ceil(1.5 * difficulty), Math.ceil(2.5 * difficulty));
+      if (type == "harderFight") return getRandomInt(3 * difficulty, Math.ceil(4.5 * difficulty));
+      return difficulty == 1 ? 15 : 68;
     }
   }
 }
