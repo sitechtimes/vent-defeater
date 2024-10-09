@@ -1,11 +1,11 @@
 <template>
   <div class="background w-screen h-screen flex items-center justify-around overflow-hidden" :style="{ backgroundImage: `url(${level.levelImg})` }">
     <Transition name="opacity">
-      <div class="winOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
+      <div class="winOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-md" v-if="showWin && !store.isDead"></div>
     </Transition>
 
     <Transition name="left">
-      <div class="absolute card z-[101] bg-white w-screen py-6 gap-4 flex items-center justify-center flex-col" v-if="showReward">
+      <div class="absolute card z-[101] bg-white w-screen py-6 gap-4 flex items-center justify-center flex-col" v-if="showReward && !store.isDead">
         <h1 class="text-4xl font-semibold">You win!</h1>
         <p class="text-xl font-semibold">Pick your reward:</p>
         <Reward :level="level" @select="(reward) => (selectedReward = reward)" />

@@ -362,7 +362,7 @@ const tutorialPhases = ref([
   {
     top: 170,
     left: 600,
-    text: "These are your elements, relics, and powerups. You can hover over them to see what they do",
+    text: "These are your elements, relics, and powerups. Hover over them to see what they do. EX: Ice freezes a tile on click, preventing the tile from changing on reroll",
     src: "/game/tutorial/tutorialElements.mp4",
     allowNext: false
   },
