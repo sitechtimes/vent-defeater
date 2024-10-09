@@ -79,7 +79,7 @@
           </p>
 
           <div class="w-full flex flex-col items-start justify-center">
-            <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Guy 2 & Guy 1.5</span></p>
+            <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Kenf & Lorenz</span></p>
             <p><span class="text-gray-400 text-xs">PUBLISHER:</span> <span class="text-blue-400 text-md font-bold">Bogdan Sussyomin, Robber of Barons</span></p>
           </div>
 
