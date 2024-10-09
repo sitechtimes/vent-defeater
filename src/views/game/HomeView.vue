@@ -467,7 +467,7 @@ function generateNewMap() {
   levels.push(generateNewLevel(2, 390, 215, "asteroid", 1, "fight", [3]));
   levels.push(generateNewLevel(3, 605, 215, "cafeteria1", 2, "random", [4, 11, 12]));
   levels.push(generateNewLevel(4, 810, 45, "cafeteria3", 2, "random", [5]));
-  levels.push(generateNewLevel(5, 997, 215, "cafeteria4", 2, "harderFight", [6]));
+  levels.push(generateNewLevel(5, 997, 215, "cafeteria4", 2, "random", [6]));
   levels.push(generateNewLevel(6, 1400, 215, "gen1", 2, "random", [7]));
   levels.push(generateNewLevel(7, 1462, 300, "gen2", 2, "random", [8]));
   levels.push(generateNewLevel(8, 1622, 540, "reactor1", 3, "shop", [9]));
@@ -484,7 +484,7 @@ function generateNewMap() {
   levels.push(generateNewLevel(19, 910, 690, "shop", 2, "shop", [20, 23]));
   levels.push(generateNewLevel(20, 1160, 720, "electrical1", 2, "mystery", [21]));
   levels.push(generateNewLevel(21, 1175, 585, "electrical2", 2, "random", [22]));
-  levels.push(generateNewLevel(22, 1205, 420, "medbay", 2, "harderFight", [6]));
+  levels.push(generateNewLevel(22, 1205, 420, "medbay", 2, "random", [6]));
   levels.push(generateNewLevel(23, 1395, 735, "gen1", 2, "random", [24]));
   levels.push(generateNewLevel(24, 1462, 660, "gen2", 3, "random", [8]));
 
