@@ -24,6 +24,10 @@ export type Level = {
   x: number;
   /** Y-position of the level on the map, in pixels. */
   y: number;
+  /** Top percentage for placement of the level on the map for smaller screens */
+  topPercent: number;
+  /** Left percentage for placement of the level on the map for smaller screens */
+  leftPercent: number;
   /** Background image of the level during game phase. */
   levelImg: string;
   /** Image of the level marker on the map. */
@@ -326,7 +330,7 @@ export const fire: Element = {
       level: 1,
       name: "Farenheit 451",
       description:
-        "**Burn** a tile. When rerolling, **burning** tiles will heal **0.1** max HP each. If **2** adjacent tiles are **burning**, all **burning** tiles will explode and return to a **normal** state. You will take **25** damage from the resulting second-degree burns."
+        "**Burn** a tile. When rerolling, **burning** tiles will heal **0.1** HP each. If **2** adjacent tiles are **burning**, all **burning** tiles will explode and you will take **25** damage."
     },
     {
       level: 2,
@@ -357,7 +361,7 @@ export const air: Element = {
     {
       level: 1,
       name: "Yeet",
-      description: "**Yeet** a number from the **enemy board**, swapping it out with a new random number."
+      description: "**Yeet** a number from the **ENEMY BOARD**, swapping it out with a new random number."
     },
     {
       level: 2,

@@ -75,7 +75,8 @@ const router = createRouter({
       name: "game",
       component: () => import("../views/game/HomeView.vue"),
       meta: {
-        requiresAuth: false
+        requiresAuth: false,
+        transition: "circle-wipe"
       }
     }
   ]
