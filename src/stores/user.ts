@@ -14,6 +14,7 @@ export const useUserStore = defineStore("userStore", () => {
     const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/auth/login/", {
       method: "POST",
       credentials: "include",
+
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     });
