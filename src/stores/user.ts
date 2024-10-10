@@ -36,11 +36,9 @@ export const useUserStore = defineStore("userStore", () => {
     return "Success";
   }
 
-  async function verify() {
-    const match = document.cookie.match(/csrftoken=(\w+)/);
-    if (!match) return false;
+  async function init() {
     try {
-      const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/auth/user/", {
+      const res = await fetch(import.meta.env.VITE_BACKEND_URL, {
         method: "GET",
         credentials: "same-origin", // Ensures cookies are sent
         headers: {
@@ -54,5 +52,5 @@ export const useUserStore = defineStore("userStore", () => {
     }
   }
 
-  return { user, isAuth, verify, theme, presentations, currentPres, logIn, signUp };
+  return { user, isAuth, init, theme, presentations, currentPres, logIn, signUp };
 });

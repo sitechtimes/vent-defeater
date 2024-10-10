@@ -23,7 +23,7 @@ useMeta({
 });
 
 onBeforeMount(() => {
-  userStore.verify();
+  userStore.init();
   sessionStorage.removeItem("previousIsHome");
   // sample shit
 
