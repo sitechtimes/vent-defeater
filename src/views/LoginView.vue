@@ -196,8 +196,7 @@ async function loginWithEmail() {
   try {
     showLoginAnimation.value = true;
     await delay(2000);
-    throw new Error();
-    // await userStore.logIn(email.value, password.value);
+    await userStore.logIn(email.value, password.value);
   } catch (error) {
     if (error instanceof Error){
       passwordErr.value = error.message;
