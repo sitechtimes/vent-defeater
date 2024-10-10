@@ -1,5 +1,12 @@
 <template>
-  <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)] py-12">
+  <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)] py-12 overflow-x-hidden">
+    <div
+      class="w-screen z-10 h-20 bg-[var(--primary-light)] rounded-b-3xl flex justify-center items-center text-2xl fixed transition-[top] ease-out duration-500"
+      :class="verifyNag ? 'top-0' : '-top-20'"
+    >
+      <p>Check your email to verify your account.</p>
+    </div>
+
     <a href="/"><img class="logo h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? " back" : "" }}!</h1>
 
@@ -120,11 +127,15 @@ const nameErr = ref("");
 const passwordErr = ref("");
 const confirmPasswordErr = ref("");
 
+const verifyNag = ref(false);
+const loading = ref(false);
+
 watch(
   () => route.query.signup,
   (value) => {
     if (value) showLogin.value = false;
     else showLogin.value = true;
+    verifyNag.value = false;
   }
 );
 
@@ -134,17 +145,20 @@ watch(
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (value.length != 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
     else emailErr.value = "";
+    verifyNag.value = false;
   }
 );
 
 watch(
   () => password.value,
   (value) => {
-    if (value != confirmPassword.value) confirmPasswordErr.value = "Passwords do not match.";
-
+    if (value != confirmPassword.value && !showLogin.value) confirmPasswordErr.value = "Passwords do not match.";
+    else confirmPasswordErr.value = "";
+    if (emailErr.value == "Unable to log in with provided credentials.") emailErr.value = "";
     if (value.length < 8) passwordErr.value = "Password must be at least 8 characters.";
-    else if (value.length > 50) passwordErr.value = "Password must be less than 50 characters.";
+    else if (value.length > 50) passwordErr.value = "Password must be less than 30 characters.";
     else passwordErr.value = "";
+    verifyNag.value = false;
   }
 );
 
@@ -154,13 +168,14 @@ watch(
     if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
     else if (value.length > 40) nameErr.value = "name must be less than 40 characters.";
     else nameErr.value = "";
+    verifyNag.value = false;
   }
 );
 
 watch(
   () => confirmPassword.value,
   (value) => {
-    if (value != password.value) confirmPasswordErr.value = "Passwords do not match.";
+    if (value != password.value && !showLogin.value) confirmPasswordErr.value = "Passwords do not match.";
     else confirmPasswordErr.value = "";
   }
 );
@@ -190,45 +205,28 @@ const loginButtons = [
 
 async function loginWithEmail() {
   if (emailErr.value || passwordErr.value || nameErr.value) return;
-
-  if (!showLogin.value) return signupWithEmail();
-
-  try {
-    showLoginAnimation.value = true;
-    await delay(2000);
-    await userStore.logIn(email.value, password.value);
-  } catch (error) {
-    if (error instanceof Error){
-      passwordErr.value = error.message;
-      if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
+  loading.value = true;
+  if (showLogin.value) {
+    const data = await userStore.logIn(email.value, password.value);
+    if (data == "Success") {
+      router.push("/app/dashboard");
+    } else {
+      if ("non_field_errors" in data) emailErr.value = data.non_field_errors.join(" ");
+      if ("password" in data) passwordErr.value = data.password.join(" ");
+      if ("email" in data) emailErr.value = data.email.join(" ");
     }
-    return;
-  } finally {
-    showLoginAnimation.value = false;
+  } else if (confirmPasswordErr.value) {
+  } else {
+    let data = await userStore.signUp(email.value, password.value, name.value);
+    if (data == "Success") {
+      verifyNag.value = true;
+    } else {
+      if ("password" in data) passwordErr.value = data.password.join(" ");
+      if ("email" in data) emailErr.value = data.email.join(" ");
+      if ("name" in data) nameErr.value = data.name.join(" ");
+    }
   }
-
-  if (userStore.isAuth) router.push('/app/dashboard');
-  else passwordErr.value = "Something went wrong. Please try again.";
-}
-
-async function signupWithEmail() {
-  if (password.value != confirmPassword.value) {
-    passwordErr.value = "Passwords do not match.";
-    return;
-  }
-
-  try {
-    showLoginAnimation.value = true;
-    await userStore.signUp(email.value, password.value, name.value);
-  } catch (error) {
-    if (error instanceof Error) passwordErr.value = error.message;
-    return;
-  } finally {
-    showLoginAnimation.value = false;
-  }
-
-  if (userStore.isAuth) router.push("/app/dashboard");
-  else passwordErr.value = "Something went wrong. Please try again.";
+  loading.value = false;
 }
 
 async function loginWithGoogle() {

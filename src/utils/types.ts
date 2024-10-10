@@ -53,6 +53,12 @@ export type TextStyles = {
   wrap: boolean;
 };
 
+export type User = {
+  name: string;
+  email: string;
+  presentations: Presentation[];
+};
+
 /** Presentation data. */
 export type Presentation = {
   /** ID of the presentation. */

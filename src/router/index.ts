@@ -84,7 +84,7 @@ const router = createRouter({
 
 let previousRoute: RouteLocationNormalizedGeneric;
 
-router.beforeEach((to, from) => {
+router.beforeEach(async (to, from) => {
   const userStore = useUserStore();
   if (
     !userStore.isAuth &&
@@ -94,7 +94,7 @@ router.beforeEach((to, from) => {
       .flatMap((route) => route.path)
       .includes(to.path)
   )
-    return { name: "login" };
+    if (await !userStore.verify()) return { name: "login" };
   previousRoute = from;
 });
 

@@ -3,7 +3,7 @@ import { defineStore } from "pinia";
 import { ref } from "vue";
 
 export const useUserStore = defineStore("userStore", () => {
-  const user = ref(false);
+  const user = ref({});
   const isAuth = ref(false);
 
   const theme = ref<"light" | "dark">("light");
@@ -13,13 +13,17 @@ export const useUserStore = defineStore("userStore", () => {
   async function logIn(email: string, password: string) {
     const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/auth/login/", {
       method: "POST",
+      credentials: "include",
+
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     });
-    isAuth.value = res.ok;
-    if (isAuth.value) {
-      user.value = await res.json();
-    }
+    if (!res.ok) return await res.json();
+    const data = await res.json();
+
+    isAuth.value = true;
+    user.value = data.user;
+    return "Success";
   }
 
   async function signUp(email: string, password: string, name: string) {
@@ -28,11 +32,27 @@ export const useUserStore = defineStore("userStore", () => {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, name })
     });
-    isAuth.value = res.ok;
-    if (isAuth.value) {
-      user.value = await res.json();
+    if (!res.ok) return await res.json();
+    return "Success";
+  }
+
+  async function verify() {
+    const match = document.cookie.match(/csrftoken=(\w+)/);
+    if (!match) return false;
+    try {
+      const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/auth/user/", {
+        method: "GET",
+        credentials: "same-origin", // Ensures cookies are sent
+        headers: {
+          "Content-Type": "application/json"
+        }
+      });
+      console.log(await res.json());
+      return res.ok;
+    } catch (e) {
+      return false;
     }
   }
 
-  return { user, isAuth, theme, presentations, currentPres, logIn, signUp };
+  return { user, isAuth, verify, theme, presentations, currentPres, logIn, signUp };
 });
