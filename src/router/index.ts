@@ -94,7 +94,7 @@ router.beforeEach(async (to, from) => {
       .flatMap((route) => route.path)
       .includes(to.path)
   )
-    if (await !userStore.verify()) return { name: "login" };
+    if (userStore.isAuth) return { name: "login" };
   previousRoute = from;
 });
 

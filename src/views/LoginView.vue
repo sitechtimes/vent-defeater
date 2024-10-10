@@ -81,7 +81,7 @@
         </div>
 
         <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] mt-4 transition duration-500" type="submit">
-          <p class="text-[color:var(--text-color-contrast)]" v-if="!showLoginAnimation">{{ showLogin ? "Log in" : "Sign up" }}</p>
+          <p class="text-[color:var(--text-color-contrast)]" v-if="!loading">{{ showLogin ? "Log in" : "Sign up" }}</p>
           <p class="text-[color:var(--text-color-contrast)] flex items-center justify-center gap-2" v-else><Vent class="w-10 h-10" /> Loading...</p>
         </button>
         <RouterLink to="/reset-password" class="no-underline font-medium" v-if="showLogin">Forgot password?</RouterLink>

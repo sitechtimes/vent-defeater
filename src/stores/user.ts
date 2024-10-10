@@ -40,13 +40,16 @@ export const useUserStore = defineStore("userStore", () => {
     try {
       const res = await fetch(import.meta.env.VITE_BACKEND_URL, {
         method: "GET",
-        credentials: "same-origin", // Ensures cookies are sent
+        credentials: "include",
         headers: {
           "Content-Type": "application/json"
         }
       });
-      console.log(await res.json());
-      return res.ok;
+      if (!res.ok) return false;
+      const data = await res.json();
+      user.value = data.user;
+      isAuth.value = true;
+      return true;
     } catch (e) {
       return false;
     }
