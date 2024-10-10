@@ -31,19 +31,26 @@
       </div>
     </header>
 
-    <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
-      <div class="disclaimer border-8 border-orange-600 bg-orange-400 p-4 rounded-lg w-full mb-5 flex flex-col items-start justify-center gap-1">
-        <h3 class="text-3xl font-extrabold">Disclaimer!</h3>
-        <p class="text-2xl">This game works best on a 1920x1080 screen.</p>
-        <p class="text-lg font-semibold">Some aspects of the game may not work as intended, or at all, on smaller devices.</p>
-      </div>
+    <div class="fixed top-0 left-0 w-screen h-screen disclaimer z-[300] border-8 border-orange-600 bg-orange-400 p-4 rounded-lg flex-col items-center justify-center gap-1">
+      <h3 class="text-4xl font-bold text-center">Slow down!</h3>
+      <p class="text-2xl text-center">Vent Defeater hasn't developed the technology to make it work on smaller devices as of now.</p>
+      <p class="text-2xl font-semibold text-center">Try using a tablet, laptop, or computer.</p>
+      <p class="text-5xl font-extrabold text-center mt-5">Sorry!</p>
+      <RouterLink to="/" class="bg-green-400 rounded-full p-2 text-3xl font-medium mt-5">Go back</RouterLink>
+    </div>
 
+    <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
       <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > Strategy Games > Rougelites > Vent Defeater</div>
       <div class="w-full flex items-center justify-start text-white text-3xl">Vent Defeater: The Game</div>
       <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
         <div class="flex items-center justify-center flex-col gap-2 w-[62.5%]">
-          <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted controls @ended="selectedShowcase = showcases[1]"></video>
-          <img v-else :src="selectedShowcase.src" />
+          <div class="flex flex-col items-center justify-center w-full">
+            <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted @load="showcaseCooldown = 0" @ended="selectedShowcase = showcases[1]"></video>
+            <img v-else :src="selectedShowcase.src" @load="showcaseCooldown = 0" />
+            <div class="w-full bg-gray-900 h-2">
+              <div v-if="showcaseCooldown > 0" class="h-full bg-yellow-300" :style="{ animation: `move-steal-bar ${selectedShowcase.type == 'video' ? 19.5 : 5}s linear` }"></div>
+            </div>
+          </div>
           <div class="flex items-center justify-between gap-1">
             <button @click="selectedShowcase = showcase" :class="{ relative: showcase.type == 'video' }" v-for="showcase in showcases" class="showcase w-[20%] flex items-center justify-center">
               <video :class="{ 'brightness-50': showcase.src != selectedShowcase.src }" v-if="showcase.type == 'video'" :src="showcase.src" muted></video>
@@ -53,7 +60,7 @@
           </div>
         </div>
 
-        <div class="flex items-center justify-start flex-col w-[37.5%] h-full gap-4">
+        <div class="flex items-center justify-start flex-col w-[37.5%] h-full gap-3">
           <img class="bg-lime-200 p-3" src="/logo/logoTheGame.svg" aria-hidden="true" />
           <p class="text-white text-sm">The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?</p>
 
@@ -72,9 +79,11 @@
           </p>
 
           <div class="w-full flex flex-col items-start justify-center">
-            <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Guy 2 & Guy 1.5</span></p>
+            <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Kenf & Lorenz</span></p>
             <p><span class="text-gray-400 text-xs">PUBLISHER:</span> <span class="text-blue-400 text-md font-bold">Bogdan Sussyomin, Robber of Barons</span></p>
           </div>
+
+          <p class="text-left w-full"><span class="text-gray-400 text-xs">PLATFORMS:</span> <span class="text-blue-400 text-md font-bold">PC, Tablet</span></p>
         </div>
       </div>
 
@@ -177,6 +186,7 @@
 </template>
 
 <script setup lang="ts">
+import { useGameStore } from "@/stores/game";
 import { delay } from "@/utils/functions";
 import { onMounted, ref, watch } from "vue";
 
@@ -189,12 +199,16 @@ type Emits = {
   next: [void];
 };
 const emit = defineEmits<Emits>();
+const store = useGameStore();
 
 const showOpening = ref(false);
+const startTime = ref(new Date().getTime());
 
 async function start() {
-  const page = document.documentElement;
-  page.requestFullscreen({ navigationUI: "hide" });
+  if (!store.smallScreen) {
+    const page = document.documentElement;
+    page.requestFullscreen({ navigationUI: "hide" });
+  }
   showOpening.value = true;
   await delay(2000);
   emit("next");
@@ -226,6 +240,7 @@ const selectedShowcase = ref<Showcase>(showcases.value[0]);
 watch(
   () => selectedShowcase.value,
   () => {
+    startTime.value = new Date().getTime();
     showcaseCooldown.value = 0;
   }
 );
@@ -233,7 +248,7 @@ const showcaseCooldown = ref(0);
 watch(
   () => showcaseCooldown.value,
   (num) => {
-    if (selectedShowcase.value.type == "image" && num > 6) {
+    if (selectedShowcase.value.type == "image" && new Date().getTime() >= startTime.value + 5000) {
       const index = showcases.value.findIndex((showcase) => showcase.src == selectedShowcase.value.src);
 
       if (index < showcases.value.length - 1) selectedShowcase.value = showcases.value[index + 1];
@@ -310,7 +325,7 @@ const reviews = ref<Review[]>([
 
 async function incrementCooldown() {
   while (true) {
-    await delay(1000);
+    await delay(20);
     showcaseCooldown.value++;
   }
 }
@@ -340,9 +355,9 @@ function translateMonth(month: number) {
   background: radial-gradient(circle at 50% 0%, rgb(30, 67, 86), rgb(27, 40, 56) 60%);
 }
 
-@media (max-width: 1400px) {
+@media (max-width: 975px) {
   .disclaimer {
-    display: block;
+    display: flex;
   }
 }
 

@@ -1,11 +1,11 @@
 <template>
   <div class="background w-screen h-screen flex items-center justify-around overflow-hidden" :style="{ backgroundImage: `url(${level.levelImg})` }">
     <Transition name="opacity">
-      <div class="winOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-md" v-if="showWin"></div>
+      <div class="winOverlay w-screen h-screen fixed left-0 top-0 pointer-events-none transition-none z-[100] backdrop-blur-md" v-if="showWin && !store.isDead"></div>
     </Transition>
 
     <Transition name="left">
-      <div class="absolute card z-[101] bg-white w-screen py-6 gap-4 flex items-center justify-center flex-col" v-if="showReward">
+      <div class="absolute card z-[101] bg-white w-screen py-6 gap-4 flex items-center justify-center flex-col" v-if="showReward && !store.isDead">
         <h1 class="text-4xl font-semibold">You win!</h1>
         <p class="text-xl font-semibold">Pick your reward:</p>
         <Reward :level="level" @select="(reward) => (selectedReward = reward)" />
@@ -13,7 +13,7 @@
       </div>
     </Transition>
 
-    <div class="w-[50em]"></div>
+    <div :class="{ 'w-[50em]': !store.smallScreen, 'w-[60vw]': store.smallScreen }"></div>
 
     <div class="w-full h-full gap-8 py-10 flex flex-col items-center justify-around" v-if="level.type != 'shop' && level.type != 'relic'">
       <div class="w-2/3 h-[45%] flex items-center justify-end">
@@ -27,6 +27,7 @@
             @regen="(hp, energy) => emit('regen', hp, energy)"
             @fart="damageEnemy"
             @blizzard="damageEnemy"
+            @out-of-energy="showOutOfEnergy = true"
           />
           <Amogus :color="amogusColor" v-if="level.id != 10" />
           <Vent v-else />
@@ -43,15 +44,20 @@
             @damaged="(damage) => emit('damaged', damage)"
             @regen="(hp, energy) => emit('regen', hp, energy)"
             @oil-spill="damageEnemy"
+            @out-of-energy="showOutOfEnergy = true"
           />
           <button
             @click="roll"
             class="reroll back transition w-48 py-2.5 rounded-full border-2 border-[color:var(--text-color)] bg-[color:var(--bg-color)] text-[color:var(--text-color)] text-lg font-semibold mt-6"
-            :disabled="matchedBoard != undefined || store.isDead"
+            :disabled="matchedBoard != undefined || store.isDead || showReward"
             :class="{ 'cursor-not-allowed': matchedBoard }"
           >
             Reroll 🎲
           </button>
+          <div v-show="showOutOfEnergy" :class="{ 'bottom-20': !store.smallScreen, 'bottom-10': store.smallScreen }" class="absolute flex flex-col items-center justify-center bg-red-700 py-2 px-6 rounded-full">
+            <p class="text-white font-extrabold text-lg">Out of energy!</p>
+            <p class="text-white font-medium text-md">Try rerolling to regenerate some.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -67,7 +73,7 @@ import Player from "./Player.vue";
 import { delay, getRandomItemFromArray } from "@/utils/functions";
 import { useGameStore } from "@/stores/game";
 import Amogus from "./Amogus.vue";
-import { relics, type Element, type Level, type Powerup, type Relic as RelicType } from "@/utils/elements";
+import { relics, ice, type Element, type Level, type Powerup, type Relic as RelicType } from "@/utils/elements";
 import Reward from "./Reward.vue";
 import Shop from "./Shop.vue";
 import Vent from "./Vent.vue";
@@ -93,12 +99,6 @@ const store = useGameStore();
 
 const props = defineProps<Props>();
 watch(
-  () => props.level,
-  (level) => {
-    if (store.heartAttack && level.enemy) level.enemy.lives = Math.ceil(level.enemy.lives / 2);
-  }
-);
-watch(
   () => props.fastForward,
   (bool) => {
     if (bool) damageEnemy();
@@ -108,9 +108,11 @@ watch(
 const emit = defineEmits<Emits>();
 const reroll = ref(false);
 const matchedBoard = ref<number[][]>();
+const showOutOfEnergy = ref(false);
 
 const showWin = ref(false);
 const showReward = ref(false);
+
 const selectedReward = ref<Element | RelicType | Powerup | { type: "Bypass" }>();
 
 const enemyBoard = ref<number[]>();
@@ -120,6 +122,7 @@ const winCooldown = ref(true);
 
 onMounted(async () => {
   await winProtection();
+  if (store.heartAttack && props.level.enemy) props.level.enemy.lives = Math.ceil(props.level.enemy.lives / 2);
 });
 
 onBeforeUnmount(() => {
@@ -149,10 +152,10 @@ function next() {
 async function damageEnemy() {
   if (!enemyBoard.value || !playerBoard.value || !props.level.enemy) return;
 
-  props.level.enemy.lives--;
+  props.level.enemy.lives -= ice.currentLevel >= 3 ? 2 : 1;
   showWin.value = true;
 
-  if (props.level.enemy.lives == 0) {
+  if (props.level.enemy.lives <= 0) {
     if (props.level.id == 10) next();
     else showReward.value = true;
   } else {
@@ -197,7 +200,7 @@ async function handleReroll(board: number[] | number[][], from: "enemy" | "playe
             path.push(currentCell);
 
             if (enemy[k] == enemy[enemy.length - 1]) return path;
-          }
+          } else break;
         }
       }
     }
@@ -216,7 +219,8 @@ async function handleReroll(board: number[] | number[][], from: "enemy" | "playe
       ];
 
       for (let dir of directions) {
-        if (checkBounds(dir[0], dir[1]) && !previousTiles.includes([dir[0], dir[1]]) && player[dir[0]][dir[1]] == searchFor) return { dir1: dir[0], dir2: dir[1] };
+        if (checkBounds(dir[0], dir[1]) && !previousTiles.some((dirs) => dirs.length == 2 && dirs.every((value, index) => value == [dir[0], dir[1]][index])) && player[dir[0]][dir[1]] == searchFor)
+          return { dir1: dir[0], dir2: dir[1] };
       }
       return null;
     }
@@ -230,6 +234,7 @@ async function handleReroll(board: number[] | number[][], from: "enemy" | "playe
 async function roll() {
   reroll.value = true;
   if (!winCooldown.value) emit("regen", 0, relics[14].unlocked ? 6 : 5);
+  showOutOfEnergy.value = false;
   await delay(50);
   reroll.value = false;
 }

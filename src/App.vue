@@ -3,9 +3,7 @@
     <template v-slot:title="{ content }">{{ content ? content : "" }}</template>
   </metainfo>
   <div>
-    <transition :name="'circle-wipe'" mode="out-in">
-      <RouterView />
-    </transition>
+    <RouterView />
   </div>
 </template>
 
@@ -23,14 +21,6 @@ useMeta({
   description:
     "Featuring features fraught with a few fixes featured in many of your favorite apps and websites, Vent Defeater enables the imagination of anyone looking to build modern, sleek, and top-quality presentations."
 });
-
-function transitionName(): string {
-  if (route.meta.transition) {
-    return route.meta.transition as string;
-  } else {
-    return "default"; // Default transition if no meta data is provided
-  }
-}
 
 onBeforeMount(() => {
   userStore.verify();
@@ -89,78 +79,4 @@ onBeforeMount(() => {
 });
 </script>
 
-<style scoped>
-@keyframes circle-in-center {
-  from {
-    clip-path: circle(0% at 50% 50%);
-  }
-  to {
-    clip-path: circle(125% at 50% 50%);
-  }
-}
-
-@keyframes circle-out-center {
-  from {
-    clip-path: circle(125% at 50% 50%);
-  }
-  to {
-    clip-path: circle(0% at 50% 50%);
-  }
-}
-
-.circle-wipe-enter-active,
-.circle-wipe-leave-active {
-  transition: clip-path 2.5s cubic-bezier(0.25, 1, 0.3, 1);
-}
-
-.circle-wipe-enter-from {
-  clip-path: circle(0% at 50% 50%);
-}
-
-.circle-wipe-enter-to {
-  clip-path: circle(125% at 50% 50%);
-}
-
-.circle-wipe-leave-from {
-  clip-path: circle(125% at 50% 50%);
-}
-
-.circle-wipe-leave-to {
-  clip-path: circle(0% at 50% 50%);
-}
-
-body {
-  margin: 0;
-  padding: 0;
-}
-
-.page {
-  position: absolute;
-  width: 100vw;
-  height: 100vh;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.usage {
-  position: absolute;
-  top: 40px;
-  line-height: 50px;
-  z-index: 1000;
-  color: white;
-  font-size: 20px;
-  width: 100%;
-  text-align: center;
-  font-family: "Arial Black", Gadget, sans-serif;
-  pointer-events: none;
-}
-
-h1 {
-  color: white;
-  font-family: arial;
-  font-weight: bold;
-  font-size: 3em;
-}
-</style>
+<style lang="scsss" scoped></style>

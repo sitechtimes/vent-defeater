@@ -1,16 +1,41 @@
 <template>
-  <div class="z-[200] bg-[rgba(0,0,0,0.2)] w-screen h-screen absolute top-0 left-0 flex items-center justify-center" v-if="showTutorial">
-    <div
-      class="absolute bg-white shadow-lg shadow-black flex flex-col items-center justify-center gap-2 w-[30rem] p-5 rounded-lg"
-      v-if="currentTutorialPhase >= 0"
-      :style="{ top: tutorialPhases[currentTutorialPhase].top + 'px', left: tutorialPhases[currentTutorialPhase].left + 'px' }"
-    >
-      <div class="flex items-center justify-center gap-4">
-        <button class="font-extrabold text-2xl" @click="currentTutorialPhase = Math.max(0, currentTutorialPhase - 1)"><</button>
-        <button class="font-extrabold text-2xl" @click="currentTutorialPhase = Math.min(tutorialPhases.length - 1, currentTutorialPhase + 1)">></button>
+  <div class="z-[200] bg-[rgba(0,0,0,0.75)] w-screen h-screen absolute top-0 left-0 flex items-center justify-center" v-if="showTutorial">
+    <div class="absolute bg-white shadow-lg shadow-black flex flex-col items-center justify-start gap-2 w-[30rem] min-h-[25rem] p-5 rounded-lg" v-if="currentTutorialPhase >= 0">
+      <p class="absolute top-0 left-2 text-lg">Tutorial {{ currentTutorialPhase + 1 }}/{{ tutorialPhases.length }}</p>
+      <p class="absolute top-0 right-2 text-md text-red-700" v-if="showTutorialYelling">Watch the demo video first</p>
+      <div class="flex items-center justify-center gap-4 w-full">
+        <button class="flex items-center justify-center font-extrabold text-2xl rounded-full w-[30%]" @click="currentTutorialPhase = Math.max(-1, currentTutorialPhase - 1)">
+          <img class="w-10 rotate-180 transition-none" src="/ui/rightArrow.svg" aria-hidden="true" />
+        </button>
+        <button
+          class="flex items-center justify-center font-extrabold text-2xl rounded-full w-[30%]"
+          :class="{
+            'bg-gray-400': !tutorialPhases[currentTutorialPhase].allowNext || currentTutorialPhase + 1 >= tutorialPhases.length,
+            blink: tutorialPhases[currentTutorialPhase].allowNext && currentTutorialPhase + 1 < tutorialPhases.length
+          }"
+          @click="nextTutorialPage"
+        >
+          <img class="w-10" src="/ui/rightArrow.svg" aria-hidden="true" />
+        </button>
       </div>
+      <video
+        ref="tutorialVideo"
+        @ended="
+          tutorialVideo?.play();
+          tutorialPhases[currentTutorialPhase].allowNext = true;
+        "
+        :src="tutorialPhases[currentTutorialPhase].src"
+        muted
+        autoplay
+      ></video>
       <p class="text-lg font-medium text-center">{{ tutorialPhases[currentTutorialPhase].text }}</p>
-      <button v-show="currentTutorialPhase == tutorialPhases.length - 1" @click="showTutorial = false" class="w-1/2 py-3 mt-4 bg-green-400 brightness-75 rounded-lg tutorialButton text-2xl font-bold">
+      <button
+        :class="{ 'bg-green-400': tutorialPhases[tutorialPhases.length - 1].allowNext, 'bg-gray-400': !tutorialPhases[tutorialPhases.length - 1].allowNext }"
+        :disabled="!tutorialPhases[tutorialPhases.length - 1].allowNext"
+        v-show="currentTutorialPhase == tutorialPhases.length - 1"
+        @click="showTutorial = false"
+        class="w-1/2 py-3 mt-4 brightness-75 rounded-lg tutorialButton text-2xl font-bold"
+      >
         Let's go
       </button>
     </div>
@@ -39,7 +64,7 @@
   <div v-if="store.isDead || gameWon" class="fixed lost z-[101] bg-white flex items-center justify-center flex-col gap-4 p-8 rounded-2xl">
     <h2 class="text-4xl font-semibold">{{ gameWon ? "You won!" : "You lost 😦" }}</h2>
     <p class="text-2xl font-medium" v-if="store.relicOfDeath && !gameWon && health <= 0">You lost the double or nothing</p>
-    <p class="text-2xl font-medium" v-else-if="!gameWon && health <= 0">You died from wounds</p>
+    <p class="text-2xl font-medium" v-else-if="!gameWon && health <= 0">You died from chronic death syndrome</p>
     <p class="text-2xl font-medium" v-else-if="!gameWon && energy >= (relics[2].unlocked ? 200 : 125)">Your energy meter spontaneously combusted</p>
     <div class="z-10 flex items-center justify-center flex-col bg-slate-900 py-2 px-10 w-48 rounded-xl">
       <p class="timer font-semibold text-4xl">
@@ -79,7 +104,7 @@
 
   <div class="relative flex items-center justify-center w-screen h-screen overflow-hidden select-none" :class="{ 'bg-black': level }">
     <Transition name="left">
-      <div class="absolute left-0 h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-black bg-opacity-65 w-[35rem] z-20" v-show="typeof level != 'string' && level">
+      <div class="inventory absolute left-0 h-screen flex items-center justify-start flex-col gap-4 px-3 py-10 bg-black bg-opacity-65 z-20" v-show="typeof level != 'string' && level">
         <div class="w-3/4 flex items-center justify-center gap-1">
           <img class="w-6 h-6 dark:invert" src="/game/health.svg" aria-hidden="true" />
           <h3 class="text-2xl font-semibold w-16 text-[color:var(--bg-color)]">{{ Math.floor(health) }}</h3>
@@ -126,13 +151,13 @@
             :key="element.name"
           >
             <img class="w-[25%] h-[25%]" :src="element.img" :alt="'Open tech tree of ' + element.name" />
-            <p class="mt-2 text-xl">Level {{ element.currentLevel }}</p>
+            <p class="mt-2 text-xl">{{ store.smallScreen ? "Lvl" : "Level" }} {{ element.currentLevel }}</p>
             <p>{{ element.name[0].toUpperCase() + element.name.slice(1) }}</p>
           </button>
         </div>
 
         <Transition name="down">
-          <div class="flex items-center justify-center w-full p-3 rounded-2xl" v-if="selectedElement">
+          <div class="flex items-center justify-center w-full p-3 rounded-2xl" :class="{ 'flex-col': store.smallScreen }" v-if="selectedElement">
             <div class="flex flex-col items-center justify-center w-40">
               <h2 class="text-4xl text-[color:var(--bg-color)]">{{ selectedElement.name[0].toUpperCase() + selectedElement.name.slice(1) }}</h2>
               <p class="text-lg text-[color:var(--bg-color)]">Level {{ selectedElement.currentLevel }}</p>
@@ -172,7 +197,7 @@
             <img v-if="relic" class="w-14 h-14" :src="relic.img" aria-hidden="true" />
             <div
               v-if="relic"
-              class="description shadow-[color:var(--text-color)] shadow-sm pointer-events-none hidden absolute top-0 left-20 w-96 rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap bg-white"
+              class="description shadow-[color:var(--text-color)] shadow-sm pointer-events-none hidden absolute top-0 left-20 w-96 min-w-96 rounded-lg z-10 p-2 flex-col gap-2 items-center justify-center whitespace-nowrap bg-white"
             >
               <h4 class="text-xl font-semibold">{{ relic.name }}</h4>
               <p class="text-wrap w-3/4 text-center transition-none">
@@ -206,8 +231,6 @@
             <div v-else class="relic duration-200 relative w-24 h-16 flex items-center justify-center rounded-lg bg-white brightness-50"></div>
           </div>
         </div>
-
-        <Amogus color="#ff0000" class="absolute bottom-[-3rem] left-[-3rem] scale-50 cursor-pointer" />
       </div>
     </Transition>
 
@@ -250,13 +273,15 @@ import { air, earth, fire, ice, formatDescription, type Relic, type Powerup, rel
 import type { Element, Level as LevelType } from "@/utils/elements";
 import { delay, getRandomInt, getRandomItemFromArray } from "@/utils/functions";
 import { storeToRefs } from "pinia";
-import { onBeforeMount, ref, watch } from "vue";
+import { onBeforeMount, onMounted, ref, watch } from "vue";
 import { useMeta } from "vue-meta";
 
 useMeta({
   title: "Vent Defeater on Steal",
   description: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?"
 });
+
+const tutorialVideo = ref<HTMLVideoElement>();
 
 const store = useGameStore();
 const userStore = useUserStore();
@@ -318,54 +343,83 @@ watch(
   }
 );
 
+const showTutorialYelling = ref(false);
 const tutorialPhases = ref([
   {
     top: 0,
     left: 500,
-    text: "This is your health. Don't let it go below 0 or else your glycemic index will drop into the negatives"
+    text: "This is your health. Don't let it go below 0 or else your glycemic index will drop into the negatives",
+    src: "/game/tutorial/tutorialHealth.mp4",
+    allowNext: false
   },
   {
     top: 40,
     left: 500,
-    text: "This is your energy. Don't let it go above 125 or you'll get electrocuted and die"
+    text: "This is your energy. Don't let it go above 125 or you'll get electrocuted and die",
+    src: "/game/tutorial/tutorialEnergy.mp4",
+    allowNext: false
   },
   {
     top: 170,
     left: 600,
-    text: "These are your elements, relics, and powerups. Click to select. You can hover over them to see what they do"
+    text: "These are your elements, relics, and powerups. Hover over them to see what they do. EX: Ice freezes a tile on click, preventing the tile from changing on reroll",
+    src: "/game/tutorial/tutorialElements.mp4",
+    allowNext: false
   },
   {
     top: 700,
     left: 975,
-    text: "This is your board. You can use your elements here by clicking on a tile"
-  },
-  {
-    top: 115,
-    left: 1000,
-    text: "This is your enemy. He burns down orphanages. Let's kill him and steal his stuff"
-  },
-  {
-    top: 190,
-    left: 1000,
-    text: "Your enemy will attack you if this bar fills up. They may also have extra lives so be careful"
+    text: "This is your board. You can use your elements here by clicking on a tile. Using an element costs 5 energy",
+    src: "/game/tutorial/tutorialBoard.mp4",
+    allowNext: false
   },
   {
     top: 800,
     left: 1000,
-    text: "This is the great almighty reroll button. Click it to reroll your board"
+    text: "This is the great almighty reroll button. Rerolling will regenerate 5 energy",
+    src: "/game/tutorial/tutorialReroll.mp4",
+    allowNext: false
   },
   {
-    top: 925,
-    left: 1200,
-    text: "This is your speedrun timer. It'll start once you exit this tutorial"
+    top: 115,
+    left: 1000,
+    text: "This is your enemy. He burns down orphanages. Let's kill him and steal his stuff",
+    src: "/game/tutorial/tutorialEnemy.mp4",
+    allowNext: false
+  },
+  {
+    top: 190,
+    left: 1000,
+    text: "Your enemy will attack you if this bar fills up. They may also have extra lives so be careful",
+    src: "/game/tutorial/tutorialEnemy2.mp4",
+    allowNext: false
   },
   {
     top: 700,
     left: 975,
-    text: "Your goal is to match numbers on your board to the numbers above the enemy. Good luck and don't die"
+    text: "Your goal is to match numbers on your board to the numbers above the enemy. Matching is done automatically, you just need to keep rolling!",
+    src: "/game/tutorial/tutorialMatch.mp4",
+    allowNext: false
+  },
+  {
+    top: 925,
+    left: 1200,
+    text: "This is your speedrun timer. It'll start once you exit this tutorial",
+    src: "/game/tutorial/tutorialTimer.mp4",
+    allowNext: false
   }
 ]);
 const currentTutorialPhase = ref(-1);
+
+function nextTutorialPage() {
+  if (!tutorialPhases.value[currentTutorialPhase.value].allowNext) {
+    showTutorialYelling.value = true;
+    return;
+  }
+
+  showTutorialYelling.value = false;
+  currentTutorialPhase.value = Math.min(tutorialPhases.value.length - 1, currentTutorialPhase.value + 1);
+}
 
 watch(
   () => selectedElement.value,
@@ -373,9 +427,19 @@ watch(
 );
 
 onBeforeMount(() => {
+  document.body.classList.remove("dark");
   userStore.theme = "light";
   store.levels = generateNewMap();
   selectedElement.value = elements.value.ice;
+  currentRelics.value[0] = getRandomItemFromArray([relics[0], relics[3], relics[4], relics[14]]);
+  currentPowerups.value[0] = powerups[1];
+});
+
+onMounted(() => {
+  store.smallScreen = window.innerWidth < 1920;
+  window.addEventListener("resize", () => {
+    store.smallScreen = window.innerWidth < 1920;
+  });
 });
 
 function generateNewMap() {
@@ -385,6 +449,8 @@ function generateNewMap() {
     id: 0,
     x: 90,
     y: 450,
+    topPercent: 450 / 11,
+    leftPercent: 90 / 20,
     levelImg: "/game/firstperson/navigation.png",
     mapImg: "/game/skull1.svg",
     type: "fight",
@@ -401,28 +467,28 @@ function generateNewMap() {
 
   levels.push(generateNewLevel(1, 525, 400, "o2", 1, "mystery", [2]));
   levels.push(generateNewLevel(2, 390, 215, "asteroid", 1, "fight", [3]));
-  levels.push(generateNewLevel(3, 605, 215, "cafeteria1", 2, "fight", [4, 11, 12]));
-  levels.push(generateNewLevel(4, 810, 45, "cafeteria3", 2, "mystery", [5]));
-  levels.push(generateNewLevel(5, 997, 215, "cafeteria4", 2, "harderFight", [6]));
-  levels.push(generateNewLevel(6, 1400, 215, "gen1", 2, "fight", [7]));
-  levels.push(generateNewLevel(7, 1462, 300, "gen2", 2, "mystery", [8]));
+  levels.push(generateNewLevel(3, 605, 215, "cafeteria1", 2, "random", [4, 11, 12]));
+  levels.push(generateNewLevel(4, 810, 45, "cafeteria3", 2, "random", [5]));
+  levels.push(generateNewLevel(5, 997, 215, "cafeteria4", 2, "random", [6]));
+  levels.push(generateNewLevel(6, 1400, 215, "gen1", 2, "random", [7]));
+  levels.push(generateNewLevel(7, 1462, 300, "gen2", 2, "random", [8]));
   levels.push(generateNewLevel(8, 1622, 540, "reactor1", 3, "shop", [9]));
   levels.push(generateNewLevel(9, 1675, 382, "reactor2", 3, "harderFight", [10]));
   levels.push(generateNewLevel(10, 1307, 400, "cams", 3, "boss", null));
   levels.push(generateNewLevel(11, 810, 215, "emergency", 2, "shop", [5]));
-  levels.push(generateNewLevel(12, 805, 410, "cafeteria2", 2, "mystery", [13, 19]));
+  levels.push(generateNewLevel(12, 805, 410, "cafeteria2", 2, "random", [13, 19]));
   levels.push(generateNewLevel(13, 675, 655, "admin1", 2, "mystery", [14]));
   levels.push(generateNewLevel(14, 517, 550, "admin2", 1, "boss", [19]));
   levels.push(generateNewLevel(15, 390, 525, "route1vent1", 1, "fight", [16]));
-  levels.push(generateNewLevel(16, 395, 755, "route1vent2", 1, "fight", [17, 18, 19]));
+  levels.push(generateNewLevel(16, 395, 755, "route1vent2", 1, "random", [17, 18, 19]));
   levels.push(generateNewLevel(17, 567, 890, "comms", 2, "mystery", [18, 19]));
-  levels.push(generateNewLevel(18, 767, 903, "chute", 2, "mystery", [20, 23]));
+  levels.push(generateNewLevel(18, 767, 903, "chute", 2, "random", [20, 23]));
   levels.push(generateNewLevel(19, 910, 690, "shop", 2, "shop", [20, 23]));
   levels.push(generateNewLevel(20, 1160, 720, "electrical1", 2, "mystery", [21]));
-  levels.push(generateNewLevel(21, 1175, 585, "electrical2", 2, "fight", [22]));
-  levels.push(generateNewLevel(22, 1205, 420, "medbay", 2, "harderFight", [6]));
-  levels.push(generateNewLevel(23, 1395, 735, "gen1", 2, "harderFight", [24]));
-  levels.push(generateNewLevel(24, 1462, 660, "gen2", 3, "mystery", [8]));
+  levels.push(generateNewLevel(21, 1175, 585, "electrical2", 2, "random", [22]));
+  levels.push(generateNewLevel(22, 1205, 420, "medbay", 2, "random", [6]));
+  levels.push(generateNewLevel(23, 1395, 735, "gen1", 2, "random", [24]));
+  levels.push(generateNewLevel(24, 1462, 660, "gen2", 3, "random", [8]));
 
   return levels;
 
@@ -432,52 +498,56 @@ function generateNewMap() {
     y: number,
     levelImg: string,
     difficulty: 1 | 2 | 3,
-    type: "mystery" | "fight" | "harderFight" | "boss" | "shop",
+    type: "mystery" | "fight" | "harderFight" | "boss" | "shop" | "random",
     nextLevels: number[] | null
   ): LevelType {
-    const determinedType = type == "mystery" ? getRandomItemFromArray(["fight", "harderFight", "relic", "shop"]) : type;
+    const determinedType = type == "mystery" || type == "random" ? getRandomItemFromArray(["fight", "relic", "shop"]) : type;
     return {
       id,
       x,
       y,
+      topPercent: y / 11,
+      leftPercent: x / 20,
       levelImg: "/game/firstperson/" + levelImg + ".png",
-      mapImg: getMapImg(type),
+      mapImg: type == "mystery" ? getMapImg(type) : getMapImg(determinedType),
       type: determinedType,
       mystery: type == "mystery",
       completed: false,
-      color: getColor(type),
+      color: type == "mystery" ? getColor(type) : getColor(determinedType),
       enemy: determinedType != "shop" && determinedType != "relic" ? generateNewEnemy(difficulty, determinedType) : null,
       nextLevels
     };
   }
 
-  function getMapImg(type: "mystery" | "fight" | "harderFight" | "boss" | "shop") {
+  function getMapImg(type: "mystery" | "fight" | "harderFight" | "boss" | "shop" | "relic") {
     if (type == "mystery") return "/game/mystery.svg";
     if (type == "fight") return "/game/skull1.svg";
     if (type == "harderFight") return "/game/skull2.svg";
     if (type == "boss") return "/game/skull3.svg";
-    return "/game/shop.svg";
+    if (type == "shop") return "/game/shop.svg";
+    return "/game/relic.svg";
   }
 
-  function getColor(type: "mystery" | "fight" | "harderFight" | "boss" | "shop") {
+  function getColor(type: "mystery" | "fight" | "harderFight" | "boss" | "shop" | "relic") {
     if (type == "mystery") return "#ffffff";
     if (type == "fight") return "#ffff00";
     if (type == "harderFight") return "#ffa500";
     if (type == "boss") return "#ff0000";
-    return "#00ff00";
+    if (type == "shop") return "#00ff00";
+    return "#03cafc";
   }
 
   function generateNewEnemy(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
     return {
       lives: getLives(difficulty, type),
-      slots: type == "boss" ? 9 : getRandomInt(1.5 * difficulty, 2.75 * difficulty) + (type == "harderFight" ? 1 : 0),
+      slots: type == "boss" ? 9 : getRandomInt(Math.ceil(1.25 * difficulty), 2 * difficulty) + (type == "harderFight" ? 1 : 0),
       color: getRandomItemFromArray(["#ff0000", "#00ff00", "#56deff", "#ffff00", "#ff00ff", "#00ffff", "#f7f7f7"])
     };
 
     function getLives(difficulty: 1 | 2 | 3, type: "fight" | "harderFight" | "boss") {
-      if (type == "fight") return getRandomInt(1.5 * difficulty, 2.5 * difficulty);
-      if (type == "harderFight") return getRandomInt(3 * difficulty, 4.5 * difficulty);
-      return difficulty == 1 ? 15 : 70;
+      if (type == "fight") return getRandomInt(Math.ceil(1.25 * difficulty), 2 * difficulty);
+      if (type == "harderFight") return getRandomInt(Math.ceil(2.5 * difficulty), Math.ceil(3.5 * difficulty));
+      return difficulty == 1 ? 15 : 68;
     }
   }
 }
@@ -504,7 +574,7 @@ function handleReward(reward: Element | Relic | Powerup | { type: "Bypass" }) {
     reward.unlocked = true;
     currentRelics.value[currentRelics.value.findIndex((relic) => !relic)] = reward;
   } else if (reward.type == "Powerup") {
-    reward.count += 3;
+    reward.count += 5;
     if (currentPowerups.value.find((powerup) => powerup && powerup.name == reward.name) != undefined) return;
     currentPowerups.value[currentPowerups.value.findIndex((powerup) => !powerup)] = reward;
   }
@@ -768,6 +838,52 @@ async function usePowerup(powerup: Powerup) {
   background-color: var(--earth-secondary);
 }
 
+.relic:hover,
+.level:hover {
+  .description {
+    display: flex;
+  }
+}
+
+.inventory {
+  width: 35rem;
+}
+
+@keyframes blink {
+  5% {
+    background-color: transparent;
+  }
+  40% {
+    background-color: rgb(88, 255, 150);
+  }
+  60% {
+    background-color: rgb(88, 255, 150);
+  }
+  95% {
+    background-color: transparent;
+  }
+}
+.blink {
+  animation: blink 1s ease infinite;
+}
+
+@media (max-width: 1200px) {
+  .inventory {
+    width: 40vw;
+    overflow-x: visible;
+    overflow-y: scroll;
+  }
+
+  .relic:hover,
+  .level:hover {
+    .description {
+      position: unset;
+      top: unset;
+      left: unset;
+    }
+  }
+}
+
 @media (hover: hover) and (pointer: fine) {
   .element:hover {
     background-color: var(--faded-bg-color-dark);
@@ -787,18 +903,6 @@ async function usePowerup(powerup: Powerup) {
       img {
         transform: rotate(360deg);
       }
-    }
-  }
-
-  .relic:hover {
-    .description {
-      display: flex;
-    }
-  }
-
-  .level:hover {
-    .description {
-      display: flex;
     }
   }
 }

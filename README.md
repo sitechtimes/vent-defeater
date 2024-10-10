@@ -35,10 +35,10 @@ npm run dev
 ## Tech Stack
 
 <ul>
-    <li><a href="https://vuejs.org/guide/introduction.html"><img src="https://seeklogo.com/images/V/vuejs-logo-17D586B587-seeklogo.com.png?raw=true" height="15"> Vue 3</a> (Composition API)</li>
-    <li><a href="https://pinia.vuejs.org/core-concepts/"><img src="https://seeklogo.com/images/P/pinia-logo-51BF712FB0-seeklogo.com.png?raw=true" height="21"> Pinia</a> (Composition API)</li>
-    <li><a href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html"><img src="https://images.seeklogo.com/logo-png/52/1/typescript-logo-png_seeklogo-526730.png?raw=true" height="17"> Typescript</a></li>
-    <li><a href="https://tailwindcss.com/docs/utility-first"><img src="https://seeklogo.com/images/T/tailwind-css-logo-5AD4175897-seeklogo.com.png?raw=true" height="11"> Tailwind CSS</a></li>
-    <li><a href="https://sass-lang.com/guide/#nesting"><img src="https://sass-lang.com/assets/img/styleguide/seal-color.png?raw=true" height="17"> SCSS</a> (for nesting)</li>
-    <li><a href="https://prettier.io/docs/en/install"><img src="https://seeklogo.com/images/P/prettier-logo-D5C5197E37-seeklogo.com.png?raw=true" height="17"> Prettier</a></li>
+    <li><img src="https://seeklogo.com/images/V/vuejs-logo-17D586B587-seeklogo.com.png?raw=true" height="15"> <a href="https://vuejs.org/guide/introduction.html">Vue 3</a> (Composition API)</li>
+    <li><img src="https://seeklogo.com/images/P/pinia-logo-51BF712FB0-seeklogo.com.png?raw=true" height="21"> <a href="https://pinia.vuejs.org/core-concepts/">Pinia</a> (Composition API)</li>
+    <li><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png?raw=true" height="17"> <a href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html">Typescript</a></li>
+    <li><img src="https://seeklogo.com/images/T/tailwind-css-logo-5AD4175897-seeklogo.com.png?raw=true" height="11"> <a href="https://tailwindcss.com/docs/utility-first">Tailwind CSS</a></li>
+    <li><img src="https://sass-lang.com/assets/img/styleguide/seal-color.png?raw=true" height="17"> <a href="https://sass-lang.com/guide/#nesting">SCSS</a> (for nesting)</li>
+    <li><img src="https://seeklogo.com/images/P/prettier-logo-D5C5197E37-seeklogo.com.png?raw=true" height="17"> <a href="https://prettier.io/docs/en/install">Prettier</a></li>
 </ul>

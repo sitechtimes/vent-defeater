@@ -24,6 +24,10 @@ export type Level = {
   x: number;
   /** Y-position of the level on the map, in pixels. */
   y: number;
+  /** Top percentage for placement of the level on the map for smaller screens */
+  topPercent: number;
+  /** Left percentage for placement of the level on the map for smaller screens */
+  leftPercent: number;
   /** Background image of the level during game phase. */
   levelImg: string;
   /** Image of the level marker on the map. */
@@ -264,8 +268,8 @@ export const powerups: Powerup[] = [
     name: "Blue Cow (not Red Bull)",
     id: 1,
     img: "/game/relics/bluecow.png",
-    description: "Regenerater back to full energy.",
-    count: 0
+    description: "Regenerate back to full energy.",
+    count: 3
   },
   {
     type: "Powerup",
@@ -298,14 +302,14 @@ export const ice: Element = {
     },
     {
       level: 2,
-      name: "Canada",
-      description: "**Frozen** tiles will have a chance to not thaw out based on the number of adjacent **frozen** tiles."
-    },
-    {
-      level: 3,
       name: "Hot 😏",
       description:
         "You've been working on your charisma, and now you're hotter than the sun. **Frozen** tiles will never thaw out naturally, but you can also reselect **frozen** tiles to manually thaw them out at no additional cost."
+    },
+    {
+      level: 3,
+      name: "Ice Tea",
+      description: "Deal 2x more damage to Bri'ish enemies (all enemies are Bri'ish)"
     },
     {
       level: 4,
@@ -326,24 +330,24 @@ export const fire: Element = {
       level: 1,
       name: "Farenheit 451",
       description:
-        "**Burn** a tile. When rerolling, **burning** tiles will heal **0.1** max HP each. If **2** adjacent tiles are **burning**, all **burning** tiles will explode and return to a **normal** state. You will take **25** damage from the resulting second-degree burns."
+        "**Burn** a tile. When rerolling, **burning** tiles will heal **5** HP each. If **2** adjacent tiles are **burning**, all **burning** tiles will explode and you will take **20** damage."
     },
     {
       level: 2,
       name: "Demolition",
       description:
-        "**Burning** tiles will spread **fire** to adjacent tiles every **3** rerolls, and the threshold for an explosion is increased to **4** adjacent tiles. However, **burning** tiles will only heal **0.05** max HP each."
+        "**Burning** tiles will spread **fire** to adjacent tiles every **3** rerolls, and the threshold for an explosion is increased to **4** adjacent tiles. **burning** tiles will heal **7.5** HP each as well."
     },
     {
       level: 3,
       name: "Workplace Safety",
-      description: "**Burning** tiles will no longer explode, but **burning** tiles will only heal **0.033** max HP each."
+      description: "**Burning** tiles will no longer explode, and **burning** tiles will heal **10** HP each."
     },
     {
       level: 4,
       name: "Arson",
       description:
-        "Your inner arsonist emerges, and you begin to set the world on fire. Every 3 rerolls, a random non-**burning** tiles will be set on **fire**. The max HP healed per **burning** tile is increased back to **0.1** HP, but **burning** a tile will now cost **7.5** energy because fire and electricity don't go well together."
+        "Your inner arsonist emerges, and you begin to set the world on fire. Every 3 rerolls, a random non-**burning** tile will be set on **fire**. The HP healed per **burning** tile is increased to **15** HP."
     }
   ]
 };
@@ -357,7 +361,7 @@ export const air: Element = {
     {
       level: 1,
       name: "Yeet",
-      description: "**Yeet** a number from the **enemy board**, swapping it out with a new random number."
+      description: "**Yeet** a number from the **ENEMY BOARD**, swapping it out with a new random number."
     },
     {
       level: 2,
