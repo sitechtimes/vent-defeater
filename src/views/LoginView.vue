@@ -11,7 +11,7 @@
 
     <input type="checkbox" v-model="verifyNag" />
 
-    <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? ' back' : '' }}!</h1>
+    <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? " back" : "" }}!</h1>
 
     <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4">
       <h3 class="mb-4" v-show="showLogin">Log in to your Vent Defeater account</h3>
@@ -25,7 +25,7 @@
           @click="button.function"
         >
           <img class="w-4" :src="button.img" aria-hidden="true" />
-          <p class="my-2 font-bold">{{ showLogin ? 'Log in' : 'Sign up' }} with {{ button.name }}</p>
+          <p class="my-2 font-bold">{{ showLogin ? "Log in" : "Sign up" }} with {{ button.name }}</p>
         </button>
       </div>
 
@@ -58,7 +58,7 @@
         </div>
 
         <div class="relative flex items-start justify-center flex-col gap-1">
-          <label class="font-medium" for="password">{{ showLogin ? 'Your' : 'Choose a' }} password <span title="Required" class="text-red-500 font-2xl">*</span></label>
+          <label class="font-medium" for="password">{{ showLogin ? "Your" : "Choose a" }} password <span title="Required" class="text-red-500 font-2xl">*</span></label>
           <input
             class="w-96 h-12 rounded-lg border-0 bg-[color:var(--faded-bg-color)] px-4 transition duration-500 focus:outline focus:outline-2 focus:outline-[color:var(--primary)] focus:bg-[color:var(--bg-color)]"
             id="password"
@@ -84,7 +84,7 @@
         </div>
 
         <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] mt-4 transition duration-500" type="submit" :disabled="loading">
-          {{ showLogin ? 'Log in' : 'Sign up' }}
+          {{ showLogin ? "Log in" : "Sign up" }}
         </button>
         <RouterLink to="/reset-password" class="no-underline font-medium" v-if="showLogin">Forgot password?</RouterLink>
       </form>
@@ -94,15 +94,20 @@
     <h3 v-show="showLogin">New to Vent Defeater?</h3>
     <h3 v-show="!showLogin">Already have an account?</h3>
     <button class="bg-transparent border-0" @click="showLogin ? router.push('?signup=1') : router.push('')">
-      <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? 'Sign up now' : 'Log in' }}</h3>
+      <h3 class="m-0 font-medium cursor-pointer">{{ showLogin ? "Sign up now" : "Log in" }}</h3>
     </button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { useUserStore } from '@/stores/user';
-import { onMounted, ref, watch } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import { useUserStore } from "@/stores/user";
+import { onMounted, ref, watch } from "vue";
+import { useActiveMeta, useMeta } from "vue-meta";
+import { useRoute, useRouter } from "vue-router";
+
+useMeta({
+  title: "Vent in to your account - Vent Defeater"
+});
 
 const userStore = useUserStore();
 
@@ -111,15 +116,15 @@ const router = useRouter();
 
 const showLogin = ref(true);
 
-const email = ref('');
-const name = ref('');
-const password = ref('');
-const confirmPassword = ref('');
+const email = ref("");
+const name = ref("");
+const password = ref("");
+const confirmPassword = ref("");
 
-const emailErr = ref('');
-const nameErr = ref('');
-const passwordErr = ref('');
-const confirmPasswordErr = ref('');
+const emailErr = ref("");
+const nameErr = ref("");
+const passwordErr = ref("");
+const confirmPasswordErr = ref("");
 
 const verifyNag = ref(false);
 const loading = ref(false);
@@ -137,8 +142,8 @@ watch(
   () => email.value,
   (value) => {
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (value.length != 0 && !emailRegex.test(value)) emailErr.value = 'Invalid email.';
-    else emailErr.value = '';
+    if (value.length != 0 && !emailRegex.test(value)) emailErr.value = "Invalid email.";
+    else emailErr.value = "";
     verifyNag.value = false;
   }
 );
@@ -146,12 +151,12 @@ watch(
 watch(
   () => password.value,
   (value) => {
-    if (value != confirmPassword.value && !showLogin.value) confirmPasswordErr.value = 'Passwords do not match.';
-    else confirmPasswordErr.value = '';
-    if (emailErr.value == 'Unable to log in with provided credentials.') emailErr.value = '';
-    if (value.length < 8) passwordErr.value = 'Password must be at least 8 characters.';
-    else if (value.length > 50) passwordErr.value = 'Password must be less than 30 characters.';
-    else passwordErr.value = '';
+    if (value != confirmPassword.value && !showLogin.value) confirmPasswordErr.value = "Passwords do not match.";
+    else confirmPasswordErr.value = "";
+    if (emailErr.value == "Unable to log in with provided credentials.") emailErr.value = "";
+    if (value.length < 8) passwordErr.value = "Password must be at least 8 characters.";
+    else if (value.length > 50) passwordErr.value = "Password must be less than 30 characters.";
+    else passwordErr.value = "";
     verifyNag.value = false;
   }
 );
@@ -159,9 +164,9 @@ watch(
 watch(
   () => name.value,
   (value) => {
-    if (value.length < 2) nameErr.value = 'Name must be at least 2 characters.';
-    else if (value.length > 40) nameErr.value = 'name must be less than 40 characters.';
-    else nameErr.value = '';
+    if (value.length < 2) nameErr.value = "Name must be at least 2 characters.";
+    else if (value.length > 40) nameErr.value = "name must be less than 40 characters.";
+    else nameErr.value = "";
     verifyNag.value = false;
   }
 );
@@ -169,8 +174,8 @@ watch(
 watch(
   () => confirmPassword.value,
   (value) => {
-    if (value != password.value && !showLogin.value) confirmPasswordErr.value = 'Passwords do not match.';
-    else confirmPasswordErr.value = '';
+    if (value != password.value && !showLogin.value) confirmPasswordErr.value = "Passwords do not match.";
+    else confirmPasswordErr.value = "";
   }
 );
 
@@ -181,18 +186,18 @@ onMounted(() => {
 
 const loginButtons = [
   {
-    name: 'Google',
-    img: '/logo/google.svg',
+    name: "Google",
+    img: "/logo/google.svg",
     function: loginWithGoogle
   },
   {
-    name: 'Microsoft',
-    img: '/logo/microsoft.svg',
+    name: "Microsoft",
+    img: "/logo/microsoft.svg",
     function: loginWithMicrosoft
   },
   {
-    name: 'Facebook',
-    img: '/logo/facebook.svg',
+    name: "Facebook",
+    img: "/logo/facebook.svg",
     function: loginWithFacebook
   }
 ];
@@ -202,37 +207,37 @@ async function loginWithEmail() {
   loading.value = true;
   if (showLogin.value) {
     const data = await userStore.logIn(email.value, password.value);
-    if (data == 'Success') {
-      router.push('/app/dashboard');
+    if (data == "Success") {
+      router.push("/app/dashboard");
     } else {
-      if ('non_field_errors' in data) emailErr.value = data.non_field_errors.join(' ');
-      if ('password' in data) passwordErr.value = data.password.join(' ');
-      if ('email' in data) emailErr.value = data.email.join(' ');
+      if ("non_field_errors" in data) emailErr.value = data.non_field_errors.join(" ");
+      if ("password" in data) passwordErr.value = data.password.join(" ");
+      if ("email" in data) emailErr.value = data.email.join(" ");
     }
   } else if (confirmPasswordErr.value) {
   } else {
     let data = await userStore.signUp(email.value, password.value, name.value);
-    if (data == 'Success') {
+    if (data == "Success") {
       verifyNag.value = true;
     } else {
-      if ('password' in data) passwordErr.value = data.password.join(' ');
-      if ('email' in data) emailErr.value = data.email.join(' ');
-      if ('name' in data) nameErr.value = data.name.join(' ');
+      if ("password" in data) passwordErr.value = data.password.join(" ");
+      if ("email" in data) emailErr.value = data.email.join(" ");
+      if ("name" in data) nameErr.value = data.name.join(" ");
     }
   }
   loading.value = false;
 }
 
 async function loginWithGoogle() {
-  console.log('google');
+  console.log("google");
 }
 
 async function loginWithMicrosoft() {
-  console.log('microsoft');
+  console.log("microsoft");
 }
 
 async function loginWithFacebook() {
-  console.log('facebook');
+  console.log("facebook");
 }
 </script>
 
@@ -249,7 +254,7 @@ async function loginWithFacebook() {
 
 @media (hover: hover) and (pointer: fine) {
   .logo:hover {
-    filter: contrast(200%);
+    filter: saturate(50%);
   }
 
   .loginButtons {

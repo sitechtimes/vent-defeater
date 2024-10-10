@@ -1,12 +1,13 @@
 <template>
   <div class="w-[100vw] h-[100vh] overflow-hidden">
-    <div ref="joe" class="hidden"></div>
+    <marquee class="screen"><img src="https://media1.tenor.com/m/Spmi9HLHEz0AAAAd/despite-all-my-rage.gif" class="h-[100vh]" /></marquee>
+    <div ref="joe" class="w-screen h-screen absolute hidden"></div>
     <div ref="skibidi" class="screen z-10" @click="addRandom" @mousemove="getMousePos">
       <span
         v-for="(data, word) in words"
         @mouseenter="cursor(1)"
         @mouseleave="cursor(0)"
-        class="word absolute select-none origin-center"
+        class="word absolute select-none origin-center border-black hover:border-2 p-2"
         :key="word"
         :id="String(word)"
         @click="big(word as string)"
@@ -14,14 +15,14 @@
         >{{ word }}</span
       >
     </div>
-    <marquee class="screen"><img src="https://media1.tenor.com/m/Spmi9HLHEz0AAAAd/despite-all-my-rage.gif" class="h-[100vh]" /></marquee>
+
     <div ref="pointer" id="pointer"></div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { nextTick, onMounted, ref, type Ref } from 'vue';
-import Matter from 'matter-js';
+import { nextTick, onMounted, ref, type Ref } from "vue";
+import Matter from "matter-js";
 var Engine = Matter.Engine,
   Render = Matter.Render,
   Runner = Matter.Runner,
@@ -35,21 +36,21 @@ const skibidi = ref<HTMLDivElement | undefined>();
 type Word = { count: number; width: number; height: number; area: number; shape: Matter.Body | undefined };
 
 const words: Ref<{ [key: string]: Word }> = ref({
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Duis ut est in diam blandit condimentum a non neque.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Fusce pharetra tortor sit amet aliquet venenatis.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Suspendisse finibus felis quis risus porta, non mattis velit congue.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Morbi placerat arcu eu convallis feugiat.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Donec sed sapien interdum, blandit mi vitae, posuere nulla.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Cras scelerisque nibh at urna fermentum sagittis.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Nulla feugiat nisl quis massa gravida tempor.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Donec et ex nec dui blandit tristique.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Morbi ultricies purus at eros fringilla gravida.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Morbi pretium urna nec arcu elementum pharetra.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Nulla vel elit eu purus ultrices vestibulum a at diam.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Praesent ac dui hendrerit, dapibus dui iaculis, convallis tellus.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Sed in tellus vitae nunc ornare pharetra non ut diam.': { count: 0, width: 0, height: 0, area: 0, shape: undefined },
-  'Nunc egestas mi ac urna maximus blandit.': { count: 0, width: 0, height: 0, area: 0, shape: undefined }
+  "Lorem ipsum dolor sit amet, consectetur adipiscing elit.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Duis ut est in diam blandit condimentum a non neque.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Fusce pharetra tortor sit amet aliquet venenatis.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Suspendisse finibus felis quis risus porta, non mattis velit congue.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Morbi placerat arcu eu convallis feugiat.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Donec sed sapien interdum, blandit mi vitae, posuere nulla.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Cras scelerisque nibh at urna fermentum sagittis.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Nulla feugiat nisl quis massa gravida tempor.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Donec et ex nec dui blandit tristique.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Morbi ultricies purus at eros fringilla gravida.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Morbi pretium urna nec arcu elementum pharetra.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Nulla vel elit eu purus ultrices vestibulum a at diam.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Praesent ac dui hendrerit, dapibus dui iaculis, convallis tellus.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Sed in tellus vitae nunc ornare pharetra non ut diam.": { count: 0, width: 0, height: 0, area: 0, shape: undefined },
+  "Nunc egestas mi ac urna maximus blandit.": { count: 0, width: 0, height: 0, area: 0, shape: undefined }
 });
 /* const funny = ``; // bee movie script and bible went here. rip
 words.value[funny] = { count: 1, width: 0, height: 0, shape: undefined }; */
@@ -78,8 +79,8 @@ function getMousePos(e: MouseEvent) {
   mouseX = e.clientX;
   mouseY = e.clientY;
   if (!pointer.value) return;
-  pointer.value.style.left = mouseX + 'px';
-  pointer.value.style.top = mouseY + 'px';
+  pointer.value.style.left = mouseX + "px";
+  pointer.value.style.top = mouseY + "px";
 }
 
 const cursor = (yes: number) => pointer.value && Object.assign(pointer.value.style, { width: `${yes + 1}em`, height: `${yes + 1}em` });
@@ -87,6 +88,9 @@ const cursor = (yes: number) => pointer.value && Object.assign(pointer.value.sty
 const engine = Engine.create();
 
 engine.gravity.scale = 0;
+engine.constraintIterations = 0; // from 2
+engine.positionIterations = 7; // from 6
+engine.velocityIterations = 5; // from 4
 
 function init() {
   if (!skibidi.value) return;
@@ -122,20 +126,20 @@ onMounted(() => {
 
   // run the engine
   Runner.run(runner, engine);
-  Events.on(runner, 'afterUpdate', () => {
+  Events.on(runner, "afterUpdate", () => {
     Object.keys(words.value).forEach((word) => {
       const el = document.getElementById(word);
       if (!el) return;
       const wordData = words.value[word];
       if (!wordData.shape) return;
       const center = [wordData.shape.position.x, wordData.shape.position.y];
-      el.style.left = center[0] + 'px';
-      el.style.top = center[1] + 'px';
-      el.style.transform = `rotate(${wordData.shape.angle}rad)`;
+      el.style.left = center[0] - wordData.width / 2 + "px";
+      el.style.top = center[1] - wordData.height / 2 + "px";
+      el.style.rotate = `${wordData.shape.angle}rad`;
       // let bHole = Matter.Vector.create(window.innerWidth / 2 - center[0], window.innerHeight / 2 - center[1]);
       let bHole = Matter.Vector.create(mouseX - (center[0] + wordData.width / 2), mouseY - (center[1] + wordData.height / 2));
       bHole = Matter.Vector.normalise(bHole);
-      bHole = Matter.Vector.mult(bHole, wordData.area * 0.00001);
+      bHole = Matter.Vector.mult(bHole, wordData.area * 0.000001);
 
       Matter.Body.applyForce(wordData.shape, wordData.shape.position, bHole);
     });
@@ -185,8 +189,8 @@ async function big(word: string) {
   console.log(Composite.remove(engine.world, wordData.shape, true));
 }
 
-Events.on(engine.world, 'afterRemove', () => {
-  console.log(toAdd);
+Events.on(engine.world, "afterRemove", () => {
+  // console.log(toAdd);
   for (const word in toAdd) {
     if (Object.prototype.hasOwnProperty.call(toAdd, word)) {
       words.value[word].shape = toAdd[word];
@@ -233,8 +237,10 @@ function add(word: string) {
 }
 
 .word {
-  font-family: 'Comic Sans MS', 'Comic Sans', 'SUSE', sans-serif;
-  max-width: 30vw;
+  font-family: "Comic Sans MS", "Comic Sans", "SUSE", sans-serif;
+  /* max-width: 30vw; */
+  width: max-content;
+  box-sizing: content-box;
 }
 
 #pointer {

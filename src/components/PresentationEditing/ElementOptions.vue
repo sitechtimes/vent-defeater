@@ -12,9 +12,9 @@
 </template>
 
 <script setup lang="ts">
-import type { Element, Slide } from '@/utils/types';
-import TextOptions from './options/TextOptions.vue';
-import BackgroundOptions from './options/BackgroundOptions.vue';
+import type { Element, Slide } from "@/utils/types";
+import TextOptions from "./options/TextOptions.vue";
+import BackgroundOptions from "./options/BackgroundOptions.vue";
 
 type Props = {
   selectedElement: Slide | Element | undefined;
