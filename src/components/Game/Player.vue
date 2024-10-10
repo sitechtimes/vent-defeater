@@ -150,20 +150,6 @@ function reroll() {
     if (elementGrid.value[i][j] != 1) return false;
 
     if (level == 1) elementGrid.value[i][j] = 0;
-    else if (level == 2 || level == 3) {
-      const directions = getAdjacentTiles(i, j);
-      let adjacentFrozen = 0;
-      let allAdjacent = 0;
-      for (let direction of directions) {
-        if (direction != undefined) {
-          allAdjacent++;
-          if (direction == 1) adjacentFrozen++;
-        }
-      }
-
-      const chance = adjacentFrozen / allAdjacent;
-      if (Math.random() > chance && level == 2) elementGrid.value[i][j] = 0;
-    }
 
     return true;
   }
@@ -237,7 +223,7 @@ function attack(element: Element | undefined, rowIndex: number, numIndex: number
     if (store.energy < (relics[1].unlocked ? 6 : relics[0].unlocked ? 4 : 5)) return emit("outOfEnergy");
     if (elementGrid.value[rowIndex][numIndex] > 1) return;
 
-    if (elementGrid.value[rowIndex][numIndex] == 1 && element.currentLevel >= 3) {
+    if (elementGrid.value[rowIndex][numIndex] == 1 && element.currentLevel >= 2) {
       elementGrid.value[rowIndex][numIndex] = 0;
       return;
     } else if (elementGrid.value[rowIndex][numIndex] != 0) return;

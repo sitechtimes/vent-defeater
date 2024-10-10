@@ -302,14 +302,14 @@ export const ice: Element = {
     },
     {
       level: 2,
-      name: "Canada",
-      description: "**Frozen** tiles will have a chance to not thaw out based on the number of adjacent **frozen** tiles."
-    },
-    {
-      level: 3,
       name: "Hot 😏",
       description:
         "You've been working on your charisma, and now you're hotter than the sun. **Frozen** tiles will never thaw out naturally, but you can also reselect **frozen** tiles to manually thaw them out at no additional cost."
+    },
+    {
+      level: 3,
+      name: "Ice Tea",
+      description: "Deal 2x more damage to Bri'ish enemies (all enemies are Bri'ish)"
     },
     {
       level: 4,

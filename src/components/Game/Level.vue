@@ -73,7 +73,7 @@ import Player from "./Player.vue";
 import { delay, getRandomItemFromArray } from "@/utils/functions";
 import { useGameStore } from "@/stores/game";
 import Amogus from "./Amogus.vue";
-import { relics, type Element, type Level, type Powerup, type Relic as RelicType } from "@/utils/elements";
+import { relics, ice, type Element, type Level, type Powerup, type Relic as RelicType } from "@/utils/elements";
 import Reward from "./Reward.vue";
 import Shop from "./Shop.vue";
 import Vent from "./Vent.vue";
@@ -152,10 +152,10 @@ function next() {
 async function damageEnemy() {
   if (!enemyBoard.value || !playerBoard.value || !props.level.enemy) return;
 
-  props.level.enemy.lives--;
+  props.level.enemy.lives -= ice.currentLevel >= 3 ? 2 : 1;
   showWin.value = true;
 
-  if (props.level.enemy.lives == 0) {
+  if (props.level.enemy.lives <= 0) {
     if (props.level.id == 10) next();
     else showReward.value = true;
   } else {
