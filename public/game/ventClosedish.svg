@@ -1,0 +1,19 @@
+<svg width="250" height="250" viewBox="0 0 250 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+<path fill-rule="evenodd" clip-rule="evenodd" d="M245 142.5L189 105.5L15.3901 87.5L75.8801 123L245 142.5ZM64.1699 102L69 99L191.557 112.61L198.686 116.767L64.1699 102ZM75.9431 107.39L72.1699 110L206.686 124.767L198.5 121L75.9431 107.39ZM81 117.5L84 115L206.557 128.61L215.516 132.267L81 117.5Z" fill="url(#paint0_linear_55_2)"/>
+<path d="M68.9431 99.0622L64.1699 101.672L198.686 116.439L191.5 112.672L68.9431 99.0622Z" stroke="black" stroke-linejoin="round"/>
+<path d="M76.4431 107.39L72.1699 110L206.686 124.767L199 121L76.4431 107.39Z" stroke="black" stroke-linejoin="round"/>
+<path d="M83.9462 115.036L81.17 117.5L215.686 132.267L206.503 128.646L83.9462 115.036Z" stroke="black" stroke-linejoin="round"/>
+<path d="M189.5 105L245 142L76.2601 122.611L16.2803 87.1029L189.5 105Z" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+<path d="M245.5 142.5L189 195L9.5 175.5L74.5 123L245.5 142.5Z" fill="url(#paint1_linear_55_2)" stroke="black" stroke-width="4" stroke-linejoin="round"/>
+<path d="M4 167.5L9.5 175.5L75.5 122L16 87L18 95.5L53 120L4 167.5Z" fill="#072417" stroke="black" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="paint0_linear_55_2" x1="145.64" y1="103.529" x2="133.339" y2="147.008" gradientUnits="userSpaceOnUse">
+<stop stop-color="#232830"/>
+<stop offset="1" stop-color="#716E96"/>
+</linearGradient>
+<linearGradient id="paint1_linear_55_2" x1="206" y1="71" x2="85" y2="195" gradientUnits="userSpaceOnUse">
+<stop stop-color="#802392"/>
+<stop offset="1" stop-color="#995FA3"/>
+</linearGradient>
+</defs>
+</svg>

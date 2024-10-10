@@ -14,11 +14,23 @@
   --bg-color: white;
   --bg-color-contrast: rgb(40, 40, 40);
   --bg-color-contrast-translucent: rgba(0, 0, 0, 0.2);
+  --faded-bg-color-dark: rgb(220, 220, 220);
   --faded-bg-color: rgb(230, 230, 230);
   --faded-bg-color-light: rgb(241, 245, 245);
   --text-color: black;
   --faded-text-color: rgb(70, 70, 70);
   --text-color-contrast: white;
+
+  --enemy: rgb(223, 181, 181);
+  --you: rgb(201, 226, 201);
+  --ice: rgb(83, 161, 250);
+  --ice-secondary: rgb(149, 197, 253);
+  --fire: rgb(248, 106, 96);
+  --fire-secondary: rgb(253, 156, 149);
+  --air: rgb(125, 111, 248);
+  --air-secondary: rgb(156, 149, 253);
+  --earth: hsl(244, 7%, 62%);
+  --earth-secondary: rgb(223, 222, 236);
 }
 
 .dark {
@@ -34,8 +46,9 @@
   --bg-color: black;
   --bg-color-contrast: rgb(230, 230, 230);
   --bg-color-contrast-translucent: rgba(255, 255, 255, 0.2);
-  --faded-bg-color: rgb(40, 40, 40);
-  --faded-bg-color-light: rgb(50, 50, 50);
+  --faded-bg-color-dark: rgb(40, 40, 40);
+  --faded-bg-color: rgb(30, 30, 30);
+  --faded-bg-color-light: rgb(20, 20, 20);
   --text-color: white;
   --faded-text-color: rgb(230, 230, 230);
   --text-color-contrast: black;
@@ -53,7 +66,7 @@ body {
 
 * {
   box-sizing: border-box;
-  font-family: 'SUSE', sans-serif;
+  font-family: "SUSE", sans-serif;
   font-optical-sizing: auto;
   font-weight: 400;
   font-style: normal;
@@ -63,13 +76,21 @@ body {
   transition-duration: 500ms;
 }
 
+button {
+  touch-action: manipulation;
+}
+
+.comic-sans {
+  font-family: "Comic Sans MS", sans-serif;
+}
+
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type='number'] {
+input[type="number"] {
   -moz-appearance: textfield;
 }
 
@@ -82,4 +103,13 @@ input[type='number'] {
 ::-webkit-scrollbar-thumb {
   background-color: var(--primary);
   border-radius: 1em;
+}
+
+@keyframes move-steal-bar {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
 }

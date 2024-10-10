@@ -1,53 +1,53 @@
-import { useUserStore } from '@/stores/user';
-import { createRouter, createWebHistory, type RouteLocationNormalizedGeneric } from 'vue-router';
+import { useUserStore } from "@/stores/user";
+import { createRouter, createWebHistory, type RouteLocationNormalizedGeneric } from "vue-router";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: () => import('../views/HomeView.vue'),
+      path: "/",
+      name: "home",
+      component: () => import("../views/HomeView.vue"),
       meta: {
         requiresAuth: false
       }
     },
     {
-      path: '/login',
-      name: 'login',
-      component: () => import('../views/LoginView.vue'),
+      path: "/login",
+      name: "login",
+      component: () => import("../views/LoginView.vue"),
       meta: {
         requiresAuth: false
       }
     },
     {
-      path: '/join',
-      name: 'join',
-      component: () => import('../views/JoinPage.vue'),
+      path: "/join",
+      name: "join",
+      component: () => import("../views/JoinPage.vue"),
       meta: {
         requiresAuth: false
       }
     },
     {
-      path: '/app/',
-      name: 'app',
-      redirect: '/app/dashboard',
+      path: "/app/",
+      name: "app",
+      redirect: "/app/dashboard",
       meta: {
         requiresAuth: true
       },
       children: [
         {
-          path: 'dashboard',
-          name: 'dashboard',
-          component: () => import('../views/app/DashboardView.vue'),
+          path: "dashboard",
+          name: "dashboard",
+          component: () => import("../views/app/DashboardView.vue"),
           meta: {
             requiresAuth: true
           }
         },
         {
-          path: 'presentation',
-          name: 'presentation',
-          component: () => import('../views/app/presentation/EditView.vue'),
+          path: "presentation",
+          name: "presentation",
+          component: () => import("../views/app/presentation/EditView.vue"),
           meta: {
             requiresAuth: true
           }
@@ -55,27 +55,28 @@ const router = createRouter({
       ]
     },
     {
-      path: '/physics',
-      name: 'physics',
-      component: () => import('../views/PhysicsView.vue'),
+      path: "/physics",
+      name: "physics",
+      component: () => import("../views/PhysicsView.vue"),
       meta: {
         requiresAuth: false
       }
     },
     {
-      path: '/word',
-      name: 'word',
-      component: () => import('../views/WordView.vue'),
+      path: "/:pathMatch(.*)*",
+      name: "error",
+      component: () => import("../views/ErrorView.vue"),
       meta: {
         requiresAuth: false
       }
     },
     {
-      path: '/:pathMatch(.*)*',
-      name: 'error',
-      component: () => import('../views/ErrorView.vue'),
+      path: "/game",
+      name: "game",
+      component: () => import("../views/game/HomeView.vue"),
       meta: {
-        requiresAuth: false
+        requiresAuth: false,
+        transition: "circle-wipe"
       }
     }
   ]
@@ -93,7 +94,7 @@ router.beforeEach((to, from) => {
       .flatMap((route) => route.path)
       .includes(to.path)
   )
-    return { name: 'login' };
+    return { name: "login" };
   previousRoute = from;
 });
 

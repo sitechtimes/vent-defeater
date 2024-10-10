@@ -20,40 +20,40 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router';
+import { useRouter } from "vue-router";
 
 const router = useRouter();
 
 const navButtons = [
   {
-    name: 'Dashboard',
-    img: '/ui/home.svg',
-    route: '/app/dashboard'
+    name: "Dashboard",
+    img: "/ui/home.svg",
+    route: "/app/dashboard"
   },
   {
-    name: 'My vents',
-    img: '/ui/user.svg',
-    route: '/app/my-vents'
+    name: "My vents",
+    img: "/ui/user.svg",
+    route: "/app/my-vents"
   },
   {
-    name: 'Shared with me',
-    img: '/ui/share.svg',
-    route: '/app/shared-with-me'
+    name: "Shared with me",
+    img: "/ui/share.svg",
+    route: "/app/shared-with-me"
   },
   {
-    name: 'Recent',
-    img: '/ui/clock.svg',
-    route: '/app/recent'
+    name: "Recent",
+    img: "/ui/clock.svg",
+    route: "/app/recent"
   },
   {
-    name: 'Starred',
-    img: '/ui/star.svg',
-    route: '/app/starred'
+    name: "Starred",
+    img: "/ui/star.svg",
+    route: "/app/starred"
   },
   {
-    name: 'Templates',
-    img: '/ui/document.svg',
-    route: '/app/templates'
+    name: "Templates",
+    img: "/ui/document.svg",
+    route: "/app/templates"
   }
 ];
 </script>

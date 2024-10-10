@@ -18,12 +18,17 @@
 </template>
 
 <script setup lang="ts">
-import NavBar from '@/components/NavBar.vue';
-import { getRandomInt } from '@/utils/functions';
-import { onMounted, ref } from 'vue';
-import { useRoute, useRouter } from 'vue-router';
+import NavBar from "@/components/NavBar.vue";
+import { getRandomInt } from "@/utils/functions";
+import { onMounted, ref } from "vue";
+import { useMeta } from "vue-meta";
+import { useRoute, useRouter } from "vue-router";
 
-const back = ref<string>('/');
+useMeta({
+  title: "Vent not found - Vent Defeater"
+});
+
+const back = ref<string>("/");
 const showImg = ref(false);
 
 const route = useRoute();
@@ -32,14 +37,14 @@ const errorCode = ref(404);
 const errorMessage = ref("Unfortunately, we couldn't find the vent you're looking for. Our crewmates will keep venting to find it!");
 
 onMounted(() => {
-  back.value = String(router.options.history.state.back ?? '/');
+  back.value = String(router.options.history.state.back ?? "/");
   showImg.value = true;
 
-  if (route.query.code && typeof route.query.code == 'string') {
+  if (route.query.code && typeof route.query.code == "string") {
     errorCode.value = Number(route.query.code);
   }
 
-  if (route.query.msg && typeof route.query.msg == 'string') {
+  if (route.query.msg && typeof route.query.msg == "string") {
     errorMessage.value = String(route.query.msg);
   }
 });

@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue';
+import { onMounted, ref } from "vue";
 
 type Emits = {
   join: [code: string];
@@ -49,7 +49,7 @@ type Emits = {
 
 const emit = defineEmits<Emits>();
 
-const code = ref<string[]>(new Array(6).fill('0'));
+const code = ref<string[]>(new Array(6).fill("0"));
 const frozen = ref<number[]>(new Array(6).fill(-1));
 const health = ref(100);
 
@@ -60,8 +60,8 @@ onMounted(() => {
 
 function roll() {
   let rand = String(Math.floor(Math.random() * 1000000));
-  while (rand.length < 6) rand = '0' + rand;
-  code.value = rand.split('');
+  while (rand.length < 6) rand = "0" + rand;
+  code.value = rand.split("");
   if (frozen.value.every((num) => num == -1)) {
     health.value--;
     regen.value = -3;
@@ -74,10 +74,10 @@ function roll() {
     }
   });
   if (health.value <= 0) {
-    code.value = new Array(6).fill('0');
+    code.value = new Array(6).fill("0");
     frozen.value = new Array(6).fill(-1);
-    alert('You died!');
-    emit('die');
+    alert("You died!");
+    emit("die");
     health.value = 100;
   }
 }
