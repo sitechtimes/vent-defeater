@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <img class="vent w-56 h-56" :src="position ? '/game/ventOpen.svg' : '/game/ventClosedish.svg'" aria-hidden="true" />
-  </div>
+    <img class="vent" :src="position ? '/game/ventOpen.svg' : '/game/ventClosedish.svg'" aria-hidden="true" />
 </template>
 
 <script setup lang="ts">
