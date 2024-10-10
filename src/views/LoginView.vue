@@ -73,8 +73,9 @@
           <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
         </div>
 
-        <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-[color:var(--text-color-contrast)] mt-4 transition duration-500" type="submit">
-          {{ showLogin ? "Log in" : "Sign up" }}
+        <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] mt-4 transition duration-500" type="submit">
+          <p class="text-[color:var(--text-color-contrast)]" v-if="!showLoginAnimation">{{ showLogin ? "Log in" : "Sign up" }}</p>
+          <p class="text-[color:var(--text-color-contrast)] flex items-center justify-center gap-2" v-else><Vent class="w-10 h-10" /> Loading...</p>
         </button>
         <RouterLink to="/reset-password" class="no-underline font-medium" v-if="showLogin">Forgot password?</RouterLink>
       </form>
@@ -90,13 +91,15 @@
 </template>
 
 <script setup lang="ts">
+import Vent from "@/components/Game/Vent.vue";
 import { useUserStore } from "@/stores/user";
+import { delay } from "@/utils/functions";
 import { onMounted, ref, watch } from "vue";
-import { useActiveMeta, useMeta } from "vue-meta";
+import { useMeta } from "vue-meta";
 import { useRoute, useRouter } from "vue-router";
 
 useMeta({
-  title: "Vent in to your account - Vent Defeater"
+  title: "Vent into your account - Vent Defeater"
 });
 
 const userStore = useUserStore();
@@ -104,6 +107,7 @@ const userStore = useUserStore();
 const route = useRoute();
 const router = useRouter();
 
+const showLoginAnimation = ref(false);
 const showLogin = ref(true);
 
 const email = ref("");
@@ -185,43 +189,43 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  userStore.isAuth = true;
-  router.push("/app/dashboard");
-  return;
-  /*if (emailErr.value || passwordErr.value || nameErr.value) return;
+  if (emailErr.value || passwordErr.value || nameErr.value) return;
 
-  if (!showLogin.value) {
-    signupWithEmail();
-    return;
-  }
+  if (!showLogin.value) return signupWithEmail();
 
   try {
-    await userStore.logIn(email.value, password.value);
+    showLoginAnimation.value = true;
+    await delay(2000);
+    throw new Error();
+    // await userStore.logIn(email.value, password.value);
   } catch (error) {
     if (error instanceof Error){
       passwordErr.value = error.message;
       if (!error.message) passwordErr.value = "Something went wrong. Please try again.";
     }
     return;
+  } finally {
+    showLoginAnimation.value = false;
   }
 
   if (userStore.isAuth) router.push('/app/dashboard');
-  else passwordErr.value = "Something went wrong. Please try again.";*/
+  else passwordErr.value = "Something went wrong. Please try again.";
 }
 
 async function signupWithEmail() {
-  if (emailErr.value || passwordErr.value || nameErr.value) return;
-
   if (password.value != confirmPassword.value) {
     passwordErr.value = "Passwords do not match.";
     return;
   }
 
   try {
+    showLoginAnimation.value = true;
     await userStore.signUp(email.value, password.value, name.value);
   } catch (error) {
     if (error instanceof Error) passwordErr.value = error.message;
     return;
+  } finally {
+    showLoginAnimation.value = false;
   }
 
   if (userStore.isAuth) router.push("/app/dashboard");

@@ -30,7 +30,7 @@
             @out-of-energy="showOutOfEnergy = true"
           />
           <Amogus :color="amogusColor" v-if="level.id != 10" />
-          <Vent v-else />
+          <Vent class="w-56 h-56" v-else />
         </div>
       </div>
       <div class="w-2/3 h-[45%] flex items-center justify-start">
