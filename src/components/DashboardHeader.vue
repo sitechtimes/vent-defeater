@@ -76,31 +76,19 @@ type Options = {
 const options: Options[] = [
   {
     name: 'settings',
-    path: '/UserSettings'
+    path: '/user-settings'
   },
   {
-    name: 'hamburger',
-    path: '/'
+    name: 'Manage Members',
+    path: ''
   },
   {
-    name: 'hamburger',
-    path: '/'
+    name: 'Teams',
+    path: ''
   },
   {
-    name: 'hamburger',
-    path: '/'
-  },
-  {
-    name: 'hamburger',
-    path: '/'
-  },
-  {
-    name: 'hamburger',
-    path: '/'
-  },
-  {
-    name: 'hamburger',
-    path: '/'
+    name: 'Log Out',
+    path: ''
   }
 ];
 const userStore = useUserStore();

@@ -79,8 +79,8 @@ const router = createRouter({
       }
     },
     {
-      path: '/userSettings',
-      name: 'userSettings',
+      path: '/user-settings',
+      name: 'User Settings',
       component: () => import('../views/UserSettingsView.vue'),
       meta: {
         requiresAuth: true
