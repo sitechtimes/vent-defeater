@@ -33,22 +33,17 @@ export const useUserStore = defineStore("userStore", () => {
   }
 
   async function init() {
-    try {
-      const res = await fetch(import.meta.env.VITE_BACKEND_URL, {
-        method: "GET",
-        credentials: "include",
-        headers: {
-          "Content-Type": "application/json"
-        }
-      });
-      if (!res.ok) return false;
-      const data = await res.json();
-      user.value = data.user;
-      isAuth.value = true;
-      return true;
-    } catch (e) {
-      return false;
-    }
+    const res = await fetch(import.meta.env.VITE_BACKEND_URL, {
+      method: "GET",
+      credentials: "include",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    if (res.status !== 200) return;
+    const data = await res.json();
+    user.value = data.user;
+    isAuth.value = true;
   }
 
   return { user, isAuth, init, theme, presentations, currentPres, logIn, signUp };
