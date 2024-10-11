@@ -35,6 +35,7 @@ npm run dev
 ## Tech Stack
 
 <ul>
+    <li><img src="https://seeklogo.com/images/N/nuxt-logo-1CCC5F38FD-seeklogo.com.png?raw=true" height="13"> <a href="https://nuxt.com/docs/getting-started/introduction">Nuxt 3</a></li>
     <li><img src="https://seeklogo.com/images/V/vuejs-logo-17D586B587-seeklogo.com.png?raw=true" height="15"> <a href="https://vuejs.org/guide/introduction.html">Vue 3</a> (Composition API)</li>
     <li><img src="https://seeklogo.com/images/P/pinia-logo-51BF712FB0-seeklogo.com.png?raw=true" height="21"> <a href="https://pinia.vuejs.org/core-concepts/">Pinia</a> (Composition API)</li>
     <li><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4c/Typescript_logo_2020.svg/2048px-Typescript_logo_2020.svg.png?raw=true" height="17"> <a href="https://www.typescriptlang.org/docs/handbook/typescript-in-5-minutes.html">Typescript</a></li>
