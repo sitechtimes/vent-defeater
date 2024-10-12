@@ -172,7 +172,7 @@ async function createPresentation(preset?: Template) {
       }
     ]
   };
-  router.push("/app/presentation?prs=sdbhugu89wdgh89weghwn9g&sld=nweui9gh9wqehg80?view=1");
+  router.push("/app/presentation/edit?prs=sdbhugu89wdgh89weghwn9g&sld=nweui9gh9wqehg80");
 }
 </script>
 

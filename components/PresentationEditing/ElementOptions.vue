@@ -6,8 +6,8 @@
         <img class="w-5 h-5 dark:invert" src="/ui/x.svg" alt="Click to close editing menu" />
       </button>
     </div>
-    <TextOptions v-if="'text' in selectedElement" :options="selectedElement.text" />
-    <BackgroundOptions v-if="'background' in selectedElement" :options="selectedElement.background" />
+    <PresentationEditingOptionsTextOptions v-if="'text' in selectedElement" :options="selectedElement.text" />
+    <PresentationEditingOptionsBackgroundOptions v-if="'background' in selectedElement" :options="selectedElement.background" />
   </div>
 </template>
 
