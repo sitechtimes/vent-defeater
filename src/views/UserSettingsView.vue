@@ -6,7 +6,15 @@
       v-for="option in options"
       :key="option.name"
     >
-      {{ option.name }}
+      <h3>{{ option.name }}</h3>
+      <div
+        class="hoverDropdown absolute flex pointer-events-none opacity-0 flex-col items-start justify-center gap-1 bg-[color:var(--bg-color)] shadow-2xl shadow-[color:var(--bg-color-contrast-translucent)] p-4 rounded-sm transition"
+        v-if="option.dropdown"
+      >
+        <RouterLink class="no-underline text-[color:var(--text-color)]" v-for="options in option.dropdown" :to="options.path" :key="options.name">
+          <h4 class="font-medium m-1">{{ options.name }}</h4></RouterLink
+        >
+      </div>
     </div>
   </div>
 </template>
@@ -43,4 +51,29 @@ const options: Options[] = [
 ];
 </script>
 
-<style scoped></style>
+<style scoped>
+@media (hover: hover) and (pointer: fine) {
+  .outerNavButton:hover {
+    .navButton {
+      img {
+        transform: rotate(-180deg);
+      }
+    }
+
+    .hoverDropdown {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+
+  .close:hover {
+    background-color: var(--primary-shade-translucent);
+  }
+
+  .logins {
+    .signup:hover {
+      background-color: var(--primary-shade);
+    }
+  }
+}
+</style>

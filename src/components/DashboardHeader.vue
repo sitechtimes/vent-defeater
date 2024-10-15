@@ -162,4 +162,8 @@ function search(input: string) {
     }
   }
 }
+
+.path-options:hover {
+  background-color: var(--bg-color);
+}
 </style>
