@@ -21,6 +21,7 @@
 useSeoMeta({
   title: "Vent not found - Vent Defeater",
   ogTitle: "Vent not found",
+  ogImage: () => document.URL + "/logo/logoWithQuestionMarks.svg",
   description: "We couldn't find the vent you were looking for. We'll keep looking!",
   ogDescription: "We couldn't find the vent you were looking for. We'll keep looking!"
 });
