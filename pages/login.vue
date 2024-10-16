@@ -91,14 +91,17 @@
 </template>
 
 <script setup lang="ts">
+const route = useRoute();
+const router = useRouter();
+
 useSeoMeta({
-  title: "Vent into your account - Vent Defeater"
+  title: () => (route.query.signup ? "Create an account - Vent Defeater" : "Vent into your account - Vent Defeater"),
+  ogTitle: () => (route.query.signup ? "Create an account" : "Login"),
+  description: () => (route.query.signup ? "Create a free Vent Defeater account in just a few clicks." : "Login to your Vent Defeater account and start venting into presentations right away."),
+  ogDescription: () => (route.query.signup ? "Create a free Vent Defeater account in just a few clicks." : "Login to your Vent Defeater account and start venting into presentations right away.")
 });
 
 const userStore = useUserStore();
-
-const route = useRoute();
-const router = useRouter();
 
 const showLoginAnimation = ref(false);
 const showLogin = ref(true);

@@ -8,6 +8,14 @@
 const userStore = useUserStore();
 const route = useRoute();
 
+useSeoMeta({
+  ogTitle: "Vent Defeater",
+  ogImage: "/logo/logoWithWords.svg",
+  ogDescription:
+    "Featuring features fraught with a few fixes featured in many of your favorite apps and websites, Vent Defeater enables the imagination of anyone looking to build modern, sleek, and top-quality presentations.",
+  ogSiteName: "Vent Defeater"
+});
+
 onBeforeMount(() => {
   sessionStorage.removeItem("previousIsHome");
   // sample shit

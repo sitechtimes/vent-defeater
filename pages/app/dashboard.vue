@@ -59,7 +59,10 @@
 import { getPreviousRoute } from "~/middleware/auth";
 
 useSeoMeta({
-  title: "Dashboard - Vent Defeater"
+  title: "Dashboard - Vent Defeater",
+  ogTitle: "Dashboard",
+  description: "View, manage, and edit your vents for free.",
+  ogDescription: "View, manage, and edit your vents for free."
 });
 definePageMeta({
   middleware: "auth",
