@@ -12,11 +12,6 @@ export default defineNuxtConfig({
       }
     }
   },
-  runtimeConfig: {
-    public: {
-      url: import.meta.env.VITE_URL
-    }
-  },
   modules: ["@pinia/nuxt"],
   postcss: {
     plugins: {

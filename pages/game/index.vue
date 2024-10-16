@@ -265,15 +265,14 @@
 </template>
 
 <script setup lang="ts">
-const config = useRuntimeConfig();
 useSeoMeta({
   title: "Vent Defeater on Steal",
   ogTitle: "Vent Defeater: The Game",
-  ogImage: config.public.url + "/logo/logoTheGame.svg",
+  ogImage: () => document.URL + "/logo/logoTheGame.svg",
   description: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
   ogDescription: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
   ogSiteName: "Steal",
-  ogUrl: config.public.url + "/game"
+  ogUrl: () => document.URL + "/game"
 });
 
 useHead({
