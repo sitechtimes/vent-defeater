@@ -7,14 +7,15 @@
 <script setup lang="ts">
 const userStore = useUserStore();
 const route = useRoute();
+const config = useRuntimeConfig();
 
 useSeoMeta({
   ogTitle: "Vent Defeater",
-  ogImage: () => document.URL + "/logo/logoWithWords.svg",
+  ogImage: () => config.public.url + "/logo/logoWithWords.svg",
   ogDescription:
     "Featuring features fraught with a few fixes featured in many of your favorite apps and websites, Vent Defeater enables the imagination of anyone looking to build modern, sleek, and top-quality presentations.",
   ogSiteName: "Vent Defeater",
-  ogUrl: () => document.URL
+  ogUrl: () => config.public.url as string
 });
 
 onBeforeMount(() => {

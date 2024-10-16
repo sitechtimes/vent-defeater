@@ -22,7 +22,7 @@ type Props = {
 defineProps<Props>();
 
 const userStore = useUserStore();
-const dark = ref(userStore.theme == "dark");
+const dark = ref(false);
 
 function toggleTheme() {
   const wasLight = userStore.theme === "light";
@@ -31,6 +31,10 @@ function toggleTheme() {
   document.body.classList[wasLight ? "add" : "remove"]("dark");
   localStorage.setItem("theme", userStore.theme);
 }
+
+onMounted(() => {
+  dark.value = userStore.theme == "dark";
+});
 </script>
 
 <style lang="scss" scoped>
