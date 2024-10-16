@@ -25,7 +25,15 @@
   </a>
 </h2>
 
-## Local Project Setup
+## Project Setup
+
+1. Create a .env file in the root of the project
+
+```env
+VITE_URL = /* site URL */
+```
+
+2. Install dependencies and run locally
 
 ```sh
 npm install

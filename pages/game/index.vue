@@ -265,20 +265,22 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 useSeoMeta({
   title: "Vent Defeater on Steal",
   ogTitle: "Vent Defeater: The Game",
-  ogImage: "/logo/logoTheGame.svg",
+  ogImage: config.public.url + "/logo/logoTheGame.svg",
   description: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
   ogDescription: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
-  ogSiteName: "Steal"
+  ogSiteName: "Steal",
+  ogUrl: config.public.url + "/game"
 });
 
 useHead({
   meta: [
-    { name: "product:price:amount", content: "0.00" },
-    { name: "product:price:currency", content: "USD" },
-    { name: "product:recommendations", content: "5" }
+    { property: "product:price:amount", content: "0.00" },
+    { property: "product:price:currency", content: "USD" },
+    { property: "product:recommendations", content: "5" }
   ]
 });
 
