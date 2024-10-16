@@ -38,11 +38,14 @@
 </template>
 
 <script setup lang="ts">
-useSeoMeta({
-  title: "Enter the Code to Join & Vent on a Presentation - Vent Defeater"
-});
-
 const router = useRouter();
+
+useSeoMeta({
+  title: "Join a live presentation - Vent Defeater",
+  ogTitle: "Join a live presentation",
+  description: "Forget the hassle of sharing links or QR codes. Enter a short, 6-digit code to quickly join a live presentation.",
+  ogDescription: "Forget the hassle of sharing links or QR codes. Enter a short, 6-digit code to quickly join a live presentation."
+});
 
 const counter = ref(0);
 watch(

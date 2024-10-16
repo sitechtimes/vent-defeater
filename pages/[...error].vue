@@ -19,7 +19,10 @@
 
 <script setup lang="ts">
 useSeoMeta({
-  title: "Vent not found - Vent Defeater"
+  title: "Vent not found - Vent Defeater",
+  ogTitle: "Vent not found",
+  description: "We couldn't find the vent you were looking for. We'll keep looking!",
+  ogDescription: "We couldn't find the vent you were looking for. We'll keep looking!"
 });
 
 const back = ref<string>("/");

@@ -59,7 +59,10 @@
 import { getPreviousRoute } from "~/middleware/auth";
 
 useSeoMeta({
-  title: "Dashboard - Vent Defeater"
+  title: "Dashboard - Vent Defeater",
+  ogTitle: "Dashboard",
+  description: "View, manage, and edit your vents for free.",
+  ogDescription: "View, manage, and edit your vents for free."
 });
 definePageMeta({
   middleware: "auth",
@@ -172,7 +175,7 @@ async function createPresentation(preset?: Template) {
       }
     ]
   };
-  router.push("/app/presentation?prs=sdbhugu89wdgh89weghwn9g&sld=nweui9gh9wqehg80?view=1");
+  router.push("/app/presentation/edit?prs=sdbhugu89wdgh89weghwn9g&sld=nweui9gh9wqehg80");
 }
 </script>
 

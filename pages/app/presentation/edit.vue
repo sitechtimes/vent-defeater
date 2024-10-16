@@ -59,7 +59,7 @@
         </div>
       </div>
 
-      <ElementOptions :selected-element="selectedElement" @close="selectedElement = undefined" />
+      <PresentationEditingElementOptions :selected-element="selectedElement" @close="selectedElement = undefined" />
       <div class="w-80" v-show="!selectedElement"></div>
     </div>
   </div>

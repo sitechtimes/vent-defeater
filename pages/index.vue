@@ -39,6 +39,11 @@ useSeoMeta({
   title: "Interactive presentation venting - Vent Defeater"
 });
 
+useSeoMeta({
+  title: "Interactive presentation venting - Vent Defeater",
+  ogTitle: "Free, easy, interactive"
+});
+
 const showBanner = ref(false);
 onMounted(() => {
   sessionStorage.setItem("previousIsHome", "true");
