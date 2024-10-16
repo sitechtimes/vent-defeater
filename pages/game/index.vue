@@ -269,7 +269,7 @@ const config = useRuntimeConfig();
 useSeoMeta({
   title: "Vent Defeater on Steal",
   ogTitle: "Vent Defeater: The Game",
-  ogImage: () => config.public.url + "/logo/logoTheGame.svg",
+  ogImage: () => config.public.url + "/logo/logoTheGame.png",
   description: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
   ogDescription: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
   ogSiteName: "Steal",
