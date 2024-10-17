@@ -1,5 +1,9 @@
 <template>
   <div class="flex items-center justify-center flex-col w-screen min-h-screen bg-[color:var(--faded-bg-color)] py-12">
+    <Transition name="opacity">
+      <ResetPassword v-if="resetPassword" @close="resetPassword = false" />
+    </Transition>
+
     <a href="/"><img class="logo h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? " back" : "" }}!</h1>
 
@@ -73,11 +77,11 @@
           <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
         </div>
 
-        <button class="w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] mt-4 transition duration-500" type="submit">
+        <button class="submit w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] mt-4 transition duration-500" type="submit">
           <p class="text-[color:var(--text-color-contrast)]" v-if="!showLoginAnimation">{{ showLogin ? "Log in" : "Sign up" }}</p>
           <p class="text-[color:var(--text-color-contrast)] flex items-center justify-center gap-2" v-else><GameVent class="w-10 h-10" /> Loading...</p>
         </button>
-        <NuxtLink to="/reset-password" class="no-underline font-medium" v-if="showLogin">Forgot password?</NuxtLink>
+        <button type="button" @click="resetPassword = true" class="no-underline font-medium" v-if="showLogin">Forgot password?</button>
       </form>
     </div>
     <span class="mb-4" v-show="!showLogin">By signing up, you accept our <a href="/">terms of use</a> and <a href="/">privacy policy</a>.</span>
@@ -95,8 +99,8 @@ const route = useRoute();
 const router = useRouter();
 
 useSeoMeta({
-  title: () => (route.query.signup ? "Create an account - Vent Defeater" : "Vent into your account - Vent Defeater"),
-  ogTitle: () => (route.query.signup ? "Create an account" : "Login"),
+  title: () => (route.query["reset-password"] ? "Reset your password" : route.query.signup ? "Create an account" : "Vent into your account") + " - Vent Defeater",
+  ogTitle: () => (route.query["reset-password"] ? "Reset password" : route.query.signup ? "Create an account" : "Login"),
   description: () => (route.query.signup ? "Create a free Vent Defeater account in just a few clicks." : "Login to your Vent Defeater account and start venting into presentations right away."),
   ogDescription: () => (route.query.signup ? "Create a free Vent Defeater account in just a few clicks." : "Login to your Vent Defeater account and start venting into presentations right away.")
 });
@@ -105,6 +109,11 @@ const userStore = useUserStore();
 
 const showLoginAnimation = ref(false);
 const showLogin = ref(true);
+const resetPassword = ref(false);
+watch(resetPassword, (value) => {
+  if (value) router.push("?reset-password=1");
+  else router.push("");
+});
 
 const email = ref("");
 const name = ref("");
@@ -162,6 +171,8 @@ watch(
 );
 
 onMounted(() => {
+  if (route.query["reset-password"]) resetPassword.value = true;
+
   if (route.query.signup) showLogin.value = false;
   else showLogin.value = true;
 });
@@ -185,7 +196,10 @@ const loginButtons = [
 ];
 
 async function loginWithEmail() {
-  if (emailErr.value || passwordErr.value || nameErr.value) return;
+  userStore.isAuth = true;
+  router.push("/app/dashboard");
+  return;
+  /*if (emailErr.value || passwordErr.value || nameErr.value) return;
 
   if (!showLogin.value) return signupWithEmail();
 
@@ -203,7 +217,7 @@ async function loginWithEmail() {
   }
 
   if (userStore.isAuth) router.push("/app/dashboard");
-  else passwordErr.value = "Something went wrong. Please try again.";
+  else passwordErr.value = "Something went wrong. Please try again.";*/
 }
 
 async function signupWithEmail() {
@@ -227,15 +241,15 @@ async function signupWithEmail() {
 }
 
 async function loginWithGoogle() {
-  console.log("google");
+  window.location.href = "https://www.youtube.com/watch?v=uHgt8giw1LY";
 }
 
 async function loginWithMicrosoft() {
-  console.log("microsoft");
+  loginWithGoogle();
 }
 
 async function loginWithFacebook() {
-  console.log("facebook");
+  loginWithGoogle();
 }
 </script>
 
@@ -244,6 +258,15 @@ async function loginWithFacebook() {
   input:focus {
     box-shadow: 0 0 0 0.375rem var(--primary-shade-translucent);
   }
+}
+.opacity-enter-active,
+.opacity-leave-active {
+  transition: all 0.75s ease;
+}
+
+.opacity-enter-from,
+.opacity-leave-to {
+  opacity: 0;
 }
 
 .error {
@@ -265,7 +288,7 @@ async function loginWithFacebook() {
     input:hover {
       outline: 0.125rem solid var(--primary);
     }
-    button:hover {
+    .submit:hover {
       background-color: var(--text-color);
     }
   }
