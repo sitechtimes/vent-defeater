@@ -1,4 +1,5 @@
 export const useUserStore = defineStore("userStore", () => {
+  const config = useRuntimeConfig();
   const user = ref({});
   const isAuth = ref(false);
 
@@ -7,7 +8,7 @@ export const useUserStore = defineStore("userStore", () => {
   const currentPres = ref<Presentation>();
 
   async function logIn(email: string, password: string) {
-    const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/auth/login/", {
+    const res = await fetch(config.public.backend + "/auth/login/", {
       method: "POST",
       credentials: "include",
 
@@ -23,7 +24,7 @@ export const useUserStore = defineStore("userStore", () => {
   }
 
   async function signUp(email: string, password: string, name: string) {
-    const res = await fetch(import.meta.env.VITE_BACKEND_URL + "/auth/signup/", {
+    const res = await fetch(config.public.backend + "/auth/signup/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password, name })
@@ -33,7 +34,7 @@ export const useUserStore = defineStore("userStore", () => {
   }
 
   async function init() {
-    const res = await fetch(import.meta.env.VITE_BACKEND_URL, {
+    const res = await fetch(config.public.backend, {
       method: "GET",
       credentials: "include",
       headers: {
