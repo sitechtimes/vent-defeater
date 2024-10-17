@@ -125,8 +125,7 @@ const loading = ref(false);
 watch(
   () => route.query.signup,
   (value) => {
-    if (value) showLogin.value = false;
-    else showLogin.value = true;
+    showLogin.value = !value;
     verifyNag.value = false;
   }
 );
@@ -172,10 +171,7 @@ watch(
   }
 );
 
-onMounted(() => {
-  if (route.query.signup) showLogin.value = false;
-  else showLogin.value = true;
-});
+onMounted(() => (showLogin.value = !route.query.signup));
 
 const loginButtons = [
   {
