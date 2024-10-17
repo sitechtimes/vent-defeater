@@ -18,9 +18,11 @@
 </template>
 
 <script setup lang="ts">
+const config = useRuntimeConfig();
 useSeoMeta({
   title: "Vent not found - Vent Defeater",
   ogTitle: "Vent not found",
+  ogImage: () => config.public.url + "/logo/logoWithQuestionMarks.png",
   description: "We couldn't find the vent you were looking for. We'll keep looking!",
   ogDescription: "We couldn't find the vent you were looking for. We'll keep looking!"
 });
