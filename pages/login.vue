@@ -4,7 +4,7 @@
       <ResetPassword v-if="resetPassword" @close="resetPassword = false" />
     </Transition>
 
-    <a href="/"><img class="logo h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
+    <a href="/"><img class="hover:saturate-50 h-32 transition duration-500" src="/logo/logoWithWords.svg" aria-hidden="true" /></a>
     <h1 class="text-5xl font-bold mb-8">Welcome{{ showLogin ? " back" : "" }}!</h1>
 
     <div class="flex items-center justify-center flex-col bg-[color:var(--bg-color)] p-4 rounded-3xl mb-4">
@@ -77,7 +77,7 @@
           <p class="absolute error font-medium text-red-500" v-show="confirmPasswordErr.length > 0">{{ confirmPasswordErr }}</p>
         </div>
 
-        <button class="submit w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] mt-4 transition duration-500" type="submit">
+        <button class="hover:bg-[var(--text-color)] w-96 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] mt-4 transition duration-500" type="submit">
           <p class="text-[color:var(--text-color-contrast)]" v-if="!showLoginAnimation">{{ showLogin ? "Log in" : "Sign up" }}</p>
           <p class="text-[color:var(--text-color-contrast)] flex items-center justify-center gap-2" v-else><GameVent class="w-10 h-10" /> Loading...</p>
         </button>
@@ -261,7 +261,7 @@ async function loginWithFacebook() {
 }
 .opacity-enter-active,
 .opacity-leave-active {
-  transition: all 0.75s ease;
+  transition: all 0.25s ease;
 }
 
 .opacity-enter-from,
@@ -274,10 +274,6 @@ async function loginWithFacebook() {
 }
 
 @media (hover: hover) and (pointer: fine) {
-  .logo:hover {
-    filter: saturate(50%);
-  }
-
   .loginButtons {
     button:hover {
       background-color: var(--faded-bg-color);
