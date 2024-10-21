@@ -54,7 +54,7 @@
         <div
           class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center text-center flex-col gap-2 w-48 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
         >
-          <RouterLink class="path-options block w-48 rounded-lg text-lg" @click="" v-for="option in options" :to="option.path" :key="option.name">{{ option.name }}</RouterLink>
+          <RouterLink class="path-options block w-48 rounded-lg text-lg" v-for="option in options" :to="option.path" :key="option.name">{{ option.name }}</RouterLink>
         </div>
       </div>
     </div>
@@ -76,7 +76,7 @@ type Options = {
 const options: Options[] = [
   {
     name: 'settings',
-    path: '/user-settings'
+    path: '/app/settings'
   },
   {
     name: 'Manage Members',
@@ -93,7 +93,6 @@ const options: Options[] = [
 ];
 const userStore = useUserStore();
 const presentations = ref<Presentation[]>([]);
-const userPopUp = ref(false);
 const searchInput = ref('');
 watch(
   () => searchInput.value,
