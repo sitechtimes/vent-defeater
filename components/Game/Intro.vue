@@ -1,36 +1,5 @@
 <template>
   <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 overflow-y-scroll background select-text">
-    <header class="sticky top-0 z-10 w-full h-24 flex items-center justify-center bg-[rgb(23,29,37)]" :class="{ 'brightness-50': showOpening }">
-      <div class="w-[1152px] h-full flex items-center justify-around">
-        <div class="flex items-center justify-center gap-2">
-          <img class="h-20" src="/logo/steal.svg" aria-hidden="true" />
-          <div class="flex items-center justify-center flex-col">
-            <h3 class="flex items-center justify-center gap-[2px]">
-              <span class="text-[#c5c3c0] font-bold text-3xl comic-sans">S</span><span class="text-[#c5c3c0] font-bold text-3xl comic-sans">T</span
-              ><span class="text-[#c5c3c0] font-bold text-3xl comic-sans">E</span><span class="text-[#c5c3c0] font-bold text-3xl comic-sans">A</span
-              ><span class="text-[#c5c3c0] font-bold text-3xl comic-sans">L</span>
-            </h3>
-            <p class="text-[#c5c3c0] text-xs">(not steam)</p>
-          </div>
-        </div>
-
-        <div class="flex items-center justify-center gap-4">
-          <button class="underline text-[rgb(26,159,255)] text-xl font-bold">PLAY</button>
-          <button class="text-[#c5c3c0] text-xl font-semibold cursor-not-allowed">VENT</button>
-          <button class="text-[#c5c3c0] text-xl font-semibold cursor-not-allowed">DEFEATER</button>
-          <button class="text-[#c5c3c0] text-xl font-semibold cursor-not-allowed">NOW</button>
-          <button class="text-[#c5c3c0] text-md font-semibold cursor-not-allowed">or else...</button>
-        </div>
-
-        <div class="h-full flex items-start justify-center gap-4 py-2">
-          <button @click="start" class="play flex items-center justify-center gap-1 bg-[rgb(39,45,55)] p-2 rounded-sm">
-            <img class="w-4 h-4" src="/game/play.svg" aria-hidden="true" />
-            <p class="text-white text-xs">Play Vent Defeater</p>
-          </button>
-        </div>
-      </div>
-    </header>
-
     <div class="fixed top-0 left-0 w-screen h-screen disclaimer z-[300] border-8 border-orange-600 bg-orange-400 p-4 rounded-lg flex-col items-center justify-center gap-1">
       <h3 class="text-4xl font-bold text-center">Slow down!</h3>
       <p class="text-2xl text-center">Vent Defeater hasn't developed the technology to make it work on smaller devices as of now.</p>
