@@ -12,6 +12,7 @@ const config = useRuntimeConfig();
 useSeoMeta({
   ogTitle: "Vent Defeater",
   ogImage: () => config.public.url + "/logo/logo.png",
+  twitterImage: () => config.public.url + "/logo/logo.png",
   twitterCard: "summary_large_image",
   ogDescription:
     "Featuring features fraught with a few fixes featured in many of your favorite apps and websites, Vent Defeater enables the imagination of anyone looking to build modern, sleek, and top-quality presentations.",
