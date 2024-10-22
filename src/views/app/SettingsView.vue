@@ -1,20 +1,27 @@
 <template>
-  <div class="flex flex-col items-center justify-start gap-4 w-screen h-screen">
-    <h1>personal info</h1>
+  <div class="flex items-start justify-center w-screen h-full overflow-hidden">
+    <div class="menu flex items-center justify-start flex-col w-72 min-h-screen p-8 gap-8 fixed top-0 left-0 transition duration-500">
+      <img class="logo w-full transition duration-300 rounded-lg cursor-pointer p-2" src="/logo/logoWithWords.svg" aria-hidden="true" @click="$router.push('/app/dashboard')" />
+      <div class="flex items-center justify-center flex-col w-full gap-px">
+        <RouterLink
+          class="h-9 transition duration-300 navButton flex items-center justify-start gap-3 no-underline text-[color:var(--text-color)] w-full rounded-md"
+          v-for="settings in options"
+          :key="settings.name"
+          :to="settings.anchor"
+        >
+          <div class="w-1 h-6 rounded-full" :class="'bg-[color:var(--secondary)]'"></div>
+          <div class="flex align-center justify-center gap-1">
+            {{ settings.name }}
+          </div>
+        </RouterLink>
+      </div>
+    </div>
     <div
       class="outerNavButton no-underline text-[color:var(--text-color)] bg-[color:var(--bg-color)] border-4 border-[color:var(--bg-color-contrast)] shadow-2xl rounded-xl shadow-[color:var(--bg-color-contrast-translucent)] p-4 text-xl m-1"
       v-for="option in options"
       :key="option.name"
     >
       <h3>{{ option.name }}</h3>
-      <div
-        class="flex pointer-events-none flex-col items-start justify-center gap-1 bg-[color:var(--bg-color)] shadow-2xl shadow-[color:var(--bg-color-contrast-translucent)] p-4 rounded-sm transition"
-        v-if="option.settings"
-      >
-        <RouterLink class="no-underline text-[color:var(--text-color)]" v-for="options in option.settings" :to="options.anchor" :key="options.name">
-          <h4 class="font-medium m-1">{{ options.name }}</h4>
-        </RouterLink>
-      </div>
     </div>
   </div>
 </template>
@@ -49,29 +56,16 @@ const options: Category[] = [
 ];
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 @media (hover: hover) and (pointer: fine) {
-  .outerNavButton:hover {
-    .navButton {
-      img {
-        transform: rotate(-180deg);
-      }
-    }
-
-    .hoverDropdown {
-      opacity: 1;
-      pointer-events: auto;
+  .menu {
+    .logo:hover {
+      background-color: var(--faded-bg-color);
     }
   }
 
-  .close:hover {
-    background-color: var(--primary-shade-translucent);
-  }
-
-  .logins {
-    .signup:hover {
-      background-color: var(--primary-shade);
-    }
+  .navButton:hover {
+    background-color: var(--faded-bg-color);
   }
 }
 </style>

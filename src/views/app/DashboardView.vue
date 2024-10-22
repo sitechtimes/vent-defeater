@@ -6,13 +6,14 @@
       <SideMenu v-show="loaded" class="fixed top-0 left-0" />
     </Transition>
 
+    <!-- damn you kenf <- mr trump man -->
     <div class="w-72"></div>
 
     <Transition name="page">
       <div class="w-full min-h-screen flex items-start justify-start flex-col" v-show="loaded">
         <DashboardHeader />
         <div class="w-full h-full px-16 flex items-start justify-center flex-col gap-8">
-          <h1 class="text-4xl mt-10">Welcome, dumbass</h1>
+          <h1 class="text-4xl mt-10">Welcome, poopybutt</h1>
 
           <div class="flex align-start justify-center flex-col gap-5 bg-[color:var(--faded-bg-color-light)] p-8 rounded-2xl">
             <p class="font-semibold">Popular features</p>
@@ -21,12 +22,6 @@
                 <img class="flex items-center justify-center p-8 bg-[color:var(--bg-color)] rounded-2xl w-3/4 h-3/4" :src="feature.img" aria-hidden="true" />
                 <p>{{ feature.name }}</p>
               </div>
-              <RouterLink to="/app/settings">
-                <div class="flex items-center justify-center flex-col gap-2 cursor-pointer">
-                  <!-- <img class="flex items-center justify-center p-8 bg-[color:var(--bg-color)] rounded-2xl w-3/4 h-3/4" src="feature.img" aria-hidden="true" /> -->
-                  <p>⚙ settings trust</p>
-                </div>
-              </RouterLink>
             </div>
           </div>
 
