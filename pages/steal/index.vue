@@ -38,7 +38,9 @@
       <NuxtLink to="/" class="bg-green-400 rounded-full p-2 text-3xl font-medium mt-5">Go back</NuxtLink>
     </div>
 
-    <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }"></div>
+    <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
+      <NuxtLink to="/steal/game/ventdefeater">vent defeater: the game</NuxtLink>
+    </div>
 
     <div
       class="absolute bg-[rgb(37,40,46)] w-[40rem] h-[20rem] top-[30%] pointer-events-none flex items-center justify-center shaodw-lg shadow-black border-t-4 border-blue-400 p-7 gap-7"
@@ -67,16 +69,6 @@ const store = useGameStore();
 
 const showOpening = ref(false);
 const startTime = ref(new Date().getTime());
-
-async function start() {
-  if (!store.smallScreen) {
-    const page = document.documentElement;
-    page.requestFullscreen({ navigationUI: "hide" });
-  }
-  showOpening.value = true;
-  await delay(2000);
-  emit("next");
-}
 
 const showcases = ref<Showcase[]>([
   {
