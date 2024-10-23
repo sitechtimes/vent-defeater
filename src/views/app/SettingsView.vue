@@ -1,27 +1,27 @@
 <template>
-  <div class="flex items-start justify-center w-screen h-full overflow-hidden">
+  <div class="flex flex-col items-center justify-center w-screen h-full overflow-hidden">
     <div class="menu flex items-center justify-start flex-col w-72 min-h-screen p-8 gap-8 fixed top-0 left-0 transition duration-500">
       <img class="logo w-full transition duration-300 rounded-lg cursor-pointer p-2" src="/logo/logoWithWords.svg" aria-hidden="true" @click="$router.push('/app/dashboard')" />
       <div class="flex items-center justify-center flex-col w-full gap-px">
-        <RouterLink
+        <a
           class="h-9 transition duration-300 navButton flex items-center justify-start gap-3 no-underline text-[color:var(--text-color)] w-full rounded-md"
           v-for="settings in options"
           :key="settings.name"
-          :to="settings.anchor"
+          :href="'#' + settings.anchor"
         >
           <div class="w-1 h-6 rounded-full" :class="'bg-[color:var(--secondary)]'"></div>
           <div class="flex align-center justify-center gap-1">
             {{ settings.name }}
+            <!-- name length = 32 -->
           </div>
-        </RouterLink>
+        </a>
       </div>
     </div>
     <div
       class="outerNavButton no-underline text-[color:var(--text-color)] bg-[color:var(--bg-color)] border-4 border-[color:var(--bg-color-contrast)] shadow-2xl rounded-xl shadow-[color:var(--bg-color-contrast-translucent)] p-4 text-xl m-1"
-      v-for="option in options"
-      :key="option.name"
     >
-      <h3>{{ option.name }}</h3>
+      <h2>General Options</h2>
+      <h3>Name</h3>
     </div>
   </div>
 </template>

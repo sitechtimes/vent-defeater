@@ -13,7 +13,7 @@
       <div class="w-full min-h-screen flex items-start justify-start flex-col" v-show="loaded">
         <DashboardHeader />
         <div class="w-full h-full px-16 flex items-start justify-center flex-col gap-8">
-          <h1 class="text-4xl mt-10">Welcome, poopybutt</h1>
+          <h1 class="text-4xl mt-10">Welcome, """Friend"""</h1>
 
           <div class="flex align-start justify-center flex-col gap-5 bg-[color:var(--faded-bg-color-light)] p-8 rounded-2xl">
             <p class="font-semibold">Popular features</p>
