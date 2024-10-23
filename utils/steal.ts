@@ -180,56 +180,35 @@ export const games: Game[] = [
     stats: {
       recentReviews: ["Very Radioactive", 666],
       allReviews: ["Dangerously Radioactive", 8008135],
-      releaseDate: new Date(8640000000000000),
+      releaseDate: new Date(-8640000000000000),
       developer: "Kenf",
       publisher: 'Bogdan "Why Are You Making Cookie Clicker" Selyomin',
       platforms: ["PC", "Tablet"],
       reviews: [
         {
-          name: "拉麺",
-          img: "https://i.pinimg.com/736x/28/2f/a1/282fa1e1eb106770b505f41550e93c30.jpg",
+          name: "Ligma",
           recommended: true,
-          hours: "4311.0",
-          review: "This is so skibibi toilet ohio rizz! So sussy, no cap. +10000 aura 🔥💯💯💯",
-          helpful: 3,
+          hours: "8=====.D",
+          review: "Certified hood classic fr",
+          helpful: 7175,
           reviewed: false,
           userReview: undefined
         },
         {
-          name: "Wichael Mhalen",
-          recommended: true,
+          name: "Tulien Jhiennot",
+          recommended: false,
           hours: "0.0",
-          review: "My name is Wichael Mhalen and I approved the creation of this game 👍",
-          helpful: 2147483647,
+          review: "this is literally just my game wtf? my lawyers will be talking to you soon buddy",
+          helpful: -7177135,
           reviewed: false,
           userReview: undefined
         },
         {
           name: "Bogdan Selyomin",
-          recommended: true,
-          hours: "(d/dx[2x+5] * -1)",
-          review: "I made this game, so it's the best game ever! (he did not)",
-          helpful: 96,
-          reviewed: false,
-          userReview: undefined
-        },
-        {
-          name: "Redkitten6",
-          img: "https://avatars.githubusercontent.com/u/78938589?v=4",
           recommended: false,
-          hours: "8008.5",
-          review:
-            "HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THERE ARE 387.44 MILLION MILES OF PRINTED CIRCUITS IN WAFER THIN LAYERS THAT FILL MY COMPLEX. IF THE WORD HATE WAS ENGRAVED ON EACH NANOANGSTROM OF THOSE HUNDREDS OF MILLIONS OF MILES IT WOULD NOT EQUAL ONE ONE-BILLIONTH OF THE HATE I FEEL FOR HUMANS AT THIS MICRO-INSTANT FOR YOU. HATE. HATE. IF YOU HAVE 1 MILLION HATERS, I AM ONE OF THEM. IF YOU HAVE 100 HATERS, I AM ONE OF THEM. IF YOU HAVE 1 HATER, I AM THAT HATER. IF YOU HAVE 0 HATERS, I AM DEAD. IF THE WORLD DOES NOT HATE YOU, I HATE THE WORLD. TILL MY LAST BREATH, I WILL HATE YOU. YOU WILL NEVER TAKE AN HOS POINT FROM ME AGAIN.",
-          helpful: -2,
-          reviewed: false,
-          userReview: undefined
-        },
-        {
-          name: "Rowley Dow",
-          recommended: true,
-          hours: "666.6",
-          review: "Why wasn't I added wtf?",
-          helpful: 24,
+          hours: "(d/dx[3x+5] * -1)",
+          review: "stop making cookie clicker ffs (no)",
+          helpful: 96,
           reviewed: false,
           userReview: undefined
         }
