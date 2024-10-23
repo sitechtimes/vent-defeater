@@ -6,9 +6,7 @@
 const route = useRoute();
 const router = useRouter();
 
-onMounted(() => {
-  router.push("/steal");
-});
+onMounted(() => {});
 </script>
 
-<style scoped></style>
+<style lang="scss" scoped></style>

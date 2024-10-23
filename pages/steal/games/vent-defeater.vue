@@ -235,13 +235,6 @@
         </div>
       </Transition>
 
-      <GameIntro
-        v-if="!level"
-        @next="
-          level = store.levels[0];
-          showTutorial = true;
-        "
-      />
       <Transition name="page">
         <GameLevel
           v-if="typeof level != 'string' && level"
@@ -436,6 +429,8 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
+  level.value = store.levels[0];
+  showTutorial.value = true;
   store.smallScreen = window.innerWidth < 1920;
   window.addEventListener("resize", () => {
     store.smallScreen = window.innerWidth < 1920;
@@ -874,7 +869,6 @@ async function usePowerup(powerup: Powerup) {
   .inventory {
     width: 40vw;
     overflow-x: visible;
-    overflow-y: scroll;
   }
 
   .relic:hover,
