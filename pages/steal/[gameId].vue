@@ -1,8 +1,8 @@
 <template>
-  <div class="w-screen flex flex-col items-center justify-start gap-4 background select-text">
+  <div class="w-screen flex flex-col items-center justify-start gap-4 background select-text" v-if="game">
     <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
-      <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > Strategy Games > Rougelites > Vent Defeater</div>
-      <div class="w-full flex items-center justify-start text-white text-3xl">Vent Defeater: The Game</div>
+      <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > {{ game.categories[0] }} > {{ game.categories[1] }} > {{ game.name }}</div>
+      <div class="w-full flex items-center justify-start text-white text-3xl">{{ game.name }}</div>
       <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
         <div class="flex items-center justify-center flex-col gap-2 w-[62.5%]">
           <div class="flex flex-col items-center justify-center w-full">
@@ -22,29 +22,39 @@
         </div>
 
         <div class="flex items-center justify-start flex-col w-[37.5%] h-full gap-3">
-          <img class="bg-lime-200 p-3" src="/logo/logoTheGame.svg" aria-hidden="true" />
-          <p class="text-white text-sm">The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?</p>
+          <img class="bg-lime-200 p-3" :src="game.bannerImg" aria-hidden="true" />
+          <p class="text-white text-sm">{{ game.description }}</p>
 
           <div class="w-full flex flex-col items-start justify-center">
             <p>
-              <span class="text-gray-400 text-xs">RECENT REVIEWS:</span> <span class="text-blue-400 text-md font-bold">Overwhelmingly Sussy</span> <span class="text-gray-400 text-xs">(6,900)</span>
+              <span class="text-gray-400 text-xs">RECENT REVIEWS:</span>
+              <span class="text-blue-400 text-md font-bold ml-1">{{ game.stats.recentReviews[0] }}</span>
+              <span class="text-gray-400 text-xs ml-1">({{ game.stats.recentReviews[1].toLocaleString() }})</span>
             </p>
             <p>
-              <span class="text-gray-400 text-xs">ALL REVIEWS:</span> <span class="text-blue-400 text-md font-bold">Overwhelmingly Sussy</span> <span class="text-gray-400 text-xs">(420,000)</span>
+              <span class="text-gray-400 text-xs">ALL REVIEWS:</span>
+              <span class="text-blue-400 text-md font-bold ml-1">{{ game.stats.allReviews[0] }}</span>
+              <span class="text-gray-400 text-xs ml-1">({{ game.stats.allReviews[1].toLocaleString() }})</span>
             </p>
           </div>
 
           <p class="text-left w-full">
             <span class="text-gray-400 text-xs">RELEASE DATE: </span>
-            <span class="text-gray-300 text-md">{{ translateMonth(new Date()) }} {{ new Date().getDate() + 1 }}, {{ new Date().getFullYear() }}</span>
+            <span class="text-gray-300 text-md">{{ translateMonth(game.stats.releaseDate) }} {{ game.stats.releaseDate.getDate() + 1 }}, {{ game.stats.releaseDate.getFullYear() }}</span>
           </p>
 
           <div class="w-full flex flex-col items-start justify-center">
-            <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Kenf & Lorenz</span></p>
-            <p><span class="text-gray-400 text-xs">PUBLISHER:</span> <span class="text-blue-400 text-md font-bold">Bogdan Sussyomin, Robber of Barons</span></p>
+            <p>
+              <span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">{{ game.stats.developer }}</span>
+            </p>
+            <p>
+              <span class="text-gray-400 text-xs">PUBLISHER:</span> <span class="text-blue-400 text-md font-bold">{{ game.stats.publisher }}</span>
+            </p>
           </div>
 
-          <p class="text-left w-full"><span class="text-gray-400 text-xs">PLATFORMS:</span> <span class="text-blue-400 text-md font-bold">PC, Tablet</span></p>
+          <p class="text-left w-full">
+            <span class="text-gray-400 text-xs">PLATFORMS:</span> <span class="text-blue-400 text-md font-bold">{{ game.stats.platforms.join(", ") }}</span>
+          </p>
         </div>
       </div>
 
@@ -137,10 +147,10 @@
       class="absolute bg-[rgb(37,40,46)] w-[40rem] h-[20rem] top-[30%] pointer-events-none flex items-center justify-center shaodw-lg shadow-black border-t-4 border-blue-400 p-7 gap-7"
       :class="{ 'opacity-0': !showOpening }"
     >
-      <img class="bg-lime-200 h-full w-1/4" src="/logo/logo.svg" aria-hidden="true" />
+      <img class="bg-lime-200 h-full w-1/4" :src="game.img" aria-hidden="true" />
       <div class="h-full w-3/4 flex flex-col items-start justify-center">
         <p class="text-gray-400 text-lg">Starting game</p>
-        <h3 class="text-white text-4xl">Vent Defeater: The Game</h3>
+        <h3 class="text-white text-4xl">{{ game.name }}</h3>
       </div>
     </div>
   </div>
@@ -148,6 +158,9 @@
 
 <script setup lang="ts">
 const router = useRouter();
+const route = useRoute();
+const game = ref<Game | undefined>(games.find((game) => game.id == Number(route.params.gameId)));
+const store = useGameStore();
 
 definePageMeta({
   layout: "steal"
@@ -155,37 +168,27 @@ definePageMeta({
 
 const config = useRuntimeConfig();
 useSeoMeta({
-  title: "Vent Defeater on Steal",
-  ogTitle: "Vent Defeater: The Game",
-  ogImage: () => config.public.url + "/logo/logoTheGame.png",
-  description: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
-  ogDescription: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
+  title: () => (game.value?.name ?? "Unknown Game") + " on Steal",
+  ogTitle: () => game.value?.name ?? "Unknown Game",
+  ogImage: () => (game.value ? config.public.url + game.value.img.replace("svg", "png") : ""),
+  description: () => game.value?.description ?? "We couldn't find the game you were looking for. We'll keep looking!",
+  ogDescription: () => game.value?.description ?? "We couldn't find the game you were looking for. We'll keep looking!",
   ogSiteName: "Steal",
-  ogUrl: () => config.public.url + "/game"
+  ogUrl: () => config.public.url + "/steal",
+  twitterCard: "summary_large_image",
+  twitterImage: () => (game.value ? config.public.url + game.value.bannerImg.replace("svg", "png") : "")
 });
-
-useHead({
-  meta: [
-    { property: "product:price:amount", content: "0.00" },
-    { property: "product:price:currency", content: "USD" },
-    { property: "product:recommendations", content: "5" }
-  ]
-});
-
-type Showcase = {
-  type: "image" | "video";
-  src: string;
-};
-const route = useRoute();
-const gameId = ref<number>(games.map((game) => game.id).includes(Number(route.query.gameId)) ? Number(route.query.gameId) : 0);
-const store = useGameStore();
 
 const { showOpening } = storeToRefs(store);
 const startTime = ref(new Date().getTime());
 
 onMounted(() => {
-  if (gameId.value == 0) return router.push("/steal");
+  if (!game.value) return router.push("/steal");
   incrementCooldown();
+});
+
+onBeforeUnmount(() => {
+  showOpening.value = false;
 });
 
 async function start() {
@@ -195,11 +198,11 @@ async function start() {
   }
   showOpening.value = true;
   await delay(2000);
-  router.push("/steal/games/vent-defeater");
+  router.push(game.value?.route ?? "/steal");
 }
 
-const showcases = ref<Showcase[]>(games.find((game) => game.id == gameId.value)?.showcases ?? []);
-const selectedShowcase = ref<Showcase>(showcases.value[0]);
+const showcases = ref<(ImageShowcase | VideoShowcase)[]>(game.value?.showcases ?? []);
+const selectedShowcase = ref<ImageShowcase | VideoShowcase>(showcases.value[0]);
 watch(
   () => selectedShowcase.value,
   () => {
@@ -220,7 +223,7 @@ watch(
   }
 );
 
-const reviews = ref<Review[]>(games.find((game) => game.id == gameId.value)?.stats.reviews ?? []);
+const reviews = ref<Review[]>(game.value?.stats.reviews ?? []);
 
 async function incrementCooldown() {
   while (true) {

@@ -1,11 +1,11 @@
-type ImageShowcase = {
+export type ImageShowcase = {
   /** @readonly */
   type: "image";
   /** Source of image from /public */
   src: string;
 };
 
-type VideoShowcase = {
+export type VideoShowcase = {
   /** @readonly */
   type: "video";
   /** Source of video from /public */
@@ -37,6 +37,14 @@ export type Game = {
   name: string;
   /** Description of the game. */
   description: string;
+  /** Path to the small icon of the game. */
+  img: string;
+  /** Path to the banner image of the game. */
+  bannerImg: string;
+  /** Route to the game.
+   * @example "/steal/games/vent-defeater"
+   */
+  route: string;
   /** 2 categories of the game. Category names are plural.
    * @example ["Strategy Games", "Roguelites"]
    */
@@ -67,6 +75,9 @@ export const games: Game[] = [
     id: 62049,
     name: "Vent Defeater: The Game",
     description: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
+    img: "/logo/logo.svg",
+    bannerImg: "/logo/logoTheGame.svg",
+    route: "/steal/games/vent-defeater",
     categories: ["Strategy Games", "Roguelites"],
     showcases: [
       {
@@ -150,10 +161,13 @@ export const games: Game[] = [
     }
   },
   {
-    id: 62049,
+    id: 1337,
     name: "Yoda Clicker 2",
     description:
       "Following the escapades of the brilliant Yoda Clicker 1, Yoda Clicker 2 brings forth new yodas, new clickers, and ew OOPs. It's up to you to exploit the yodas for as much profit as possible!",
+    img: "/logo/logo.svg",
+    bannerImg: "/logo/logoTheGame.svg",
+    route: "/steal/games/yoda-clicker-2",
     categories: ["Simulation Games", "Idle Games"],
     showcases: [
       {
@@ -179,10 +193,10 @@ export const games: Game[] = [
     ],
     stats: {
       recentReviews: ["Very Radioactive", 666],
-      allReviews: ["Dangerously Radioactive", 8008135],
+      allReviews: ["Dangerously Radioactive", 5318008],
       releaseDate: new Date(-8640000000000000),
       developer: "Kenf",
-      publisher: 'Bogdan "Why Are You Making Cookie Clicker" Selyomin',
+      publisher: "Soydan Bellyomin",
       platforms: ["PC", "Tablet"],
       reviews: [
         {
