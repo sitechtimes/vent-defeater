@@ -1,6 +1,6 @@
 <template>
   <div class="w-screen min-h-screen h-full flex flex-col items-center justify-start gap-4 background select-text">
-    <header class="sticky top-0 z-10 w-full h-24 flex items-center justify-center bg-[rgb(23,29,37)]" :class="{ 'brightness-50': showOpening }">
+    <header class="sticky top-0 z-10 w-full h-20 py-1 flex items-center justify-center bg-[rgb(23,29,37)]" :class="{ 'brightness-50': showOpening }">
       <div class="w-[1152px] h-full flex items-center justify-around">
         <div class="flex items-center justify-center gap-2">
           <img @click="router.push('/steal')" class="h-20 cursor-pointer" src="/logo/steal.svg" aria-hidden="true" />

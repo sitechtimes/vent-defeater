@@ -3,7 +3,7 @@
     <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
       <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > {{ game.categories[0] }} > {{ game.categories[1] }} > {{ game.name }}</div>
       <div class="w-full flex items-center justify-start text-white text-3xl">{{ game.name }}</div>
-      <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
+      <div class="flex items-start justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
         <div class="flex items-center justify-center flex-col gap-2 w-[62.5%]">
           <div class="flex flex-col items-center justify-center w-full">
             <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted @load="showcaseCooldown = 0" @ended="selectedShowcase = showcases[1]"></video>
@@ -22,7 +22,7 @@
         </div>
 
         <div class="flex items-center justify-start flex-col w-[37.5%] h-full gap-3">
-          <img class="bg-lime-200 p-3" :src="game.bannerImg" aria-hidden="true" />
+          <img class="bg-lime-200" :src="game.bannerImg" aria-hidden="true" />
           <p class="text-white text-sm">{{ game.description }}</p>
 
           <div class="w-full flex flex-col items-start justify-center">

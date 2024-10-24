@@ -82,23 +82,23 @@ export const games: Game[] = [
     showcases: [
       {
         type: "video",
-        src: "/game/showcase/ventdefeater/gameAd.mp4"
+        src: "/game/showcase/gameAd.mp4"
       },
       {
         type: "image",
-        src: "/game/showcase/ventdefeater/showcase4.png"
+        src: "/game/showcase/showcase4.png"
       },
       {
         type: "image",
-        src: "/game/showcase/ventdefeater/showcase2.png"
+        src: "/game/showcase/showcase2.png"
       },
       {
         type: "image",
-        src: "/game/showcase/ventdefeater/showcase1.png"
+        src: "/game/showcase/showcase1.png"
       },
       {
         type: "image",
-        src: "/game/showcase/ventdefeater/showcase3.png"
+        src: "/game/showcase/showcase3.png"
       }
     ],
     stats: {
@@ -165,30 +165,30 @@ export const games: Game[] = [
     name: "Yoda Clicker 2",
     description:
       "Following the escapades of the brilliant Yoda Clicker 1, Yoda Clicker 2 brings forth new yodas, new clickers, and ew OOPs. It's up to you to exploit the yodas for as much profit as possible!",
-    img: "/logo/logo.svg",
-    bannerImg: "/logo/logoTheGame.svg",
+    img: "/yodaclicker/yoda.png",
+    bannerImg: "/yodaclicker/yodaBanner.png",
     route: "/steal/games/yoda-clicker-2",
     categories: ["Simulation Games", "Idle Games"],
     showcases: [
       {
         type: "video",
-        src: "/game/showcase/ventdefeater/gameAd.mp4"
+        src: "/game/showcase/gameAd.mp4"
       },
       {
         type: "image",
-        src: "/game/showcase/ventdefeater/showcase4.png"
+        src: "/game/showcase/showcase4.png"
       },
       {
         type: "image",
-        src: "/game/showcase/ventdefeater/showcase2.png"
+        src: "/game/showcase/showcase2.png"
       },
       {
         type: "image",
-        src: "/game/showcase/ventdefeater/showcase1.png"
+        src: "/game/showcase/showcase1.png"
       },
       {
         type: "image",
-        src: "/game/showcase/ventdefeater/showcase3.png"
+        src: "/game/showcase/showcase3.png"
       }
     ],
     stats: {

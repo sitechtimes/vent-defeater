@@ -2,6 +2,7 @@
   <div class="w-screen h-screen flex flex-col items-center justify-start gap-4 background select-text">
     <div class="w-[960px] h-full flex flex-col items-center justify-start">
       <NuxtLink to="/steal/62049">vent defeater: the game</NuxtLink>
+      <NuxtLink to="/steal/1337">yoda clicker 2</NuxtLink>
     </div>
   </div>
 </template>
