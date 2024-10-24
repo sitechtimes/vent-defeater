@@ -17,11 +17,36 @@
         </a>
       </div>
     </div>
-    <div
-      class="outerNavButton no-underline text-[color:var(--text-color)] bg-[color:var(--bg-color)] border-4 border-[color:var(--bg-color-contrast)] shadow-2xl rounded-xl shadow-[color:var(--bg-color-contrast-translucent)] p-4 text-xl m-1"
-    >
-      <h2>General Options</h2>
-      <h3>Name</h3>
+    <div class="outerNavButton no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl mt-20">
+      <h2 class="font-bold">General Options</h2>
+      <form>
+        <h3>Name</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+      </form>
+      <!-- forgot if this is a proper way to do a form check back later -->
+    </div>
+    <div class="outerNavButton no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl mt-20">
+      <h2 class="font-bold">Personal Info</h2>
+      <form>
+        <h3>Email</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+      </form>
+      <form>
+        <h3>User</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+      </form>
+      <form>
+        <h3>Password</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+      </form>
+    </div>
+    <div class="outerNavButton no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl mt-20">
+      <h2 class="font-bold">Privacy</h2>
+      <form>
+        <h3>Affiliated Accounts</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+      </form>
+      <!-- forgot if this is a proper way to do a form check back later -->
     </div>
   </div>
 </template>
