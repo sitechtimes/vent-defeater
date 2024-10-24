@@ -24,22 +24,18 @@ export const useUserStore = defineStore("userStore", () => {
   }
 
   async function signUp(email: string, password: string, name: string) {
-    const res = await fetch(config.public.backend + "/auth/signup/", {
+    const res = await fetch(config.public.backend + "auth/signup/", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email, password, name })
+      body: JSON.stringify({ email, password1: password, name })
     });
     if (!res.ok) return await res.json();
     return "Success";
   }
 
   async function init() {
-    const res = await fetch(config.public.backend, {
-      method: "GET",
-      credentials: "include",
-      headers: {
-        "Content-Type": "application/json"
-      }
+    const res = await fetch(config.public.backend + "init/", {
+      credentials: "include"
     });
     if (res.status !== 200) return;
     const data = await res.json();
