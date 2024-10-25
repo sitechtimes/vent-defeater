@@ -1,8 +1,8 @@
 <template>
   <div class="w-screen h-screen flex items-center justify-between bg-lime-900">
     <div class="h-full w-1/3 flex flex-col items-center justify-center bg-[rgba(0,0,0,0.25)]">
-      <h1>{{ currentYodas }} yodas</h1>
-      <p>per second: {{ currentIncome }}</p>
+      <h2>{{ formatNumber(Number(currentYodas)) }} yodas</h2>
+      <p>per second: {{ formatNumber(Number(currentIncome)) }}</p>
       <button @click="click" class="yoda w-2/3 p-2 flex items-center justify-center rounded-full">
         <img class="w-full select-none" src="/yodaclicker/yoda.png" alt="Click to produce a yoda" />
       </button>
@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="ts">
-const currentYodas = ref(0n);
+const currentYodas = ref(BigInt(0));
 watch(currentYodas, (yodas) => {
   if (yodas >= BigInt(1.7e308)) currentYodas.value = BigInt(-1.7e308);
 });
@@ -23,7 +23,7 @@ const currentIncome = ref(0n);
 
 const config = useRuntimeConfig();
 useSeoMeta({
-  title: () => Number(currentYodas.value).toLocaleString() + " Yodas - Yoda Clicker 2 on Steal",
+  title: () => Number(currentYodas.value) + " Yodas - Yoda Clicker 2 on Steal",
   ogTitle: "Play Yoda Clicker 2",
   ogImage: () => config.public.url + "/yodaclicker/yoda.png",
   description:
@@ -117,7 +117,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 9,
     description: "",
-    upgradePrice: (price) => price ** 1.009 + 25
+    upgradePrice: (price) => price ** 1.01025 + 25
   },
   {
     name: "Natural Gas",
@@ -127,7 +127,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 75,
     description: "",
-    upgradePrice: (price) => price ** 1.008 + 70
+    upgradePrice: (price) => price ** 1.0105 + 70
   },
   {
     name: "Fossil Fuel",
@@ -137,7 +137,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 650,
     description: "",
-    upgradePrice: (price) => price ** 1.007 + 600
+    upgradePrice: (price) => price ** 1.01075 + 600
   },
   {
     name: "Raw Uranium",
@@ -147,7 +147,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 5450,
     description: "",
-    upgradePrice: (price) => price ** 1.006 + 5000
+    upgradePrice: (price) => price ** 1.02 + 5000
   },
   {
     name: "Radium-226",
@@ -157,7 +157,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 46000,
     description: "",
-    upgradePrice: (price) => price ** 1.005 + 4e4
+    upgradePrice: (price) => price ** 1.02025 + 4e4
   },
   {
     name: "Medical X-Ray",
@@ -167,7 +167,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 39e4,
     description: "",
-    upgradePrice: (price) => price ** 1.006 + 3e5
+    upgradePrice: (price) => price ** 1.0205 + 3e5
   },
   {
     name: "Plutonium-238",
@@ -177,7 +177,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 32e5,
     description: "",
-    upgradePrice: (price) => price ** 1.007 + 2e6
+    upgradePrice: (price) => price ** 1.02075 + 2e6
   },
   {
     name: "Nuclear Reactor",
@@ -187,7 +187,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 28e6,
     description: "",
-    upgradePrice: (price) => price ** 1.008 + 1e7
+    upgradePrice: (price) => price ** 1.021 + 1e7
   },
   {
     name: "Spent Nuclear Fuel Rod",
@@ -197,7 +197,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 24e7,
     description: "",
-    upgradePrice: (price) => price ** 1.009 + 7e7
+    upgradePrice: (price) => price ** 1.02025 + 7e7
   },
   {
     name: "Little Boy",
@@ -207,7 +207,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 21e8,
     description: "Japan better get ready for round 2",
-    upgradePrice: (price) => price ** 1.01 + 1e8
+    upgradePrice: (price) => price ** 1.0205 + 1e8
   },
   {
     name: "Intercontinental Ballistic Missile",
@@ -217,7 +217,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 18e9,
     description: "",
-    upgradePrice: (price) => price ** 1.011 + 8e8
+    upgradePrice: (price) => price ** 1.02075 + 8e8
   },
   {
     name: "The Sun",
@@ -227,7 +227,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 15e10,
     description: "",
-    upgradePrice: (price) => price ** 1.012 + 8e8
+    upgradePrice: (price) => price ** 1.03 + 8e8
   },
   {
     name: "Supernova Explosion",
@@ -237,7 +237,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 12e11,
     description: "",
-    upgradePrice: (price) => price ** 1.013 + 2e9
+    upgradePrice: (price) => price ** 1.03025 + 2e9
   },
   {
     name: "Gamma Ray Burst",
@@ -247,7 +247,7 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 9e12,
     description: "",
-    upgradePrice: (price) => price ** 1.014 + 1e10
+    upgradePrice: (price) => price ** 1.0305 + 1e10
   },
   {
     name: "FDA Inspector",
@@ -257,17 +257,37 @@ const clickers = ref<Clicker[]>([
     img: "",
     clicksPerLevel: 5e12,
     description: "Your little underground scheme has caught the attention of the FDA. Now you must bribe the inspectors coming your way.",
-    upgradePrice: (price) => price ** 1.015 + 1e11
+    upgradePrice: (price) => price ** 1.03075 + 1e11
   },
   {
     name: "God",
-    price: 99e99,
+    price: 99e19,
     currentLevel: 0,
     unlocked: false,
     img: "",
-    clicksPerLevel: 9e98,
+    clicksPerLevel: 9e14,
     description: "",
-    upgradePrice: (price) => price ** 1.02
+    upgradePrice: (price) => price ** 1.04
+  }
+]);
+
+type Upgrade = {
+  name: string;
+  price: number;
+  description: string;
+  unlocked: boolean;
+};
+
+const upgrades = ref<Upgrade[]>([
+  {
+    name: "Efficient UV Rays",
+    price: 500,
+    unlocked: false,
+    description: ""
+  },
+  {
+    name: "",
+    price: ""
   }
 ]);
 
@@ -282,6 +302,22 @@ function upgradeClicker(index: number) {
   clicker.price = clicker.name == "God" ? price : Math.min(price, 1.7e308);
 
   currentIncome.value = BigInt(clickers.value.map((clicker) => BigInt(clicker.currentLevel * clicker.clicksPerLevel)).reduce((acc, value) => acc + value, 0n));
+}
+
+const suffixes: Record<string, string> = {
+  1e6: "million",
+  1e9: "billion",
+  1e12: "trillion"
+};
+function formatNumber(num: number) {
+  for (let value of Object.keys(suffixes)) {
+    const numValue = Number(value);
+    if (num >= numValue) {
+      return `${(num / numValue).toFixed(2)} ${suffixes[value]}`;
+    }
+  }
+
+  return num.toLocaleString();
 }
 </script>
 
