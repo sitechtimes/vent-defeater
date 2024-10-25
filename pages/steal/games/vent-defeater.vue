@@ -269,14 +269,6 @@ useSeoMeta({
   ogUrl: () => config.public.url + "/game"
 });
 
-useHead({
-  meta: [
-    { property: "product:price:amount", content: "0.00" },
-    { property: "product:price:currency", content: "USD" },
-    { property: "product:recommendations", content: "5" }
-  ]
-});
-
 const tutorialVideo = ref<HTMLVideoElement>();
 
 const store = useGameStore();

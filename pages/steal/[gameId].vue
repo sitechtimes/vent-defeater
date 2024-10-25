@@ -147,7 +147,9 @@
       class="absolute bg-[rgb(37,40,46)] w-[40rem] h-[20rem] top-[30%] pointer-events-none flex items-center justify-center shaodw-lg shadow-black border-t-4 border-blue-400 p-7 gap-7"
       :class="{ 'opacity-0': !showOpening }"
     >
-      <img class="bg-lime-200 h-full w-1/4" :src="game.img" aria-hidden="true" />
+      <div class="bg-lime-200 h-full w-1/4 flex items-center justify-center">
+        <img :src="game.img" aria-hidden="true" />
+      </div>
       <div class="h-full w-3/4 flex flex-col items-start justify-center">
         <p class="text-gray-400 text-lg">Starting game</p>
         <h3 class="text-white text-4xl">{{ game.name }}</h3>

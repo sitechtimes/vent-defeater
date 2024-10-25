@@ -164,7 +164,7 @@ export const games: Game[] = [
     id: 1337,
     name: "Yoda Clicker 2",
     description:
-      "Following the escapades of the brilliant Yoda Clicker 1, Yoda Clicker 2 brings forth new yodas, new clickers, and ew OOPs. It's up to you to exploit the yodas for as much profit as possible!",
+      "Following the escapades of the brilliant Yoda Clicker 1, Yoda Clicker 2 brings forth new yodas, new clickers, and ew OOPs. It's up to you to contaminate the yodas with as much radioactivity as possible!",
     img: "/yodaclicker/yoda.png",
     bannerImg: "/yodaclicker/yodaBanner.png",
     route: "/steal/games/yoda-clicker-2",

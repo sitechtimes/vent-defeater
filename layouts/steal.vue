@@ -46,8 +46,21 @@
 const route = useRoute();
 const router = useRouter();
 const store = useGameStore();
+const userStore = useUserStore();
 
 const { showOpening } = storeToRefs(store);
+
+onBeforeMount(() => {
+  document.body.classList.remove("dark");
+  userStore.theme = "light";
+});
+
+onMounted(() => {
+  store.smallScreen = window.innerWidth < 1920;
+  window.addEventListener("resize", () => {
+    store.smallScreen = window.innerWidth < 1920;
+  });
+});
 </script>
 
 <style lang="scss" scoped>
