@@ -196,7 +196,7 @@ export const games: Game[] = [
       allReviews: ["Dangerously Radioactive", 5318008],
       releaseDate: new Date(-8640000000000000),
       developer: "Kenf",
-      publisher: "Soydan Bellyomin",
+      publisher: "Bogdan Soccer",
       platforms: ["PC", "Tablet"],
       reviews: [
         {
