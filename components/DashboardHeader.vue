@@ -47,9 +47,9 @@
         </div>
       </div>
 
-      <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]">
+      <NuxtLink class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]" to="/app/account">
         <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/user.svg" aria-hidden="true" />
-      </button>
+      </NuxtLink>
     </div>
   </header>
 </template>
@@ -81,9 +81,7 @@ function search(input: string) {
 
 <style lang="scss" scoped>
 .search {
-  transition:
-    outline 0.075s,
-    box-shadow 0.5s;
+  transition: outline 0.075s, box-shadow 0.5s;
 }
 
 .search:focus-within {
