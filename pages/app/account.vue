@@ -17,36 +17,25 @@
         </a>
       </div>
     </div>
-    <div class="w-full">
-      <div class="outerNavButton no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl mt-20">
+    <div class="w-full flex flex-col gap-10">
+      <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
         <h2 class="font-bold">General Options</h2>
-        <form>
-          <h3>Name</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-        </form>
-        <!-- forgot if this is a proper way to do a form check back later -->
+        <h3>Name</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
       </div>
-      <div class="outerNavButton no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl mt-20">
+      <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
         <h2 class="font-bold">Personal Info</h2>
-        <form>
-          <h3>Email</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-        </form>
-        <form>
-          <h3>User</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-        </form>
-        <form>
-          <h3>Password</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-        </form>
+        <h3>Email</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+        <h3>User</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+        <h3>Password</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
       </div>
-      <div class="outerNavButton no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl mt-20">
+      <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
         <h2 class="font-bold">Privacy</h2>
-        <form>
-          <h3>Affiliated Accounts</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-        </form>
+        <h3>Affiliated Accounts</h3>
+        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
       </div>
     </div>
   </div>
@@ -83,10 +72,6 @@ const options: Category[] = [
 </script>
 
 <style lang="scss" scoped>
-.outerNavButton {
-  @apply w-full;
-}
-
 @media (hover: hover) and (pointer: fine) {
   .menu {
     .logo:hover {
