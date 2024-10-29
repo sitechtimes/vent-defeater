@@ -17,25 +17,35 @@
         </a>
       </div>
     </div>
-    <div class="w-full flex flex-col gap-10">
-      <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
-        <h2 class="font-bold">General Options</h2>
-        <h3>Name</h3>
-        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+
+    <div class="w-full flex flex-col">
+      <div>
+        <button
+          class="fixed right-2 top-2 hover:bg-[var(--text-color)] w-36 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-lg transition duration-500 text-[color:var(--text-color-contrast)]"
+        >
+          Save
+        </button>
       </div>
-      <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
-        <h2 class="font-bold">Personal Info</h2>
-        <h3>Email</h3>
-        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-        <h3>User</h3>
-        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-        <h3>Password</h3>
-        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-      </div>
-      <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
-        <h2 class="font-bold">Privacy</h2>
-        <h3>Affiliated Accounts</h3>
-        <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+      <div class="gap-10">
+        <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
+          <h2 class="font-bold">General Options</h2>
+          <h3>Name</h3>
+          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+        </div>
+        <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
+          <h2 class="font-bold">Personal Info</h2>
+          <h3>Email</h3>
+          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          <h3>User</h3>
+          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          <h3>Password</h3>
+          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+        </div>
+        <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
+          <h2 class="font-bold">Privacy</h2>
+          <h3>Affiliated Accounts</h3>
+          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+        </div>
       </div>
     </div>
   </div>
