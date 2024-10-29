@@ -116,3 +116,9 @@ input[type="number"] {
     width: 100%;
   }
 }
+
+@media (prefers-reduced-motion) {
+  * {
+    transition: none !important;
+  }
+}
