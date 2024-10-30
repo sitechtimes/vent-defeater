@@ -1,7 +1,9 @@
 <template>
-  <div class="flex flex-rpw items-center justify-center w-screen h-full overflow-hidden">
-    <div class="menu flex items-center justify-start flex-col w-80 min-h-screen p-8 gap-8 transition duration-500">
-      <img class="logo w-full transition duration-300 rounded-lg cursor-pointer p-2" src="/logo/logoWithWords.svg" aria-hidden="true" @click="$router.push('/app/dashboard')" />
+  <img class="logo w-full transition duration-300 rounded-lg cursor-pointer p-2" src="/logo/logoWithWords.svg" aria-hidden="true" @click="$router.push('/app/dashboard')" />
+  <h1 style="font-family: 'Comic Sans MS'" class="text-8xl text-center relative bottom-40 left-80">settings</h1>
+  <DashboardHeader />
+  <div class="flex flex-row justify-center w-screen h-full overflow-hidden">
+    <div class="menu flex items-center justify-start flex-col w-80 min-h-screen p-8 gap-8 transition duration-500 fixed left-0 top-0">
       <div class="flex items-center justify-center flex-col w-full gap-px">
         <a
           class="h-9 transition duration-300 navButton flex items-center justify-start gap-3 no-underline text-[color:var(--text-color)] w-full rounded-md"
@@ -15,38 +17,33 @@
             <!-- name length = 32 -->
           </div>
         </a>
+        <button>Save</button>
       </div>
     </div>
 
-    <div class="w-full flex flex-col">
-      <div>
-        <button
-          class="fixed right-2 top-2 hover:bg-[var(--text-color)] w-36 h-12 rounded-full border-0 bg-[color:var(--bg-color-contrast)] text-lg transition duration-500 text-[color:var(--text-color-contrast)]"
-        >
-          Save
-        </button>
-      </div>
-      <div class="gap-10">
-        <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
-          <h2 class="font-bold">General Options</h2>
-          <h3>Name</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+    <div class="w-10/12 flex flex-col gap-10 pt-40">
+      <fieldset>
+        <legend class="font-bold">General Options</legend>
+        <div>
+          <label for="name">Name</label>
+          <input id="name" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
         </div>
-        <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
-          <h2 class="font-bold">Personal Info</h2>
-          <h3>Email</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-          <h3>User</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-          <h3>Password</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+      </fieldset>
+      <fieldset>
+        <legend class="font-bold">Personal Info</legend>
+        <div>
+          <label for="email">Email</label>
+          <input id="email" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
         </div>
-        <div class="w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 text-xl">
-          <h2 class="font-bold">Privacy</h2>
-          <h3>Affiliated Accounts</h3>
-          <input type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+        <div>
+          <label for="user">User</label>
+          <input id="user" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
         </div>
-      </div>
+        <div>
+          <label for="password">Password</label>
+          <input id="password" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+        </div>
+      </fieldset>
     </div>
   </div>
 </template>
@@ -81,7 +78,7 @@ const options: Category[] = [
 ];
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 @media (hover: hover) and (pointer: fine) {
   .menu {
     .logo:hover {
@@ -92,5 +89,22 @@ const options: Category[] = [
   .navButton:hover {
     background-color: var(--faded-bg-color);
   }
+}
+
+legend {
+  background-color: var(--faded-bg-color-light);
+  @apply rounded-md p-2 text-2xl;
+}
+
+fieldset {
+  @apply w-11/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 flex flex-col gap-2;
+}
+
+fieldset div {
+  @apply flex flex-col gap-2;
+}
+
+fieldset input {
+  width: 40ch;
 }
 </style>
