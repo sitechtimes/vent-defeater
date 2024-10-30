@@ -102,17 +102,17 @@ async function createPresentation(preset?: Template) {
             id: "ahgauioghioag",
             position: {
               top: 50,
-              left: 100,
-              bottom: 50,
-              right: 100
+              left: 200,
+              bottom: 150,
+              right: 0
             },
             background: {
-              color: "#ffff00",
+              color: "#56deff",
               image: null
             },
             text: {
               font: "Arial",
-              color: "#000000",
+              color: "#56deff",
               size: 37.5,
               styles: {
                 bold: false,
@@ -139,7 +139,7 @@ async function createPresentation(preset?: Template) {
           height: 360
         },
         background: {
-          color: "#ffffff",
+          color: "#ff0000",
           image: null
         },
         settings: {
