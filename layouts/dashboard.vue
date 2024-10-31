@@ -11,12 +11,12 @@
 
           <div class="flex flex-col items-center justify-between h-full w-1/4 pr-3">
             <div class="flex flex-col items-start justify-start gap-2 h-full w-full">
-              <button>General Options</button>
+              <button :class="{ border }">General Options</button>
               <button>Personal Info</button>
             </div>
 
-            <div class="w-full">
-              <button>Log out</button>
+            <div class="w-full flex items-center justify-center">
+              <button class="flex items-center justify-center w-3/4 bg-red-400 hover:bg-red-500 py-1.5 rounded-full text-lg">Log out</button>
             </div>
           </div>
 
