@@ -1,8 +1,8 @@
 <template>
-  <DashboardHeader />
-  <div class="flex flex-row justify-center w-screen h-full overflow-hidden">
-    <div class="menu flex items-center justify-start flex-col w-80 min-h-screen p-8 gap-8 transition duration-500">
-      <div class="flex items-center justify-center flex-col w-full gap-px">
+  <DashboardHeader class="fixed"/>
+  <div class="justify-center w-screen h-full overflow-hidden">
+    <div class="fixed menu items-end justify-start w-80 min-h-screen p-8 gap-8 transition duration-500 left-20 top-20">
+      <div class="flex items-end justify-center flex-col w-full gap-px">
         <a
           class="h-9 transition duration-300 navButton flex items-center justify-start gap-3 no-underline text-[color:var(--text-color)] w-full rounded-md"
           v-for="settings in options"
@@ -10,16 +10,16 @@
           :href="'#' + settings.anchor"
         >
           <div class="w-1 h-6 rounded-full" :class="'bg-[color:var(--secondary)]'"></div>
-          <div class="flex align-center justify-center gap-1">
+          <p class="flex align-center justify-center gap-1">
             {{ settings.name }}
             <!-- name length = 32 -->
-          </div>
+          </p>
         </a>
         <button class="bg-[color:var(--faded-bg-color)] w-8/12 p-4 rounded-xl font-bold mt-8">Save</button>
       </div>
     </div>
 
-    <div class="flex flex-grow flex-col gap-12 pt-6">
+    <div class="flex flex-grow flex-col items-center gap-12 mt-40">
       <fieldset>
         <legend class="font-bold">General Options</legend>
         <div>
@@ -89,8 +89,8 @@ const options: Category[] = [
   }
 }
 
-fieldaet {
-  @apply w-8/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 flex flex-col gap-2;
+fieldset {
+  @apply w-4/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 flex flex-col gap-2;
 }
 
 legend {
