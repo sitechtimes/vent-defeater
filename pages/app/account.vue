@@ -1,8 +1,8 @@
 <template>
-  <DashboardHeader class="fixed"/>
-  <div class="justify-center w-screen h-full overflow-hidden">
-    <div class="fixed menu items-end justify-start w-80 min-h-screen p-8 gap-8 transition duration-500 left-20 top-20">
-      <div class="flex items-end justify-center flex-col w-full gap-px">
+  <DashboardHeader class="fixed bg-white z-50" />
+  <div class="flex justify-center w-screen h-screen">
+    <div class="flex flex-row gap-12 mt-40 w-min mx-auto h-full overflow-visible">
+      <div class="flex flex-col min-w-40 h-min sticky top-0`">
         <a
           class="h-9 transition duration-300 navButton flex items-center justify-start gap-3 no-underline text-[color:var(--text-color)] w-full rounded-md"
           v-for="settings in options"
@@ -15,33 +15,99 @@
             <!-- name length = 32 -->
           </p>
         </a>
-        <button class="bg-[color:var(--faded-bg-color)] w-8/12 p-4 rounded-xl font-bold mt-8">Save</button>
+        <button class="bg-[color:var(--faded-bg-color)] p-2 px-4 w-fit mx-auto rounded-xl font-bold mt-8">Save</button>
       </div>
-    </div>
 
-    <div class="flex flex-grow flex-col items-center gap-12 mt-40">
-      <fieldset>
-        <legend class="font-bold">General Options</legend>
-        <div>
-          <label for="name">Name</label>
-          <input id="name" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend class="font-bold">Personal Info</legend>
-        <div>
-          <label for="email">Email</label>
-          <input id="email" max-length="40" type="email" class="rounded-md bg-[color:var(--bg-color)]" />
-        </div>
-        <div>
-          <label for="user">User</label>
-          <input id="user" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
-        </div>
-        <div>
-          <label for="password">Reset password</label>
-          <input id="password" type="button" class="rounded-md bg-[color:var(--faded-bg-color)] cursor-pointer">skibidi</input>
-        </div>
-      </fieldset>
+      <div class="flex flex-col h-full gap-10 flex-grow">
+        <fieldset>
+          <legend class="font-bold">General Options</legend>
+          <div>
+            <label for="name">Name</label>
+            <input id="name" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="font-bold">Personal Info</legend>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" max-length="40" type="email" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+          <div>
+            <label for="user">User</label>
+            <input id="user" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+          <div>
+            <label for="password">Reset password</label>
+            <input id="password" type="button" class="rounded-md bg-[color:var(--secondary-shade)] cursor-pointer py-2" value="skibidi" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="font-bold">General Options</legend>
+          <div>
+            <label for="name">Name</label>
+            <input id="name" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="font-bold">Personal Info</legend>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" max-length="40" type="email" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+          <div>
+            <label for="user">User</label>
+            <input id="user" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+          <div>
+            <label for="password">Reset password</label>
+            <input id="password" type="button" class="rounded-md bg-[color:var(--secondary-shade)] cursor-pointer py-2" value="skibidi" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="font-bold">General Options</legend>
+          <div>
+            <label for="name">Name</label>
+            <input id="name" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="font-bold">Personal Info</legend>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" max-length="40" type="email" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+          <div>
+            <label for="user">User</label>
+            <input id="user" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+          <div>
+            <label for="password">Reset password</label>
+            <input id="password" type="button" class="rounded-md bg-[color:var(--secondary-shade)] cursor-pointer py-2" value="skibidi" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="font-bold">General Options</legend>
+          <div>
+            <label for="name">Name</label>
+            <input id="name" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+        </fieldset>
+        <fieldset>
+          <legend class="font-bold">Personal Info</legend>
+          <div>
+            <label for="email">Email</label>
+            <input id="email" max-length="40" type="email" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+          <div>
+            <label for="user">User</label>
+            <input id="user" max-length="32" type="text" class="rounded-md bg-[color:var(--bg-color)]" />
+          </div>
+          <div>
+            <label for="password">Reset password</label>
+            <input id="password" type="button" class="rounded-md bg-[color:var(--secondary-shade)] cursor-pointer py-2" value="skibidi" />
+          </div>
+        </fieldset>
+      </div>
     </div>
   </div>
 </template>
@@ -90,12 +156,12 @@ const options: Category[] = [
 }
 
 fieldset {
-  @apply w-4/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-md p-4 flex flex-col gap-2;
+  @apply w-4/12 no-underline text-[color:var(--text-color)] bg-[color:var(--faded-bg-color-light)] rounded-3xl p-4 flex flex-col gap-2;
 }
 
 legend {
   background-color: var(--faded-bg-color-light);
-  @apply rounded-3xl p-2 text-4xl;
+  @apply rounded-2xl p-2 px-4 text-4xl;
 }
 
 fieldset div {
