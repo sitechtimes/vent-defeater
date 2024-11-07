@@ -29,7 +29,7 @@
 
       <button class="upgrade transition duration-300 flex items-center justify-center gap-1 bg-[color:var(--bg-color)] rounded-full py-2 px-7 border-2 border-[color:var(--text-color)]">
         <img class="transition duration-300 w-4 h-4 dark:invert" src="/ui/starFilled.svg" aria-hidden="true" />
-        <p class="m-0 text-[color:var(--text-color)] font-semibold">Upgrade</p>
+        <p class="m-0 text-[color:var(--text-color)] font-semibold" @click="funny">Downgrade</p>
       </button>
 
       <div class="button-pop-up relative">
@@ -111,6 +111,10 @@ function search(input: string) {
 
   const lowercaseInput = input.toLowerCase();
   presentations.value = [...userStore.presentations].filter((presentation) => presentation.name.toLowerCase().includes(lowercaseInput)).slice(0, 5);
+}
+
+function funny() {
+  document.body.style.filter = `blur(8px)`;
 }
 </script>
 
