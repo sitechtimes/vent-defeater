@@ -235,13 +235,6 @@
         </div>
       </Transition>
 
-      <GameIntro
-        v-if="!level"
-        @next="
-          level = store.levels[0];
-          showTutorial = true;
-        "
-      />
       <Transition name="page">
         <GameLevel
           v-if="typeof level != 'string' && level"
@@ -267,21 +260,13 @@
 <script setup lang="ts">
 const config = useRuntimeConfig();
 useSeoMeta({
-  title: "Vent Defeater on Steal",
-  ogTitle: "Vent Defeater: The Game",
+  title: "Play Vent Defeater: The Game on Steal",
+  ogTitle: "Play Vent Defeater: The Game",
   ogImage: () => config.public.url + "/logo/logoTheGame.png",
   description: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
   ogDescription: "The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?",
   ogSiteName: "Steal",
   ogUrl: () => config.public.url + "/game"
-});
-
-useHead({
-  meta: [
-    { property: "product:price:amount", content: "0.00" },
-    { property: "product:price:currency", content: "USD" },
-    { property: "product:recommendations", content: "5" }
-  ]
 });
 
 const tutorialVideo = ref<HTMLVideoElement>();
@@ -436,6 +421,8 @@ onBeforeMount(() => {
 });
 
 onMounted(() => {
+  level.value = store.levels[0];
+  showTutorial.value = true;
   store.smallScreen = window.innerWidth < 1920;
   window.addEventListener("resize", () => {
     store.smallScreen = window.innerWidth < 1920;
@@ -874,7 +861,6 @@ async function usePowerup(powerup: Powerup) {
   .inventory {
     width: 40vw;
     overflow-x: visible;
-    overflow-y: scroll;
   }
 
   .relic:hover,

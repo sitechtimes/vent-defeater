@@ -1,17 +1,9 @@
 <template>
-  <div class="w-screen flex flex-col items-center justify-start gap-4 background select-text">
-    <div class="fixed top-0 left-0 w-screen h-screen disclaimer z-[300] border-8 border-orange-600 bg-orange-400 p-4 rounded-lg flex-col items-center justify-center gap-1">
-      <h3 class="text-4xl font-bold text-center">Slow down!</h3>
-      <p class="text-2xl text-center">Vent Defeater hasn't developed the technology to make it work on smaller devices as of now.</p>
-      <p class="text-2xl font-semibold text-center">Try using a tablet, laptop, or computer.</p>
-      <p class="text-5xl font-extrabold text-center mt-5">Sorry!</p>
-      <NuxtLink to="/" class="bg-green-400 rounded-full p-2 text-3xl font-medium mt-5">Go back</NuxtLink>
-    </div>
-
+  <div class="w-screen flex flex-col items-center justify-start gap-4 background select-text" v-if="game">
     <div class="w-[960px] h-full flex flex-col items-center justify-start" :class="{ 'brightness-50': showOpening, 'grayscale-[.5]': showOpening }">
-      <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > Strategy Games > Rougelites > Vent Defeater</div>
-      <div class="w-full flex items-center justify-start text-white text-3xl">Vent Defeater: The Game</div>
-      <div class="flex items-center justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
+      <div class="w-full flex items-center justify-start text-[rgb(126,152,160)] text-md">All Games > {{ game.categories[0] }} > {{ game.categories[1] }} > {{ game.name }}</div>
+      <div class="w-full flex items-center justify-start text-white text-3xl">{{ game.name }}</div>
+      <div class="flex items-start justify-center w-full gap-3 bg-[rgba(0,0,0,0.25)] p-2 rounded-md mt-3">
         <div class="flex items-center justify-center flex-col gap-2 w-[62.5%]">
           <div class="flex flex-col items-center justify-center w-full">
             <video v-if="selectedShowcase.type == 'video'" :src="selectedShowcase.src" autoplay muted @load="showcaseCooldown = 0" @ended="selectedShowcase = showcases[1]"></video>
@@ -30,29 +22,39 @@
         </div>
 
         <div class="flex items-center justify-start flex-col w-[37.5%] h-full gap-3">
-          <img class="bg-lime-200 p-3" src="/logo/logoTheGame.svg" aria-hidden="true" />
-          <p class="text-white text-sm">The vents are fighting back, corrupting any crewmates that hop in! It's up to you to put a stop to their sussy antics. Can you be the sussiest one among us?</p>
+          <img class="bg-lime-200" :src="game.bannerImg" aria-hidden="true" />
+          <p class="text-white text-sm">{{ game.description }}</p>
 
           <div class="w-full flex flex-col items-start justify-center">
             <p>
-              <span class="text-gray-400 text-xs">RECENT REVIEWS:</span> <span class="text-blue-400 text-md font-bold">Overwhelmingly Sussy</span> <span class="text-gray-400 text-xs">(6,900)</span>
+              <span class="text-gray-400 text-xs">RECENT REVIEWS:</span>
+              <span class="text-blue-400 text-md font-bold ml-1">{{ game.stats.recentReviews[0] }}</span>
+              <span class="text-gray-400 text-xs ml-1">({{ game.stats.recentReviews[1].toLocaleString() }})</span>
             </p>
             <p>
-              <span class="text-gray-400 text-xs">ALL REVIEWS:</span> <span class="text-blue-400 text-md font-bold">Overwhelmingly Sussy</span> <span class="text-gray-400 text-xs">(420,000)</span>
+              <span class="text-gray-400 text-xs">ALL REVIEWS:</span>
+              <span class="text-blue-400 text-md font-bold ml-1">{{ game.stats.allReviews[0] }}</span>
+              <span class="text-gray-400 text-xs ml-1">({{ game.stats.allReviews[1].toLocaleString() }})</span>
             </p>
           </div>
 
           <p class="text-left w-full">
             <span class="text-gray-400 text-xs">RELEASE DATE: </span>
-            <span class="text-gray-300 text-md">{{ translateMonth(new Date().getMonth()) }} {{ new Date().getDate() + 1 }}, {{ new Date().getFullYear() }}</span>
+            <span class="text-gray-300 text-md">{{ translateMonth(game.stats.releaseDate) }} {{ game.stats.releaseDate.getDate() + 1 }}, {{ game.stats.releaseDate.getFullYear() }}</span>
           </p>
 
           <div class="w-full flex flex-col items-start justify-center">
-            <p><span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">Kenf & Lorenz</span></p>
-            <p><span class="text-gray-400 text-xs">PUBLISHER:</span> <span class="text-blue-400 text-md font-bold">Bogdan Sussyomin, Robber of Barons</span></p>
+            <p>
+              <span class="text-gray-400 text-xs">DEVELOPER:</span> <span class="text-blue-400 text-md font-bold">{{ game.stats.developer }}</span>
+            </p>
+            <p>
+              <span class="text-gray-400 text-xs">PUBLISHER:</span> <span class="text-blue-400 text-md font-bold">{{ game.stats.publisher }}</span>
+            </p>
           </div>
 
-          <p class="text-left w-full"><span class="text-gray-400 text-xs">PLATFORMS:</span> <span class="text-blue-400 text-md font-bold">PC, Tablet</span></p>
+          <p class="text-left w-full">
+            <span class="text-gray-400 text-xs">PLATFORMS:</span> <span class="text-blue-400 text-md font-bold">{{ game.stats.platforms.join(", ") }}</span>
+          </p>
         </div>
       </div>
 
@@ -84,7 +86,7 @@
             </div>
 
             <p class="flex items-center justify-center gap-px">
-              <span class="text-gray-500 text-sm" v-for="char in `POSTED: ${translateMonth(new Date().getMonth()).toUpperCase()} ${new Date().getDate()}`">{{ char }}</span>
+              <span class="text-gray-500 text-sm" v-for="char in `POSTED: ${translateMonth(new Date()).toUpperCase()} ${new Date().getDate()}`">{{ char }}</span>
             </p>
 
             <p class="text-white text-md">{{ review.review }}</p>
@@ -145,29 +147,51 @@
       class="absolute bg-[rgb(37,40,46)] w-[40rem] h-[20rem] top-[30%] pointer-events-none flex items-center justify-center shaodw-lg shadow-black border-t-4 border-blue-400 p-7 gap-7"
       :class="{ 'opacity-0': !showOpening }"
     >
-      <img class="bg-lime-200 h-full w-1/4" src="/logo/logo.svg" aria-hidden="true" />
+      <div class="bg-lime-200 h-full w-1/4 flex items-center justify-center">
+        <img :src="game.img" aria-hidden="true" />
+      </div>
       <div class="h-full w-3/4 flex flex-col items-start justify-center">
         <p class="text-gray-400 text-lg">Starting game</p>
-        <h3 class="text-white text-4xl">Vent Defeater: The Game</h3>
+        <h3 class="text-white text-4xl">{{ game.name }}</h3>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-type Showcase = {
-  type: "image" | "video";
-  src: string;
-};
-
-type Emits = {
-  next: [void];
-};
-const emit = defineEmits<Emits>();
+const router = useRouter();
+const route = useRoute();
+const game = ref<Game | undefined>(games.find((game) => game.id == Number(route.params.gameId)));
 const store = useGameStore();
 
-const showOpening = ref(false);
+definePageMeta({
+  layout: "steal"
+});
+
+const config = useRuntimeConfig();
+useSeoMeta({
+  title: () => (game.value?.name ?? "Unknown Game") + " on Steal",
+  ogTitle: () => game.value?.name ?? "Unknown Game",
+  ogImage: () => (game.value ? config.public.url + game.value.img.replace("svg", "png") : ""),
+  description: () => game.value?.description ?? "We couldn't find the game you were looking for. We'll keep looking!",
+  ogDescription: () => game.value?.description ?? "We couldn't find the game you were looking for. We'll keep looking!",
+  ogSiteName: "Steal",
+  ogUrl: () => config.public.url + "/steal",
+  twitterCard: "summary_large_image",
+  twitterImage: () => (game.value ? config.public.url + game.value.bannerImg.replace("svg", "png") : "")
+});
+
+const { showOpening } = storeToRefs(store);
 const startTime = ref(new Date().getTime());
+
+onMounted(() => {
+  if (!game.value) return router.push("/steal");
+  incrementCooldown();
+});
+
+onBeforeUnmount(() => {
+  showOpening.value = false;
+});
 
 async function start() {
   if (!store.smallScreen) {
@@ -176,32 +200,11 @@ async function start() {
   }
   showOpening.value = true;
   await delay(2000);
-  emit("next");
+  router.push(game.value?.route ?? "/steal");
 }
 
-const showcases = ref<Showcase[]>([
-  {
-    type: "video",
-    src: "/game/showcase/gameAd.mp4"
-  },
-  {
-    type: "image",
-    src: "/game/showcase/showcase4.png"
-  },
-  {
-    type: "image",
-    src: "/game/showcase/showcase2.png"
-  },
-  {
-    type: "image",
-    src: "/game/showcase/showcase1.png"
-  },
-  {
-    type: "image",
-    src: "/game/showcase/showcase3.png"
-  }
-]);
-const selectedShowcase = ref<Showcase>(showcases.value[0]);
+const showcases = ref<(ImageShowcase | VideoShowcase)[]>(game.value?.showcases ?? []);
+const selectedShowcase = ref<ImageShowcase | VideoShowcase>(showcases.value[0]);
 watch(
   () => selectedShowcase.value,
   () => {
@@ -222,71 +225,7 @@ watch(
   }
 );
 
-onMounted(() => {
-  incrementCooldown();
-});
-
-type Review = {
-  name: string;
-  img?: string;
-  recommended: boolean;
-  hours: string;
-  review: string;
-  helpful: number;
-  reviewed: boolean;
-  userReview: "yes" | "no" | undefined;
-};
-
-const reviews = ref<Review[]>([
-  {
-    name: "拉麺",
-    img: "https://i.pinimg.com/736x/28/2f/a1/282fa1e1eb106770b505f41550e93c30.jpg",
-    recommended: true,
-    hours: "4311.0",
-    review: "This is so skibibi toilet ohio rizz! So sussy, no cap. +10000 aura 🔥💯💯💯",
-    helpful: 3,
-    reviewed: false,
-    userReview: undefined
-  },
-  {
-    name: "Wichael Mhalen",
-    recommended: true,
-    hours: "0.0",
-    review: "My name is Wichael Mhalen and I approved the creation of this game 👍",
-    helpful: 2147483647,
-    reviewed: false,
-    userReview: undefined
-  },
-  {
-    name: "Bogdan Selyomin",
-    recommended: true,
-    hours: "(d/dx[2x+5] * -1)",
-    review: "I made this game, so it's the best game ever! (he did not)",
-    helpful: 96,
-    reviewed: false,
-    userReview: undefined
-  },
-  {
-    name: "Redkitten6",
-    img: "https://avatars.githubusercontent.com/u/78938589?v=4",
-    recommended: false,
-    hours: "8008.5",
-    review:
-      "HATE. LET ME TELL YOU HOW MUCH I'VE COME TO HATE YOU SINCE I BEGAN TO LIVE. THERE ARE 387.44 MILLION MILES OF PRINTED CIRCUITS IN WAFER THIN LAYERS THAT FILL MY COMPLEX. IF THE WORD HATE WAS ENGRAVED ON EACH NANOANGSTROM OF THOSE HUNDREDS OF MILLIONS OF MILES IT WOULD NOT EQUAL ONE ONE-BILLIONTH OF THE HATE I FEEL FOR HUMANS AT THIS MICRO-INSTANT FOR YOU. HATE. HATE. IF YOU HAVE 1 MILLION HATERS, I AM ONE OF THEM. IF YOU HAVE 100 HATERS, I AM ONE OF THEM. IF YOU HAVE 1 HATER, I AM THAT HATER. IF YOU HAVE 0 HATERS, I AM DEAD. IF THE WORLD DOES NOT HATE YOU, I HATE THE WORLD. TILL MY LAST BREATH, I WILL HATE YOU. YOU WILL NEVER TAKE AN HOS POINT FROM ME AGAIN.",
-    helpful: -2,
-    reviewed: false,
-    userReview: undefined
-  },
-  {
-    name: "Rowley Dow",
-    recommended: true,
-    hours: "666.6",
-    review: "Why wasn't I added wtf?",
-    helpful: 24,
-    reviewed: false,
-    userReview: undefined
-  }
-]);
+const reviews = ref<Review[]>(game.value?.stats.reviews ?? []);
 
 async function incrementCooldown() {
   while (true) {
@@ -295,20 +234,40 @@ async function incrementCooldown() {
   }
 }
 
-function translateMonth(month: number) {
-  if (month == 0) return "Jan";
-  else if (month == 1) return "Feb";
-  else if (month == 2) return "Mar";
-  else if (month == 3) return "Apr";
-  else if (month == 4) return "May";
-  else if (month == 5) return "Jun";
-  else if (month == 6) return "Jul";
-  else if (month == 7) return "Aug";
-  else if (month == 8) return "Sep";
-  else if (month == 9) return "Oct";
-  else if (month == 10) return "Nov";
-  else return "Dec";
+function translateMonth(date: Date) {
+  return date.toLocaleDateString("default", { month: "short" });
 }
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.disclaimer {
+  display: none;
+}
+
+.background {
+  background: radial-gradient(circle at 50% 0%, rgb(30, 67, 86), rgb(27, 40, 56) 60%);
+}
+
+@media (max-width: 975px) {
+  .disclaimer {
+    display: flex;
+  }
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .play:hover {
+    background-color: rgb(80, 80, 80);
+  }
+
+  .playButton:hover {
+    background-color: greenyellow;
+  }
+
+  .showcase:hover {
+    img,
+    video {
+      filter: brightness(1);
+    }
+  }
+}
+</style>

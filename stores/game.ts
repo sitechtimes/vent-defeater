@@ -1,4 +1,5 @@
 export const useGameStore = defineStore("gameStore", () => {
+  const showOpening = ref(false);
   const smallScreen = ref(false);
 
   const energy = ref(100);
@@ -12,5 +13,5 @@ export const useGameStore = defineStore("gameStore", () => {
   const noCombust = ref(false);
   const heartAttack = ref(false);
 
-  return { smallScreen, energy, currentElement, elementGrid, levels, isDead, relicOfDeath, showBrainrot, noCombust, heartAttack };
+  return { showOpening, smallScreen, energy, currentElement, elementGrid, levels, isDead, relicOfDeath, showBrainrot, noCombust, heartAttack };
 });
