@@ -10,26 +10,22 @@
           </button>
 
           <div class="flex flex-col items-center justify-between h-full w-1/4 pr-3">
-            <div class="flex flex-col items-start justify-start gap-2 h-full w-full">
-              <button :class="{ border }">General Options</button>
+            <div class="flex flex-col items-start justify-start gap-10 h-full w-full">
+              <button>General Options</button>
               <button>Personal Info</button>
             </div>
 
             <div class="w-full flex items-center justify-center">
-              <button class="flex items-center justify-center w-3/4 bg-red-400 hover:bg-red-500 py-1.5 rounded-full text-lg">Log out</button>
+              <button class="flex items-center justify-center w-3/4 bg-green-400 hover:bg-green-300 py-1.5 rounded-full text-lg">Save</button>
             </div>
           </div>
 
           <div class="flex flex-col items-center justify-between h-full w-3/4">
-            <div class="flex flex-col items-start justify-start gap-2 h-full w-full">
+            <div class="flex flex-col justify-center items-center gap-16 h-full w-full">
               <input type="text" placeholder="email" />
               <input type="text" placeholder="email" />
               <input type="text" placeholder="email" />
               <input type="text" placeholder="email" />
-            </div>
-
-            <div class="w-full">
-              <button>Change</button>
             </div>
           </div>
         </div>

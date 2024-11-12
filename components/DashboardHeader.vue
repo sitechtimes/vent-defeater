@@ -48,9 +48,16 @@
       </div>
 
       <div class="button-pop-up relative">
-        <button @click="emit('openSettings')" class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]">
+        <button class="rounded-full w-11 h-11 transition duration-300 flex items-center justify-center bg-[color:var(--secondary)]">
           <img class="transition duration-300 w-1/2 h-1/2 dark:invert" src="/ui/user.svg" aria-hidden="true" />
         </button>
+        <div
+          class="pop-up-button opacity-0 pointer-events-none absolute right-0 flex items-center text-center flex-col gap-2 w-48 p-4 mt-6 bg-[color:var(--bg-color)] rounded-lg transition duration-300"
+        >
+          <div class="path-options block w-48 rounded-lg text-lg" v-for="option in options" :to="option.path" :key="option.name">
+            <button @click="emit(option.onClick)">{{ option.name }}</button>
+          </div>
+        </div>
       </div>
     </div>
   </header>
@@ -65,28 +72,31 @@ import ThemeToggle from "./ThemeToggle.vue";
 type Options = {
   name: string;
   path: string;
-  dropdown?: { name: string; path: string }[];
+  onClick: string;
 };
 
 const options: Options[] = [
   {
     name: "Account Settings",
-    path: "/app/account"
+    path: "/app/account",
+    onClick: "openSettings"
   },
   {
     name: "Manage Members",
-    path: ""
+    path: "",
+    onClick: ""
   },
   {
     name: "Teams",
-    path: ""
+    path: "",
+    onClick: ""
   },
   {
     name: "Log Out",
-    path: ""
+    path: "",
+    onClick: ""
   }
 ];
-
 const emit = defineEmits<{
   openSettings: [void];
 }>();
