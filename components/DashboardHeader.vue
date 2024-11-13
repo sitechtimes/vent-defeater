@@ -94,7 +94,7 @@ const options: Options[] = [
   {
     name: "Log Out",
     path: "",
-    onClick: ""
+    onClick: "logOut"
   }
 ];
 const emit = defineEmits<{

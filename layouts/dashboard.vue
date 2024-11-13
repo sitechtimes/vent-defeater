@@ -9,23 +9,39 @@
             <img class="w-6 h-6 dark:invert" src="/ui/x.svg" aria-hidden="true" />
           </button>
 
-          <div class="flex flex-col items-center justify-between h-full w-1/4 pr-3">
+          <div class="flex flex-col items-center justify-between h-full w-1/4 pr-3 font-bold">
             <div class="flex flex-col items-start justify-start gap-10 h-full w-full">
-              <button>General Options</button>
+              <button class="mt-12">General Options</button>
               <button>Personal Info</button>
             </div>
 
             <div class="w-full flex items-center justify-center">
-              <button class="flex items-center justify-center w-3/4 bg-green-400 hover:bg-green-300 py-1.5 rounded-full text-lg">Save</button>
+              <button class="flex items-center justify-center w-3/4 bg-[var(--secondary)] hover:bg-[var(--secondary-shade)] py-4 mb-10 rounded-full text-xl">Save</button>
             </div>
           </div>
 
           <div class="flex flex-col items-center justify-between h-full w-3/4">
-            <div class="flex flex-col justify-center items-center gap-16 h-full w-full">
-              <input type="text" placeholder="email" />
-              <input type="text" placeholder="email" />
-              <input type="text" placeholder="email" />
-              <input type="text" placeholder="email" />
+            <div class="flex flex-col justify-center items-center gap-12 h-full w-full">
+              <input class="bg-[var(--primary-light)] w-11/12 rounded-md p-4 text-xl focus:outline-none" type="text" placeholder="email" />
+              <input class="bg-[var(--primary-light)] w-11/12 rounded-md p-4 text-xl focus:outline-none" type="text" placeholder="User" />
+              <input class="bg-[var(--primary-light)] w-11/12 rounded-md p-4 text-xl focus:outline-none" type="text" placeholder="Password" />
+            </div>
+          </div>
+        </div>
+      </div>
+    </Transition>
+
+    <Transition name="settings">
+      <div @click="logOut = false" class="fixed top-0 left-0 z-50 w-screen h-screen flex items-center justify-center bg-[rgba(0,0,0,0.5)]" v-show="logOut">
+        <div @click="$event.stopPropagation()" class="relative bg-[var(--bg-color)] flex items-start justify-between h-[35rem] w-[55rem] p-10 rounded-lg">
+          <button @click="logOut = false" class="absolute top-3 right-3 flex items-center justify-center w-9 h-9 hover:bg-[var(--faded-bg-color)] hover:rotate-90 rounded-full">
+            <img class="w-6 h-6 dark:invert" src="/ui/x.svg" aria-hidden="true" />
+          </button>
+
+          <div class="flex flex-col items-center justify-center w-full h-full pr-3 font-bold gap-20 text-7xl mt-12 text-bold">
+            <p>We'll miss you D:</p>
+            <div class="w-full flex items-center justify-center">
+              <button class="flex items-center justify-center w-2/4 bg-[var(--fire)] hover:bg-[var(--fire-secondary)] p-10 mb-10 rounded-full text-3xl">Log Out?</button>
             </div>
           </div>
         </div>
@@ -40,7 +56,7 @@
 
     <Transition name="page">
       <div class="w-full min-h-screen flex items-start justify-start flex-col" v-show="loaded">
-        <DashboardHeader @open-settings="showSettings = true" />
+        <DashboardHeader @open-settings="showSettings = true" @log-out="logOut = true" />
         <slot></slot>
       </div>
     </Transition>
@@ -58,6 +74,7 @@ type Category = {
 
 const loaded = ref(false);
 const showSettings = ref(false);
+const logOut = ref(false);
 
 onMounted(async () => {
   const previousRoute = getPreviousRoute();
@@ -83,11 +100,6 @@ const options: Category[] = [
       { name: "User", anchor: "" },
       { name: "Password", anchor: "" }
     ]
-  },
-  {
-    name: "Privacy",
-    anchor: "privacy",
-    settings: [{ name: "Affiliated Accounts", anchor: "" }]
   }
 ];
 </script>
