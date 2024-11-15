@@ -32,9 +32,9 @@
     </Transition>
 
     <Transition name="settings">
-      <div @click="logOut = false" class="fixed top-0 left-0 z-50 w-screen h-screen flex items-center justify-center bg-[rgba(0,0,0,0.5)]" v-show="logOut">
+      <div @click="showLogOut = false" class="fixed top-0 left-0 z-50 w-screen h-screen flex items-center justify-center bg-[rgba(0,0,0,0.5)]" v-show="showLogOut">
         <div @click="$event.stopPropagation()" class="relative bg-[var(--bg-color)] flex items-start justify-between h-[35rem] w-[55rem] p-10 rounded-lg">
-          <button @click="logOut = false" class="absolute top-3 right-3 flex items-center justify-center w-9 h-9 hover:bg-[var(--faded-bg-color)] hover:rotate-90 rounded-full">
+          <button @click="showLogOut = false" class="absolute top-3 right-3 flex items-center justify-center w-9 h-9 hover:bg-[var(--faded-bg-color)] hover:rotate-90 rounded-full">
             <img class="w-6 h-6 dark:invert" src="/ui/x.svg" aria-hidden="true" />
           </button>
 
@@ -56,7 +56,7 @@
 
     <Transition name="page">
       <div class="w-full min-h-screen flex items-start justify-start flex-col" v-show="loaded">
-        <DashboardHeader @open-settings="showSettings = true" @log-out="logOut = true" />
+        <DashboardHeader @open-settings="showSettings = true" @log-out="showLogOut = true" />
         <slot></slot>
       </div>
     </Transition>
@@ -74,7 +74,7 @@ type Category = {
 
 const loaded = ref(false);
 const showSettings = ref(false);
-const logOut = ref(false);
+const showLogOut = ref(false);
 
 onMounted(async () => {
   const previousRoute = getPreviousRoute();
