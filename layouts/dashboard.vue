@@ -22,9 +22,9 @@
 
           <div class="flex flex-col items-center justify-between h-full w-3/4">
             <div class="flex flex-col justify-center items-center gap-12 h-full w-full">
-              <input class="bg-[var(--primary-light)] w-11/12 rounded-md p-4 text-xl focus:outline-none" type="text" placeholder="email" />
-              <input class="bg-[var(--primary-light)] w-11/12 rounded-md p-4 text-xl focus:outline-none" type="text" placeholder="User" />
-              <input class="bg-[var(--primary-light)] w-11/12 rounded-md p-4 text-xl focus:outline-none" type="text" placeholder="Password" />
+              <input class="bg-[var(--faded-bg-color-light)] w-11/12 rounded-md p-4 text-xl focus:outline-none" type="text" placeholder="Email" />
+              <input class="bg-[var(--faded-bg-color-light)] w-11/12 rounded-md p-4 text-xl focus:outline-none" type="text" placeholder="User" />
+              <input class="bg-[var(--faded-bg-color-light)] w-11/12 rounded-md p-4 text-xl focus:outline-none" type="text" placeholder="Password" />
             </div>
           </div>
         </div>
